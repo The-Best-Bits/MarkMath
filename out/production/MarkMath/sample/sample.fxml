@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane alignment="center" hgap="10" prefHeight="374.0" prefWidth="466.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
+   <children>
+      <AnchorPane prefHeight="268.0" prefWidth="236.0">
+         <children>
+            <JFXButton layoutX="29.0" layoutY="210.0" prefHeight="25.0" prefWidth="84.0" text="OK" />
+            <JFXTextField layoutX="29.0" layoutY="81.0" />
+            <JFXDatePicker layoutX="29.0" layoutY="148.0" />
+         </children>
+      </AnchorPane>
+      <JFXListView fixedCellSize="3.0" prefHeight="268.0" prefWidth="107.0" GridPane.columnIndex="1" />
+   </children>
+</GridPane>
