@@ -6,12 +6,18 @@ import java.util.*;
 
 public class CheckMathParser {
 
+    private DocumentNameParsingAlgorithm docNameParser;
     /*The CheckMathParser Controller Class
      * Responsible for parsing the data received by SocketIOServer. For each results event received by SocketIOServer,
      * CheckMathParser will parse the event for the student name, assignment type, document name, problem number, and
      * number of errors
      */
 
+    /*set the docname parsing algorithm to ParseByDash by default. This means that the student documents
+    must be of the form StudentName-AssignmentType (spaces are allowed)*/
+    public CheckMathParser(){
+        docNameParser = new ParseByDash();
+    }
     /**
      * Takes in the JSON String data from the results event caught by the SocketIOServer and
      * parses it for the students name, assignment type, document name, problem number, and number of errors.
@@ -31,15 +37,20 @@ public class CheckMathParser {
 
         //instantiate and add key-value pairs to a new HashMap
         HashMap<String, Object> resultsData = new HashMap<>();
-        ArrayList<String> docInfo = getDocInfo((String)tempResultsMap.get("docname"));
-        resultsData.put("studentName", docInfo.get(0));
-        resultsData.put("assignmentType", docInfo.get(1));
-        resultsData.put("documentName", docInfo.get(2));
-        resultsData.put("problemNumber", tempResultsMap.get("problem"));
-        resultsData.put("numErrors", checkForErrors((LinkedHashMap)tempResultsMap.get("value")));
+        try{
+            ArrayList<String> docInfo = docNameParser.getDocNameInfo((String)tempResultsMap.get("docname"));
+            resultsData.put("studentName", docInfo.get(0));
+            resultsData.put("assignmentType", docInfo.get(1));
+            resultsData.put("documentName", docInfo.get(2));
+            resultsData.put("problemNumber", tempResultsMap.get("problem"));
+            resultsData.put("numErrors", checkForErrors((LinkedHashMap)tempResultsMap.get("value")));
 
-        //temporarily prints the resultsData HashMap
-        System.out.println(resultsData);
+            //temporarily prints the resultsData HashMap
+            System.out.println(resultsData);
+        }catch(InvalidDocumentNameException e){
+            System.out.println("Invalid Document Name");
+        }
+
     }
 
     /**
@@ -55,26 +66,5 @@ public class CheckMathParser {
             return 1;
         }
     }
-
-    /**
-     * Gets the student name, assignment type, and document title from the results event
-     * @param docname name of the student document as taken from the results event
-     * @return an ArrayList of Strings containing the students name, the assignment name, and the full document title
-     */
-    private ArrayList<String> getDocInfo(String docname){
-
-        ArrayList<String> docInfo = new ArrayList<>();
-        int periodIndex = docname.lastIndexOf(".");
-        int slashIndex = docname.lastIndexOf("-");
-        String studentName = docname.substring(0, slashIndex);
-        String assignmentType = docname.substring(slashIndex + 1, periodIndex);
-        String documentName = docname.substring(0, periodIndex);
-        docInfo.add(studentName);
-        docInfo.add(assignmentType);
-        docInfo.add(documentName);
-        return docInfo;
-
-    }
-
 
 }
