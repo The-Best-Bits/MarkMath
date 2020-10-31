@@ -60,7 +60,7 @@ public class AssignmentBundle {
         this.name = newName;
         if (assignments.size() > 0) {
             for (StudentAssignment assignment: assignments){
-                assignment.changeAssignmentName(newName);
+                assignment.setAssignmentName(newName);
             }
         }
     }
@@ -80,7 +80,7 @@ public class AssignmentBundle {
 
        if (assignments.size() != 0) {
            for (StudentAssignment assignment: assignments){
-               if (assignment.getStudentName == studentName) {
+               if (assignment.getStudentName().equals(studentName)) {
                    return assignment;
                }
            }
@@ -93,7 +93,7 @@ public class AssignmentBundle {
      * @param studentAssignment The student assignment that is going to be added to the bundle.
      */
     public void addStudentAssignment(StudentAssignment studentAssignment){
-        if (studentAssignment.getAssignmentName == this.name){
+        if (studentAssignment.getAssignmentName().equals(this.name)){
             this.assignments.add(studentAssignment);
         }
     }
