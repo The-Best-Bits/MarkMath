@@ -33,7 +33,7 @@ public class Classroom {
      */
     public AssignmentBundle getAssignment(String name){
         for (AssignmentBundle a: this.assignmentBundles){
-            if (a.name.equals(name)){
+            if (a.getName().equals(name)){
                 return a;
             }
         }

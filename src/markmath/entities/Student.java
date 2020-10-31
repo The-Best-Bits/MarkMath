@@ -51,7 +51,7 @@ public class Student {
 
     public StudentAssignment getAssignment(String assignmentName){
         for (StudentAssignment a: this.assignments){
-            if (a.name.equals(assignmentName)){
+            if (a.getAssignmentName().equals(assignmentName)){
                 return a;
             }
         }
