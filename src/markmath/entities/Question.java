@@ -16,23 +16,18 @@ public class Question {
      * */
 
     private int questionNumber;
-    private int fullMark;
     private int numberOfErrors;
     private int finalMark = 0;
 
-    public Question(int No, int full, int error){
+    public Question(int No, int error){
         questionNumber = No;
-        fullMark = full;
         numberOfErrors = error;
     }
 
-    public int getFullMark(){return fullMark;}
-
     public int getFinalMark() {return finalMark;}
 
-    public void setFinalMark(){
-        /* finalMark should be calculated by the MarkingCalculator */
-        // TODO Implement this with MarkingCalculator
+    public void setFinalMark(int n){
+        finalMark = n;
     }
 
     public void setErrors(int n){numberOfErrors = n;}
