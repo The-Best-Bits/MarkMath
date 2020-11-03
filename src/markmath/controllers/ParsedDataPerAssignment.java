@@ -5,6 +5,8 @@ import java.util.HashMap;
 public class ParsedDataPerAssignment {
 
     private String assignmentName;
+    //you decide how the parsed data will be formatted in this HashMap
+    private HashMap<String, Object> finalParsedData;
 
     public ParsedDataPerAssignment(HashMap<String, Object> parsedData){
         //send parsedData to another method that parses it
