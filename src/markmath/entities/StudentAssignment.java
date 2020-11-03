@@ -35,6 +35,8 @@ public class StudentAssignment {
 
         for (Question x: list){
             finalMark += x.getFinalMark();
+            // TODO Implement fullMark from AssignmentOutline
+
         }
     }
 
