@@ -28,13 +28,13 @@ public class AssignmentBundle {
         assignments = new ArrayList<StudentAssignment>();
         this.outline = null;
     }
+
     /** Creates an AssignmentBundle with specified name and outline. Starts with an empty collection of assignments.
-     * @param name The assignment name
      * @param receivedOutline The outline of this AssignmentBundle
      * */
-    public AssignmentBundle(String name, AssignmentOutline receivedOutline){
+    public AssignmentBundle(AssignmentOutline receivedOutline){
 
-        this.name = name;
+        this.name = receivedOutline.getName();
         this.outline = receivedOutline;
         assignments = new ArrayList<StudentAssignment>();
     }

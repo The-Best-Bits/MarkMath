@@ -32,8 +32,8 @@ public class StudentAssignment {
         this.AssignmentName = name2;
         questions.addAll(list);
         this.outline = outline;
+
         for (Question x: list){
-            fullMark += x.getFullMark();
             finalMark += x.getFinalMark();
         }
     }
