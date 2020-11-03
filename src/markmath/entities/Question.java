@@ -17,17 +17,20 @@ public class Question {
 
     private int questionNumber;
     private int numberOfErrors;
-    private int finalMark = 0;
+    private float finalMark = 0;
 
     public Question(int No, int error){
         questionNumber = No;
         numberOfErrors = error;
     }
 
-    public int getFinalMark() {return finalMark;}
+    public float getFinalMark() {return finalMark;}
 
-    public void setFinalMark(int n){
-        finalMark = n;
+    public int getQuestionNumber(){return questionNumber;}
+
+
+    public void setFinalMark(float finalMark){
+        this.finalMark = finalMark;
     }
 
     public void setErrors(int n){numberOfErrors = n;}

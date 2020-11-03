@@ -46,15 +46,15 @@ public class Student {
 
     /**return the StudentAssignment of the given assignmentName.
      * @param assignmentName the name of the assignment wanted.
-     * @return StudentAssignment the assignment by the given name. Return null if not found.
+     * @return StudentAssignment the assignment by the given name. Throws NoAssignmentFoundException if not found.
      */
 
-    public StudentAssignment getAssignment(String assignmentName){
+    public StudentAssignment getAssignment(String assignmentName) throws NoAssignmentFoundException {
         for (StudentAssignment a: this.assignments){
             if (a.getAssignmentName().equals(assignmentName)){
                 return a;
             }
         }
-        return null;
+        throw new NoAssignmentFoundException();
     }
 }

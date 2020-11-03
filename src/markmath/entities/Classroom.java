@@ -31,7 +31,7 @@ public class Classroom {
      * @param name The name of the assignment to be found
      * @return AssignmentBundle The AssignmentBundle of the given name.
      */
-    public AssignmentBundle getAssignment(String name){
+    public AssignmentBundle getAssignmentBundle(String name){
         for (AssignmentBundle a: this.assignmentBundles){
             if (a.getName().equals(name)){
                 return a;
@@ -48,6 +48,7 @@ public class Classroom {
     public boolean enroll(Student student){
         if (!this.students.contains(student)){
             this.students.add(student);
+            return true;
         }
         return false;
     }
@@ -57,7 +58,7 @@ public class Classroom {
      * @param assignment The AssignmentBundle to be added
      * @return If the AssignmentBundle is successfully added
      */
-    public boolean addAssignmentBundles(AssignmentBundle assignment){
+    public boolean addAssignmentBundle(AssignmentBundle assignment){
         if (!this.assignmentBundles.contains(assignment)){
             this.assignmentBundles.add(assignment);
             return true;
