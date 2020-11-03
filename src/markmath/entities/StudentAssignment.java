@@ -22,8 +22,8 @@ public class StudentAssignment {
     private String AssignmentName;
     private ArrayList<Question> questions = new ArrayList<>();
     private AssignmentOutline outline;
-    private int fullMark = 0;
-    private int finalMark = 0;
+    private float fullMark = 0;
+    private float finalMark = 0;
 
 
     /* create a StudentAssignment with given student's and assignment's name */
@@ -32,7 +32,7 @@ public class StudentAssignment {
         this.AssignmentName = name2;
         questions.addAll(list);
         this.outline = outline;
-
+        this.fullMark = outline.returnFullMark();
         for (Question x: list){
             finalMark += x.getFinalMark();
             // TODO Implement fullMark from AssignmentOutline
@@ -44,9 +44,9 @@ public class StudentAssignment {
 
     public void setOutline(AssignmentOutline outline) {this.outline = outline;}
 
-    public int getFinalMark(){return finalMark;}
+    public float getFinalMark(){return finalMark;}
 
-    public int getFullMark(){return fullMark;}
+    public float getFullMark(){return fullMark;}
 
     public String getStudentName(){return studentName;}
 

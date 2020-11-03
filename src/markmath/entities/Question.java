@@ -19,7 +19,7 @@ public class Question {
     private int numberOfErrors;
     private float finalMark = 0;
 
-    public Question(int No, int full, int error){
+    public Question(int No, int error){
         questionNumber = No;
         numberOfErrors = error;
     }
