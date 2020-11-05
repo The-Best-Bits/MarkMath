@@ -28,6 +28,7 @@ public class Question {
 
     public int getQuestionNumber(){return questionNumber;}
 
+    public int getNumberOfErrors(){return numberOfErrors;}
 
     public void setFinalMark(float finalMark){
         this.finalMark = finalMark;

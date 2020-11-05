@@ -73,14 +73,14 @@ public class AssignmentBundle {
 
     /** Returns the studentAssignment that belongs to the student specified by studentName. Throws an exception if the
      * assignments list is empty, or it does not contain the assignment of the specified student.
-     * @param studentName The name of the student used to look for their assignment.
+     * @param studentID The ID of the student used to look for their assignment.
      * @return The assignment in this bundle that belongs to the specified student.
      * @throws NoAssignmentFoundException No assignment was found for the specified student.*/
-    public StudentAssignment getStudentAssignment(String studentName) throws NoAssignmentFoundException{
+    public StudentAssignment getStudentAssignment(int studentID) throws NoAssignmentFoundException{
 
        if (assignments.size() != 0) {
            for (StudentAssignment assignment: assignments){
-               if (assignment.getStudentName().equals(studentName)) {
+               if (assignment.getStudentID() == studentID) {
                    return assignment;
                }
            }
