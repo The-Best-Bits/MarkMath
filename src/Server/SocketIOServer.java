@@ -7,7 +7,7 @@ import com.corundumstudio.socketio.listener.DataListener;
 
 public class SocketIOServer {
     /** The SocketIOServer controller class
-     * This is the Socket IO Server that will connect to the Hypatia app and receive
+     * This is the Socket IO Server that will sqlite.Connect.java to the Hypatia app and receive
     the emitted events
 
     SocketIO is a library that allows for bi-directional communication between clients and
