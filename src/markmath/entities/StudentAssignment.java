@@ -10,48 +10,66 @@ public class StudentAssignment {
      */
 
     /* Attributes
-        studentName: name of this student owner
-        AssignmentName: name of the assignment name, consistent with the bundle it belongs to
-        questions: the list of all questions contained
-        outline: the mapping of question to mark
-        fullMark: the total full mark
-        finalMark: the total final mark
+     * studentName: name of this student owner
+     * AssignmentName: name of the assignment name, consistent with the bundle it belongs to
+     * studentID: ID of this student owner
+     * questions: the list of all questions contained
+     * outline: the mapping of question to mark
+     * fullMark: the total full mark
+     * finalMark: the total final mark
      */
 
     private String studentName;
     private String AssignmentName;
+    private int studentID;
     private ArrayList<Question> questions = new ArrayList<>();
     private AssignmentOutline outline;
-    private int fullMark = 0;
-    private int finalMark = 0;
+    private float fullMark = 0;
+    private float finalMark = 0;
 
-
-    /* create a StudentAssignment with given student's and assignment's name */
-    public StudentAssignment(String name1, String name2, AssignmentOutline outline, ArrayList<Question> list){
-        this.studentName = name1;
-        this.AssignmentName = name2;
-        questions.addAll(list);
-        this.outline = outline;
-        for (Question x: list){
-            finalMark += x.getFinalMark();
-            // TODO Implement fullMark from AssignmentOutline
-
-        }
+    /* create a StudentAssignment with given student ID and name */
+    public StudentAssignment(int studentID, String name){
+        this.studentID = studentID;
+        studentName = name;
     }
+
 
     public AssignmentOutline getOutline() {return outline;}
 
-    public void setOutline(AssignmentOutline outline) {this.outline = outline;}
+    public void setOutline(AssignmentOutline outline) {
+        this.outline = outline;
+        this.fullMark = outline.returnFullMark();
+    }
 
-    public int getFinalMark(){return finalMark;}
+    public float getFinalMark(){return finalMark;}
 
-    public int getFullMark(){return fullMark;}
+    public float getFullMark(){return fullMark;}
 
-    public String getStudentName(){return studentName;}
+    public int getStudentID(){return studentID;}
 
     public String getAssignmentName(){return AssignmentName+ "_" +studentName;}
 
+    public ArrayList<Question> getQuestions(){return questions;}
+
     public void setAssignmentName(String name){AssignmentName = name;}
+
+    public void addQuestion(Question ques){questions.add(ques);}
+
+    public void modifyQuestionErrors(int No, int error){
+        for(Question q: questions){
+            if(q.getQuestionNumber() == No){
+                q.setErrors(error);
+            }
+        }
+    }
+
+    public void setFinalMarkSingleQuestion(int No, int mark){
+        for(Question q: questions) {
+            if (q.getQuestionNumber() == No) {
+                q.setFinalMark(mark);
+            }
+        }
+    }
 
 
 

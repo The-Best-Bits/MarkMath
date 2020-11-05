@@ -1,17 +1,24 @@
 package Server;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import markmath.controllers.ParsedDataPerAssignmentManager;
+
 import java.util.*;
 
 
 public class CheckMathParser {
-
-    private DocumentNameParsingAlgorithm docNameParser;
-    /*The CheckMathParser Controller Class
+    /**The CheckMathParser Controller Class
      * Responsible for parsing the data received by SocketIOServer. For each results event received by SocketIOServer,
      * CheckMathParser will parse the event for the student name, assignment type, document name, problem number, and
      * number of errors
+     * Attributes:
+     * docnameParser: the docname parsing algorithm used for this CheckMathParser
+     * parsedDataManager: manages the parsed data of a CheckMathParser object
      */
+
+    private static ParsedDataPerAssignmentManager parsedDataManager = new ParsedDataPerAssignmentManager();
+    private DocumentNameParsingAlgorithm docNameParser;
+
 
     /*set the docname parsing algorithm to ParseByDash by default. This means that the student documents
     must be of the form StudentName-AssignmentType (spaces are allowed)*/
@@ -47,6 +54,8 @@ public class CheckMathParser {
 
             //temporarily prints the resultsData HashMap
             System.out.println(resultsData);
+            parsedDataManager.manageParsedData(resultsData);
+
         }catch(InvalidDocumentNameException e){
             System.out.println("Invalid Document Name");
         }
@@ -55,7 +64,7 @@ public class CheckMathParser {
 
     /**
      * Checks whether a results event contains an error
-     * @param valueError holds whether this results event, anf thus a part of the problem, contains an error
+     * @param valueError holds whether this results event, and thus a part of the problem, contains an error
      * @return the number of errors given by this results event
      */
     private int checkForErrors(LinkedHashMap valueError) {

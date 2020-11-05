@@ -20,7 +20,6 @@ public class Teacher {
         this.password = password;
     }
 
-
     public boolean checkUsername(String inputUsername){
         return this.username.equals(inputUsername);
     }

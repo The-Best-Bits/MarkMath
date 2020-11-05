@@ -13,18 +13,21 @@
     <columnConstraints>
         <ColumnConstraints />
         <ColumnConstraints />
+      <ColumnConstraints />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
     </rowConstraints>
     <children>
-        <AnchorPane prefHeight="268.0" prefWidth="236.0">
+        <AnchorPane prefHeight="268.0" prefWidth="236.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <children>
                 <JFXButton layoutX="29.0" layoutY="210.0" prefHeight="25.0" prefWidth="84.0" text="OK" />
                 <JFXTextField layoutX="29.0" layoutY="81.0" />
                 <JFXDatePicker layoutX="29.0" layoutY="148.0" />
             </children>
         </AnchorPane>
-        <JFXListView fixedCellSize="3.0" prefHeight="268.0" prefWidth="107.0" GridPane.columnIndex="1" />
+        <JFXListView fixedCellSize="3.0" prefHeight="268.0" prefWidth="107.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
     </children>
 </GridPane>
