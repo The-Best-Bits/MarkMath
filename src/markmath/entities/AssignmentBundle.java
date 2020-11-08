@@ -38,11 +38,13 @@ public class AssignmentBundle {
         this.outline = receivedOutline;
         assignments = new ArrayList<StudentAssignment>();
     }
+
     /** Returns the assignmentOutline of this bundle, that describes the total marks to each question.
      * @return The current assignmentOutline of the bundle.*/
     public AssignmentOutline getOutline() {
         return this.outline;
     }
+
     /** Returns the assignmentOutline of this bundle, that describes the total marks to each question.
      * @param newOutline The new outline of Marks for the AssignmentBundle. */
     public void setOutline(AssignmentOutline newOutline){
