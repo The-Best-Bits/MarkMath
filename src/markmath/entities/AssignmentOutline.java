@@ -59,6 +59,12 @@ public class AssignmentOutline {
     }
 
     /**
+     *
+     * @return HashMap of questions to assigned weighting of the question
+     */
+    public HashMap<String, Float> getQuestionToMarks(){return this.questionToMarks;}
+
+    /**
      * Returns the name of the AssignmentOutline.
      * @return The name of the AssignmentOutline.
      */

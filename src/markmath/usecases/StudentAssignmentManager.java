@@ -42,16 +42,24 @@ public class StudentAssignmentManager {
 
     /**
     Uses the parsed data to add all of the Questions to the StudentAssignment this StudentAssignmentManager manages
+    Pre condition: The outline for this carbon copy must be set before this method is called
      */
     public void addQuestions(HashMap<String, Integer> finalParsedData){
-        int sizeOfMap = finalParsedData.size();
-        int i = 1;
-        while (i <= sizeOfMap) {
-            Question newQues = new Question(i, finalParsedData.get("question" + i));
-            carbonCopy.addQuestion(newQues);
-            i += 1;
+        HashMap<String, Float> questionToMarks = carbonCopy.getOutline().getQuestionToMarks();
+        int numOfQuestions = questionToMarks.size();
+        int i =1;
+        while (i<= numOfQuestions){
+            if (finalParsedData.containsKey("question" + i)){
+                Question tempQ = new Question(i, finalParsedData.get("question" + i));
+                carbonCopy.addQuestion(tempQ);
+            }
+            else
+            {
+                Question tempQ = new Question(i, 0);
+                carbonCopy.addQuestion(tempQ);
+            }
+            i+=1;
         }
-
     }
 
 //    //previous implementation

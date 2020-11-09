@@ -47,6 +47,7 @@ public class StudentAssignment {
         this.fullMark = outline.returnFullMark();
     }
 
+
     public float getFinalMark(){return finalMark;}
 
     public float getFullMark(){return fullMark;}
@@ -63,6 +64,7 @@ public class StudentAssignment {
 
     //removed setAssignmentType method
     public void setAssignmentName(String assignmentName){this.assignmentName = assignmentName;}
+
     public void addQuestion(Question ques){questions.add(ques);}
 
     public void modifyQuestionErrors(int No, int error){
