@@ -98,4 +98,21 @@ public class parserTests {
         Assert.assertEquals((int)p.getFinalParsedData().get("question2"), 3);
 
     }
+
+    @Test
+    public void addParsedData_oldQuestion(){
+        /*test that when newParsedData is sent for a question already in finalParsedData list that the num of errors
+        for this question is updated with respect to the new data
+         */
+
+        HashMap<String, Object> newParsedData = new HashMap<String, Object>();
+        newParsedData.put("studentName", "JasminaBrar");
+        newParsedData.put("assignmentType", "Fractions1");
+        newParsedData.put("documentName", "JasminaBrar-Fractions1");
+        newParsedData.put("problemNumber", 1);
+        newParsedData.put("numErrors", 3);
+
+        p.addParsedData(newParsedData);
+        Assert.assertEquals((int)p.getFinalParsedData().get("question1"), 6);
+    }
 }

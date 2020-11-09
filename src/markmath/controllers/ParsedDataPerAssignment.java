@@ -68,7 +68,7 @@ public class ParsedDataPerAssignment {
         String receivedQuestion = "question" + (int) newParsedData.get("problemNumber");
         if (finalParsedData.containsKey(receivedQuestion)) {
             int old_errors = finalParsedData.get(receivedQuestion);
-            finalParsedData.replace(receivedQuestion, old_errors + (int) newParsedData.get("errors"));
+            finalParsedData.replace(receivedQuestion, old_errors + (int) newParsedData.get("numErrors"));
         }
         else{
             System.out.println("new");
