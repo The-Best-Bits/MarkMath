@@ -2,15 +2,20 @@ package Test;
 import Server.InvalidDocumentNameException;
 import Server.ParseByDash;
 import markmath.controllers.ParsedDataPerAssignment;
+import markmath.controllers.ParsedDataPerAssignmentManager;
 import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class parserTests {
+    /**
+     * Class for testing CheckMathParser, ParseByDash, ParsedDataPerAssignment, and ParsedDataPerAssignmentManager
+     */
     private static HashMap<String, Object> parsedData;
     private ParseByDash docNameParser = new ParseByDash();
     private static ParsedDataPerAssignment p;
+    private static ParsedDataPerAssignmentManager manager;
 
     @BeforeClass
     public static void setUp(){
@@ -22,6 +27,7 @@ public class parserTests {
         parsedData.put("numErrors", 3);
 
         p = new ParsedDataPerAssignment(parsedData);
+        manager = new ParsedDataPerAssignmentManager();
     }
 
     @AfterClass
@@ -115,4 +121,49 @@ public class parserTests {
         p.addParsedData(newParsedData);
         Assert.assertEquals((int)p.getFinalParsedData().get("question1"), 6);
     }
+
+    //ParsedDataPerAssignmentManager tests
+    @Test
+    public void manageParsedData_addNewParsedDataPerAssignment(){
+        /* tests that if ParsedDataPerAssignmentManager receives parsedData with a documentName that is not associated
+        with a ParsedDataPerAssignment that a new ParsedDataPerAssignment will be created and added to the list
+         */
+        HashMap<String, Object> newParsedData = new HashMap<String, Object>();
+        newParsedData.put("studentName", "JasminaBrar");
+        newParsedData.put("assignmentType", "Fractions1");
+        newParsedData.put("documentName", "JasminaBrar-Fractions1");
+        newParsedData.put("problemNumber", 1);
+        newParsedData.put("numErrors", 3);
+
+        manager.manageParsedData(newParsedData);
+        Assert.assertEquals(manager.getParsedDataAssignments().size(), 1);
+    }
+
+    @Test
+    public void manageParsedData_addDataToPreExistingAssignment(){
+        /*
+        tests that if a ParsedDataPerAssignment with the document name of the given data is already in the list that
+        a new ParsedDataPerAssignment will not be created, but the data will be sent to the pre-existing Assignment in
+        the list
+         */
+        HashMap<String, Object> newParsedData = new HashMap<String, Object>();
+        newParsedData.put("studentName", "JasminaBrar");
+        newParsedData.put("assignmentType", "Fractions1");
+        newParsedData.put("documentName", "JasminaBrar-Fractions1");
+        newParsedData.put("problemNumber", 1);
+        newParsedData.put("numErrors", 3);
+
+        manager.manageParsedData(newParsedData);
+        HashMap<String, Object> newParsedData2 = new HashMap<String, Object>();
+        newParsedData2.put("studentName", "JasminaBrar");
+        newParsedData2.put("assignmentType", "Fractions1");
+        newParsedData2.put("documentName", "JasminaBrar-Fractions1");
+        newParsedData2.put("problemNumber", 1);
+        newParsedData2.put("numErrors", 3);
+
+        manager.manageParsedData(newParsedData2);
+        Assert.assertEquals(manager.getParsedDataAssignments().size(), 1);
+
+    }
+
 }
