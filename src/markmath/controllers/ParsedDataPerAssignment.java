@@ -29,7 +29,7 @@ public class ParsedDataPerAssignment {
         this.assignmentType = (String) parsedData.get("assignmentType");
         this.finalParsedData = new HashMap<>();
         String question = ("question" + (int)  parsedData.get("problemNumber"));
-        this.finalParsedData.put(question, (Integer) parsedData.get("errors"));
+        this.finalParsedData.put(question, (Integer) parsedData.get("numErrors"));
 
     }
 
