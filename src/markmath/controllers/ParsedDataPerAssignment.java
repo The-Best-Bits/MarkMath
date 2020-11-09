@@ -71,7 +71,8 @@ public class ParsedDataPerAssignment {
             finalParsedData.replace(receivedQuestion, old_errors + (int) newParsedData.get("errors"));
         }
         else{
-            finalParsedData.put(receivedQuestion,(int) newParsedData.get("errors"));
+            System.out.println("new");
+            finalParsedData.put(receivedQuestion,(int) newParsedData.get("numErrors"));
         }
 
     }
