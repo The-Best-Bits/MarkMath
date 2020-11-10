@@ -73,7 +73,7 @@ public class AssignmentBundle {
         return this.name;
     }
 
-    /** Returns the studentAssignment that belongs to the student specified by studentName. Throws an exception if the
+    /** Returns the studentAssignment that belongs to the student specified by studentID. Throws an exception if the
      * assignments list is empty, or it does not contain the assignment of the specified student.
      * @param studentID The ID of the student used to look for their assignment.
      * @return The assignment in this bundle that belongs to the specified student.
@@ -95,7 +95,7 @@ public class AssignmentBundle {
      * @param studentAssignment The student assignment that is going to be added to the bundle.
      */
     public void addStudentAssignment(StudentAssignment studentAssignment){
-        if (studentAssignment.getAssignmentName().equals(this.name)){
+        if (studentAssignment.getAssignmentType().equals(this.name)){
             this.assignments.add(studentAssignment);
         }
     }
