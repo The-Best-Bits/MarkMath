@@ -76,7 +76,8 @@ public class StudentAssignmentManager {
 //    }
 
     /**
-     * Marks all of the Questions in the StudentAssignment this StudentAssignmentManager manages
+     * Marks all of the Questions in the StudentAssignment this StudentAssignmentManager manages, and sets the final
+     * mark for this StudentAssignment
      */
     public void markAllQuestions(){
         ArrayList<Question> ques = carbonCopy.getQuestions();
@@ -85,6 +86,8 @@ public class StudentAssignmentManager {
             carbonCopy.setFinalMarkSingleQuestion(
                     q.getQuestionNumber(), calculator.getMark());
         }
+        carbonCopy.setFinalMark();
+
     }
 
     /**

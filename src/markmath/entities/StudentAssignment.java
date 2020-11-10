@@ -67,6 +67,12 @@ public class StudentAssignment {
 
     public void addQuestion(Question ques){questions.add(ques);}
 
+    /**
+     * Modifies the specified question (by question number) to have a different amount of errors
+     * Pre condition: there must be a question in this student assignment with the given number
+     * @param No question number
+     * @param error new number of errors for the question
+     */
     public void modifyQuestionErrors(int No, int error){
         for(Question q: questions){
             if(q.getQuestionNumber() == No){
@@ -81,6 +87,20 @@ public class StudentAssignment {
                 q.setFinalMark(mark);
             }
         }
+    }
+
+    /**
+     * Sets the final mark of this StudentAssignment
+     * Note: Should only be called once every Question in questions has been marked. If this is not the
+     * case, then the final mark will be lower than expected, as the default mark for each question is 0
+     */
+    //added November 10
+    public void setFinalMark(){
+        int temp = 0;
+        for(Question q: questions){
+            temp += q.getFinalMark();
+        }
+        this.finalMark = temp;
     }
 
 

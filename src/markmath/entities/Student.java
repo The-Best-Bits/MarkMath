@@ -41,7 +41,8 @@ public class Student {
         if (!this.assignments.contains(assignment)) {
             this.assignments.add(assignment);
             return true;
-        } else return false;
+        }
+        return false;
     }
 
     /**return the StudentAssignment of the given assignmentName.
