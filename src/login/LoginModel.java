@@ -18,35 +18,56 @@ public class LoginModel {
         }
     }
 
-    public boolean isDatabaseConnected(){
-        return this.connection != null;
-    }
-
-    public boolean isLogin(String user, String pass) throws Exception{
+    public boolean isPasswordAlreadySet() throws Exception {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT username, password FROM login";
+        String sql = "SELECT password FROM login";
+
+        try {
+            stmt = this.connection.createStatement();
+            rs = stmt.executeQuery(sql);
+            return rs.next();
+
+        } catch (SQLException ex) {
+            return false;
+        }
+        finally {
+            if (stmt != null && rs != null){
+                stmt.close();
+                rs.close();
+            }
+        }
+    }
+
+    public boolean isPassword(String pass) throws Exception{
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT password FROM login";
 
         try {
             stmt = this.connection.createStatement();
             rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                String userName = rs.getString(1);
-                String passWord = rs.getString(2);
+                String passWord = rs.getString(1);
 
-                if (userName.equals(user) && passWord.equals(pass)) {
+
+                if (passWord.equals(pass)) {
                     return true;
                 }
             }
+
             return false;
+
         } catch (SQLException ex) {
+            ex.printStackTrace();
             return false;
         }
 
         finally {
-            {
+            if (stmt != null && rs != null) {
                 stmt.close();
                 rs.close();
             }
