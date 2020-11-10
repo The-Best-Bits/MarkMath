@@ -47,4 +47,10 @@ public class ParsedDataPerAssignmentManager {
         }
         return null;
     }
+
+    /**
+     * Method is currently only being used for testing, but may be used in our program later in developement
+     * @return ArrayList of ParsedDataAssignments
+     */
+    public ArrayList<ParsedDataPerAssignment> getParsedDataAssignments(){return this.parsedDataAssignments;}
 }

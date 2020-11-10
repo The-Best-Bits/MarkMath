@@ -20,17 +20,23 @@ public class StudentAssignment {
      */
 
     private String studentName;
-    private String AssignmentName;
+    //added assignmentName, changed AssignmentName to assignmentType
+    private String assignmentType;
+    private String assignmentName;
     private int studentID;
     private ArrayList<Question> questions = new ArrayList<>();
+    //do we need to store the assignment outline in a student assignment?
     private AssignmentOutline outline;
     private float fullMark = 0;
     private float finalMark = 0;
 
     /* create a StudentAssignment with given student ID and name */
-    public StudentAssignment(int studentID, String name){
+    public StudentAssignment(int studentID, String studentName, String assignmentType, String assignmentName){
         this.studentID = studentID;
-        studentName = name;
+        this.studentName = studentName;
+        this.assignmentType = assignmentType;
+        this.assignmentName = assignmentName;
+
     }
 
 
@@ -41,17 +47,23 @@ public class StudentAssignment {
         this.fullMark = outline.returnFullMark();
     }
 
+
     public float getFinalMark(){return finalMark;}
 
     public float getFullMark(){return fullMark;}
 
     public int getStudentID(){return studentID;}
 
-    public String getAssignmentName(){return AssignmentName+ "_" +studentName;}
+    //changed
+    public String getAssignmentName(){return this.assignmentName;}
+
+    //added
+    public String getAssignmentType(){return this.assignmentType;}
 
     public ArrayList<Question> getQuestions(){return questions;}
 
-    public void setAssignmentName(String name){AssignmentName = name;}
+    //removed setAssignmentType method
+    public void setAssignmentName(String assignmentName){this.assignmentName = assignmentName;}
 
     public void addQuestion(Question ques){questions.add(ques);}
 
