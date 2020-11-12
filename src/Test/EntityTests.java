@@ -59,6 +59,12 @@ public class EntityTests {
         Assert.assertEquals((int)assignment.getFinalMark(), 11);
     }
 
+    @Test
+    public void getQuestion(){
+        assignment.addQuestion(q1);
+        Assert.assertEquals(assignment.getQuestion(1), q1);
+        Assert.assertNull(assignment.getQuestion(2));
+    }
     //Student Tests
     @Test
     public void addAssignments(){
