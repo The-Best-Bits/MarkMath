@@ -10,12 +10,8 @@ public class MarkingCalculator {
         this.question = question;
     }
 
-    public int getMark(){
-        int mark = 0;
-        //get full mark of the question from the assignment outline
-        if (question.getNumberOfErrors() > 1) {
-            //implement the method of calculating the mark for a question
-        }
-        return mark;
+    public Float getMark(Float fullMark){
+        float calculated = (float) (question.getNumberOfErrors()*0.5);
+        return fullMark - calculated;
     }
 }

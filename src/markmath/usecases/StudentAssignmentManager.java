@@ -83,8 +83,9 @@ public class StudentAssignmentManager {
         ArrayList<Question> ques = carbonCopy.getQuestions();
         for(Question q: ques){
             MarkingCalculator calculator = new MarkingCalculator(q);
+            HashMap<String, Float> outline = carbonCopy.getOutline().getQuestionToMarks();
             carbonCopy.setFinalMarkSingleQuestion(
-                    q.getQuestionNumber(), calculator.getMark());
+                    q.getQuestionNumber(), calculator.getMark(outline.get("question" + q.getQuestionNumber())));
         }
         carbonCopy.setFinalMark();
 
