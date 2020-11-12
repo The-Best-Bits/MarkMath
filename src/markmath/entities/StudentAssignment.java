@@ -81,7 +81,7 @@ public class StudentAssignment {
         }
     }
 
-    public void setFinalMarkSingleQuestion(int No, int mark){
+    public void setFinalMarkSingleQuestion(int No, float mark){
         for(Question q: questions) {
             if (q.getQuestionNumber() == No) {
                 q.setFinalMark(mark);
