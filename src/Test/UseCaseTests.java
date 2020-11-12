@@ -43,6 +43,20 @@ public class UseCaseTests {
         Assert.assertEquals(sa1.getQuestion(4).getNumberOfErrors(), 0);
     }
 
-    //need to test markAllQuestions and matchBundle
+    @Test
+    public void markAllQuestions(){
+        manager.markAllQuestions();
+        StudentAssignment carbonCopy = manager.getCarbonCopy();
+        Assert.assertEquals((int)carbonCopy.getFinalMark(), 18);
+        Assert.assertEquals((int)carbonCopy.getQuestion(1).getFinalMark(), 7);
+        Assert.assertEquals((int)carbonCopy.getQuestion(2).getFinalMark(), 5);
+        Assert.assertEquals((int)carbonCopy.getQuestion(3).getFinalMark(), 3);
+        Assert.assertEquals((int)carbonCopy.getQuestion(4).getFinalMark(), 3);
+        Assert.assertEquals((int)carbonCopy.getFullMark(), 22);
+    }
+
+
+
+    //need to test matchBundle
 
 }
