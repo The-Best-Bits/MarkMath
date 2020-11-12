@@ -10,7 +10,7 @@ public class MarkingCalculator {
         this.question = question;
     }
 
-    public Float getMark(Float fullMark){
+    public float getMark(float fullMark){
         float calculated = (float) (question.getNumberOfErrors()*0.5);
         return fullMark - calculated;
     }
