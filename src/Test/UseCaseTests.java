@@ -1,7 +1,9 @@
 package Test;
 
 import markmath.entities.AssignmentOutline;
+import markmath.entities.Question;
 import markmath.entities.StudentAssignment;
+import markmath.usecases.MarkingCalculator;
 import markmath.usecases.StudentAssignmentManager;
 import org.junit.*;
 
@@ -11,6 +13,7 @@ public class UseCaseTests {
 
     private static StudentAssignmentManager manager;
     private static AssignmentOutline outline;
+    private static MarkingCalculator calculator;
 
     @BeforeClass
     public static void setUp(){
@@ -55,8 +58,21 @@ public class UseCaseTests {
         Assert.assertEquals((int)carbonCopy.getFullMark(), 22);
     }
 
-
-
     //need to test matchBundle
 
+    //MarkingCalculator Tests
+    @Test
+    public void getMark_questionWithNoErrors(){
+        Question q1 = new Question(1, 0);
+        calculator = new MarkingCalculator(q1);
+        Assert.assertEquals((int)(calculator.getMark((float)5)), 5);
+
+    }
+
+    @Test
+    public void getMark_questionWithErrors(){
+        Question q1 = new Question(1, 4);
+        calculator = new MarkingCalculator(q1);
+        Assert.assertEquals((int)(calculator.getMark((float)5)), 3);
+    }
 }
