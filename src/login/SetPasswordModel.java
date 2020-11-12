@@ -4,10 +4,10 @@ import java.sql.*;
 
 import dbUtil.dbConnection;
 
-public class setPasswordModel {
+public class SetPasswordModel {
     Connection connection;
 
-    public setPasswordModel(){
+    public SetPasswordModel(){
         try {
             this.connection = dbConnection.getConnection();
         } catch (SQLException ex) {
