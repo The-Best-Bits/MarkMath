@@ -25,7 +25,7 @@ public class EntityTests {
         questionToMarks.put("question2", (float)4);
         a1 = new AssignmentOutline("Fractions1", questionToMarks);
         bundle1 = new AssignmentBundle(a1);
-        c1 = new Classroom("Math");
+        c1 = new Classroom("Math", "01");
 
     }
 

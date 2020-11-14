@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TableColumn?>
@@ -85,17 +86,50 @@
                 </Text>
             </children>
         </Pane>
-        <TableView layoutX="477.0" layoutY="233.0" prefHeight="742.0" prefWidth="1340.0">
+        <TableView fx:id="classroomtable" layoutX="439.0" layoutY="196.0" prefHeight="776.0" prefWidth="1051.0">
             <columns>
-                <TableColumn prefWidth="202.0" text="Classroom Id" />
-                <TableColumn minWidth="0.0" prefWidth="931.0" text="Classroom name" />
-                <TableColumn minWidth="0.0" prefWidth="206.33331298828125" text="View" />
+                <TableColumn fx:id="idcolumn" prefWidth="211.33331298828125" text="Classroom Id" />
+                <TableColumn fx:id="namecolumn" minWidth="0.0" prefWidth="513.0" text="Classroom name" />
             </columns>
         </TableView>
-        <JFXButton layoutX="1578.0" layoutY="140.0" onAction="#createClassroom" prefHeight="67.0" prefWidth="238.0" style="-fx-background-color: #4C6AB7;" text="New Classroom" textFill="WHITE">
+        <JFXButton layoutX="1572.0" layoutY="439.0" onAction="#addClassroom" prefHeight="67.0" prefWidth="238.0" style="-fx-background-color: #4C6AB7;" text="Add Classroom" textFill="WHITE">
             <font>
                 <Font size="25.0" />
             </font>
         </JFXButton>
+      <Pane layoutX="1489.0" layoutY="196.0" prefHeight="468.0" prefWidth="445.0" style="-fx-background-color: #ffffff; -fx-border-color: #e4e4e4;">
+         <children>
+            <JFXButton layoutX="104.0" layoutY="365.0" onAction="#loadClassroom" prefHeight="67.0" prefWidth="238.0" style="-fx-background-color: #4C6AB7;" text="Load Classroom" textFill="WHITE">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </JFXButton>
+            <JFXButton layoutX="104.0" layoutY="268.0" onAction="#addClassroom" prefHeight="67.0" prefWidth="238.0" style="-fx-background-color: #4C6AB7;" text="Add Classroom" textFill="WHITE">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </JFXButton>
+            <JFXTextField fx:id="classroomname" layoutX="85.0" layoutY="184.0" prefHeight="50.0" prefWidth="230.0" promptText="Enter name" style="-fx-background-color: #ffffff;">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </JFXTextField>
+            <Text fill="#404040" layoutX="84.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Classroom name:" wrappingWidth="178.50001215934753">
+               <font>
+                  <Font name="Yu Gothic UI Regular" size="21.0" />
+               </font>
+            </Text>
+            <JFXTextField fx:id="classroomid" layoutX="86.0" layoutY="63.0" prefHeight="50.0" prefWidth="227.0" promptText="Enter id" style="-fx-background-color: #ffffff;">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </JFXTextField>
+            <Text fill="#404040" layoutX="84.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Classroom id:" wrappingWidth="156.9669189453125">
+               <font>
+                  <Font name="Yu Gothic UI Regular" size="21.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
     </children>
 </AnchorPane>

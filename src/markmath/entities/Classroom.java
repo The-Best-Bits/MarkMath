@@ -1,4 +1,7 @@
 package markmath.entities;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.util.ArrayList;
 
 public class Classroom {
@@ -10,12 +13,14 @@ public class Classroom {
      *students: list of students in the class
      *assignmentBundles: list of assignment bundles in the class
      */
-    private String name;
+    private final StringProperty classname;
+    private final StringProperty id;
     private ArrayList<Student> students = new ArrayList<>();
     private ArrayList<AssignmentBundle> assignmentBundles = new ArrayList<>();
 
-    public Classroom(String name){
-        this.name = name;
+    public Classroom(String name, String id){
+        this.classname = new SimpleStringProperty(name);
+        this.id = new SimpleStringProperty(id);
     }
 
     public ArrayList<Student> getStudents(){
