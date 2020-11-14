@@ -1,4 +1,4 @@
-package Classroom;
+package Dashboard;
 
 
 import javafx.event.ActionEvent;
@@ -11,16 +11,28 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ClassroomController {
+public class DashboardController {
 
     @FXML
     void createClassroom(ActionEvent event) {
-    //TODO: Implement this
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/CreateClassroom/CreateClassroom.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+
+            stage.setTitle("Create New Classroom");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @FXML
     void openClassroom(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Classroom/Classroom.fxml"));
+        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
         Scene mainPage = new Scene(mainPageParent);
 
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();

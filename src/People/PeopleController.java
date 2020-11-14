@@ -25,7 +25,7 @@ public class PeopleController {
 
     @FXML
     void openClassroom(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Classroom/Classroom.fxml"));
+        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
         Scene mainPage = new Scene(mainPageParent);
 
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();

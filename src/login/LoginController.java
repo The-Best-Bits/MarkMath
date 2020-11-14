@@ -32,7 +32,7 @@ public class LoginController {
                 Stage stage = (Stage)this.loginButton.getScene().getWindow();
                 stage.close();
 
-                Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Classroom/Classroom.fxml"));
+                Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
                 Scene mainPage = new Scene(mainPageParent);
 
                 Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();

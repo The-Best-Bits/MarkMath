@@ -3,6 +3,8 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="1032.0" prefWidth="1930.0" style="-fx-background-color: #E4E4E4;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="People.PeopleController">
+<AnchorPane prefHeight="1032.0" prefWidth="1930.0" style="-fx-background-color: #E4E4E4;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Dashboard.DashboardController">
     <children>
         <VBox layoutX="-4.0" layoutY="-4.0" prefHeight="1038.0" prefWidth="382.0" style="-fx-background-color: #4C6AB7;">
             <children>
@@ -24,7 +26,7 @@
                         </ImageView>
                     </children></Pane>
                 <Pane prefHeight="76.0" prefWidth="382.0" />
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="410.0" ripplerFill="WHITE" text="  Classroom" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="410.0" text="  Classroom" textFill="WHITE">
                     <font>
                         <Font size="32.0" />
                     </font>
@@ -76,12 +78,24 @@
         </VBox>
         <Pane layoutX="378.0" layoutY="-2.0" prefHeight="120.0" prefWidth="1556.0" style="-fx-background-color: #FFFFFF;">
             <children>
-                <Text fill="#726d6d" layoutX="25.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="People" wrappingWidth="506.30029296875">
+                <Text fill="#726d6d" layoutX="25.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Classroom" wrappingWidth="506.30029296875">
                     <font>
                         <Font name="Yu Gothic UI Regular" size="50.0" />
                     </font>
                 </Text>
             </children>
         </Pane>
+        <TableView layoutX="477.0" layoutY="233.0" prefHeight="742.0" prefWidth="1340.0">
+            <columns>
+                <TableColumn prefWidth="202.0" text="Classroom Id" />
+                <TableColumn minWidth="0.0" prefWidth="931.0" text="Classroom name" />
+                <TableColumn minWidth="0.0" prefWidth="206.33331298828125" text="View" />
+            </columns>
+        </TableView>
+        <JFXButton layoutX="1578.0" layoutY="140.0" onAction="#createClassroom" prefHeight="67.0" prefWidth="238.0" style="-fx-background-color: #4C6AB7;" text="New Classroom" textFill="WHITE">
+            <font>
+                <Font size="25.0" />
+            </font>
+        </JFXButton>
     </children>
 </AnchorPane>
