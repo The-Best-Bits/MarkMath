@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -44,6 +45,7 @@ public class DashboardController implements Initializable {
     private JFXTextField classroomname;
 
     private dbConnection dbc;
+
     private ObservableList<Classroom> data;
 
     @FXML
@@ -72,8 +74,10 @@ public class DashboardController implements Initializable {
 
             ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM classrooms");
             while (rs.next()){
-                this.data.add(new Classroom(rs.getString("class_id"), rs.getString("class_name")));       //add data to resultset
-
+                this.data.add(new Classroom(rs.getString("class_name"), rs.getString("class_id")));      //add data to resultset
+                System.out.println(rs.getString("class_id"));
+                System.out.println(rs.getString("class_name"));
+                //if an empty classroom is added we should check for this and omit it
             }
         }catch (SQLException e){
             System.err.println("Error" + e);
@@ -142,7 +146,7 @@ public class DashboardController implements Initializable {
 
             ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM classrooms");
             while (rs.next()){
-                this.data.add(new Classroom(rs.getString("class_id"), rs.getString("class_name")));       //add data to resultset
+                this.data.add(new Classroom(rs.getString("class_name"), rs.getString("class_id")));       //add data to resultset
 
             }
         }catch (SQLException e){
