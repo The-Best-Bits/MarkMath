@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -47,12 +48,15 @@ public class DashboardController implements Initializable {
     @FXML
     private JFXTextField classroomname;
 
+    @FXML
+    private Label preExistingID;
+
     private dbConnection dbc;
 
     private ObservableList<Classroom> data;
 
     @FXML
-    private void addClassroom(ActionEvent event) throws preExistingClassroomIDException{
+    private void addClassroom(ActionEvent event) {
         String sqlInsert = "INSERT INTO classrooms(class_id, class_name) VALUES (?,?)";
         try {
             Connection conn = dbConnection.getConnection();
@@ -63,7 +67,7 @@ public class DashboardController implements Initializable {
                 preExistingClassroomIDs.add(rs.getString("class_id"));
             }
             if (preExistingClassroomIDs.contains(this.classroomid.getText())){
-                throw new preExistingClassroomIDException();
+                 this.preExistingID.setText("Error! Pre-existing Classroom ID");
             }
             else {
                 stmt.setString(1, this.classroomid.getText());
