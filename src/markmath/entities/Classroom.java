@@ -19,8 +19,8 @@ public class Classroom {
     private ArrayList<AssignmentBundle> assignmentBundles = new ArrayList<>();
 
     public Classroom(String name, String id){
-        this.classname = new String(name);
-        this.id = new String(id);
+        this.classname = name;
+        this.id = id;
     }
 
     public ArrayList<Student> getStudents(){
