@@ -5,10 +5,15 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+import java.awt.*;
 
 public class LoginController {
 
@@ -30,12 +35,17 @@ public class LoginController {
                 Stage stage = (Stage)this.loginButton.getScene().getWindow();
                 stage.close();
 
-                Stage newStage = new Stage();
+                Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
+                Scene mainPage = new Scene(mainPageParent);
+                Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+                window.setScene(mainPage);
+                window.show();
+                /*Stage newStage = new Stage();
                 FXMLLoader loader = new FXMLLoader();
                 Pane root = loader.load(getClass().getResource("/MarkmathApp/MarkMath.fxml").openStream());
                 Scene scene = new Scene(root);
                 newStage.setScene(scene);
-                newStage.show();
+                newStage.show();*/
             }
             else {
                 this.wrongPassword.setText("Wrong password! Please try again.");

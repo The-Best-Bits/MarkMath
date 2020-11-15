@@ -1,5 +1,6 @@
 package login;
 
+import Server.SocketIOServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,15 +13,21 @@ public class Login extends Application {
 
     public static void main(String[] args) {
         launch(args);
+
     }
 
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = openLogin();
         Scene scene = new Scene(root);
-
         stage.setScene(scene);
         stage.show();
+        //start the server
+        SocketIOServer server = new SocketIOServer();
+        server.start();
+        //configure app to screen size of current device
+        
+
     }
 
     public Parent openLogin() throws Exception{
