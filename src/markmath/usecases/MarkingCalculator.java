@@ -12,6 +12,6 @@ public class MarkingCalculator {
 
     public float getMark(float fullMark){
         float calculated = (float) (question.getNumberOfErrors()*0.5);
-        return fullMark - calculated;
+        return Math.max(fullMark - calculated, 0);
     }
 }
