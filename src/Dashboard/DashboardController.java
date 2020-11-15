@@ -1,6 +1,8 @@
 package Dashboard;
 
 
+import AssignmentBundle.AssignmentBundlePageController;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import dbUtil.dbConnection;
 import javafx.collections.FXCollections;
@@ -13,7 +15,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -27,11 +28,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 
 
-public class DashboardController implements Initializable {
+public class DashboardController<MyType> implements Initializable {
     @FXML
     private TableView<Classroom> classroomtable;
 
@@ -54,6 +56,9 @@ public class DashboardController implements Initializable {
     private dbConnection dbc;
 
     private ObservableList<Classroom> data;
+    private MyType temp;
+    private Date lastClickTime;
+    private Stage stage;
 
     @FXML
     private void addClassroom(ActionEvent event) {
@@ -106,22 +111,47 @@ public class DashboardController implements Initializable {
 
     }
 
+    private JFXButton openClassroom;
     @FXML
-    void createClassroom(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/CreateClassroom/CreateClassroom.fxml"));
-            Parent root = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
+    private void handleRowSelect() {
+        //Detect double click
+        MyType row = (MyType) this.classroomtable.getSelectionModel().getSelectedItem();
+        if (row == null) return;
+        if(row != temp){
+            temp = row;
+            lastClickTime = new Date();
+        } else if(row == temp) {
+            Date now = new Date();
+            long diff = now.getTime() - lastClickTime.getTime();
+            if (diff < 300){ //another click registered in 300 millis
+                //Load the assignment bundle page with selected class's assignment bundles presented
+                FXMLLoader Loader = new FXMLLoader();
 
-            stage.setTitle("Create New Classroom");
-            stage.setScene(new Scene(root));
-            stage.show();
+                Loader.setLocation(getClass().getResource("/AssignmentBundle/AssignmentBundlePage.fxml"));
 
-        } catch (IOException e) {
-            e.printStackTrace();
+                try {
+                    Loader.load();
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                AssignmentBundlePageController aBundlePage = Loader.getController();
+                aBundlePage.setClassroomID(this.classroomtable.getSelectionModel().getSelectedItem().getId());
+
+                Parent p = Loader.getRoot();
+                Scene scene = new Scene(p);
+
+                Stage stage = (Stage)classroomtable.getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
+
+            } else {
+                lastClickTime = new Date();
+            }
         }
-
     }
+
 
     @FXML
     void openClassroom(ActionEvent event) throws IOException {
