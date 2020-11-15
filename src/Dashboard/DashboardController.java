@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -25,7 +26,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+
 
 public class DashboardController implements Initializable {
     @FXML
@@ -44,6 +48,9 @@ public class DashboardController implements Initializable {
     @FXML
     private JFXTextField classroomname;
 
+    @FXML
+    private Label preExistingID;
+
     private dbConnection dbc;
 
     private ObservableList<Classroom> data;
@@ -54,10 +61,18 @@ public class DashboardController implements Initializable {
         try {
             Connection conn = dbConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sqlInsert);
-
-            stmt.setString(1, this.classroomid.getText());
-            stmt.setString(2, this.classroomname.getText());
-
+            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM classrooms");
+            ArrayList<String> preExistingClassroomIDs = new ArrayList<>();
+            while(rs.next()){
+                preExistingClassroomIDs.add(rs.getString("class_id"));
+            }
+            if (preExistingClassroomIDs.contains(this.classroomid.getText())){
+                 this.preExistingID.setText("Error! Pre-existing Classroom ID");
+            }
+            else {
+                stmt.setString(1, this.classroomid.getText());
+                stmt.setString(2, this.classroomname.getText());
+            }
             stmt.execute();
             conn.close();
         } catch (SQLException throwable) {
