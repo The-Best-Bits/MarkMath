@@ -25,7 +25,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+
 
 public class DashboardController implements Initializable {
     @FXML
@@ -49,15 +52,23 @@ public class DashboardController implements Initializable {
     private ObservableList<Classroom> data;
 
     @FXML
-    private void addClassroom(ActionEvent event) {
+    private void addClassroom(ActionEvent event) throws preExistingClassroomIDException{
         String sqlInsert = "INSERT INTO classrooms(class_id, class_name) VALUES (?,?)";
         try {
             Connection conn = dbConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sqlInsert);
-
-            stmt.setString(1, this.classroomid.getText());
-            stmt.setString(2, this.classroomname.getText());
-
+            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM classrooms");
+            ArrayList<String> preExistingClassroomIDs = new ArrayList<>();
+            while(rs.next()){
+                preExistingClassroomIDs.add(rs.getString("class_id"));
+            }
+            if (preExistingClassroomIDs.contains(this.classroomid.getText())){
+                throw new preExistingClassroomIDException();
+            }
+            else {
+                stmt.setString(1, this.classroomid.getText());
+                stmt.setString(2, this.classroomname.getText());
+            }
             stmt.execute();
             conn.close();
         } catch (SQLException throwable) {
