@@ -9,8 +9,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+import java.awt.*;
 
 public class LoginController {
 
@@ -34,7 +37,6 @@ public class LoginController {
 
                 Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
                 Scene mainPage = new Scene(mainPageParent);
-
                 Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
                 window.setScene(mainPage);
                 window.show();

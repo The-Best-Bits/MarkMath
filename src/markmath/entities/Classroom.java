@@ -13,14 +13,14 @@ public class Classroom {
      *students: list of students in the class
      *assignmentBundles: list of assignment bundles in the class
      */
-    private final StringProperty classname;
-    private final StringProperty id;
+    private final String classname;
+    private final String id;
     private ArrayList<Student> students = new ArrayList<>();
     private ArrayList<AssignmentBundle> assignmentBundles = new ArrayList<>();
 
     public Classroom(String name, String id){
-        this.classname = new SimpleStringProperty(name);
-        this.id = new SimpleStringProperty(id);
+        this.classname = new String(name);
+        this.id = new String(id);
     }
 
     public ArrayList<Student> getStudents(){
@@ -30,6 +30,12 @@ public class Classroom {
     public ArrayList<AssignmentBundle> getAssignmentBundles(){
         return this.assignmentBundles;
     }
+
+    public String getClassname(){
+        return this.classname;
+    }
+
+    public String getId(){return this.id;}
 
     /**Return the AssignmentBundle with the given assignment name.
      *Return null if the assignment is not found

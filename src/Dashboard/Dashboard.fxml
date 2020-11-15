@@ -77,7 +77,7 @@
                 </Pane>
             </children>
         </VBox>
-        <Pane layoutX="378.0" layoutY="-2.0" prefHeight="120.0" prefWidth="1556.0" style="-fx-background-color: #FFFFFF;">
+        <Pane layoutX="378.0" layoutY="-2.0" style="-fx-background-color: #FFFFFF;">
             <children>
                 <Text fill="#726d6d" layoutX="25.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Classroom" wrappingWidth="506.30029296875">
                     <font>
