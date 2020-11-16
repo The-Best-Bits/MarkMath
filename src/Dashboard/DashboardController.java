@@ -62,32 +62,43 @@ public class DashboardController<MyType> implements Initializable {
 
     @FXML
     private void addClassroom(ActionEvent event) {
-        String sqlInsert = "INSERT INTO classrooms(class_id, class_name) VALUES (?,?)";
-        try {
-            Connection conn = dbConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sqlInsert);
-            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM classrooms");
-            ArrayList<String> preExistingClassroomIDs = new ArrayList<>();
-            while(rs.next()){
-                preExistingClassroomIDs.add(rs.getString("class_id"));
+        //first check if the user has left the classroomid or classroomname text fields empty
+        if(this.classroomid.getText().equals("") || this.classroomname.getText().equals(""))
+        {
+            this.preExistingID.setText("Error! Text field left blank");
+        }
+        else {
+            String sqlInsert = "INSERT INTO classrooms(class_id, class_name) VALUES (?,?)";
+            try {
+                Connection conn = dbConnection.getConnection();
+                ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM classrooms");
+                ArrayList<String> preExistingClassroomIDs = new ArrayList<>();
+                while (rs.next()) {
+                    preExistingClassroomIDs.add(rs.getString("class_id"));
+                }
+                //check if there already exists a classroom with the passed id
+                if (preExistingClassroomIDs.contains(this.classroomid.getText())) {
+                    this.preExistingID.setText("Error! Pre-existing Classroom ID");
+                } else {
+                    this.preExistingID.setText("Classroom successfully added");
+                    PreparedStatement stmt = conn.prepareStatement(sqlInsert);
+                    //check if text fields are empty
+                    stmt.setString(1, this.classroomid.getText());
+                    stmt.setString(2, this.classroomname.getText());
+                    stmt.execute();
+                }
+                conn.close();
+
+            } catch (SQLException throwable) {
+                throwable.printStackTrace();
             }
-            if (preExistingClassroomIDs.contains(this.classroomid.getText())){
-                 this.preExistingID.setText("Error! Pre-existing Classroom ID");
-            }
-            else {
-                stmt.setString(1, this.classroomid.getText());
-                stmt.setString(2, this.classroomname.getText());
-            }
-            stmt.execute();
-            conn.close();
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
         }
 
     }
 
     @FXML
     private void loadClassroom(ActionEvent event) throws SQLException {
+        this.preExistingID.setText("");
         try {                                                                                                 //establish connection
             Connection conn = dbConnection.getConnection();
             this.data = FXCollections.observableArrayList();

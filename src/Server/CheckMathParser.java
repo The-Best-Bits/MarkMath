@@ -76,4 +76,8 @@ public class CheckMathParser {
         }
     }
 
+    //added November 15
+    public static ParsedDataPerAssignmentManager getParsedDataManager(){
+        return parsedDataManager;
+    }
 }
