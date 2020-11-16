@@ -62,6 +62,40 @@ public class SocketIOServer {
         server.start();
     }
 
+    /**
+     * Configures the server, starts the server, connects to Hypatia's CheckMath, and receives the results events
+     * emitted by Hypatia
+     */
+    public void start(){
+        Configuration config = new Configuration();
+        config.setHostname("localhost");
+        config.setPort(3333);
+        com.corundumstudio.socketio.SocketIOServer server = new com.corundumstudio.socketio.SocketIOServer(config);
+
+
+        // once Hypatia is connected to the server this method will be run
+        server.addConnectListener(new ConnectListener() {
+            @Override
+            public void onConnect(SocketIOClient socketIOClient) {
+                System.out.println("Connected to Hypatia's CheckMath");
+            }
+        });
+
+        // listen for the "results" event emitted by Hypatia
+        // we only need the information from this event, not the "expressions" event
+        server.addEventListener("result", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+                System.out.println("Client Results" + s);
+                CheckMathParser temp = new CheckMathParser();
+                temp.parseResult(s);
+            }
+        });
+
+        server.start();
+
+    }
+
 
 
 }

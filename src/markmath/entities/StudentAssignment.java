@@ -62,6 +62,20 @@ public class StudentAssignment {
 
     public ArrayList<Question> getQuestions(){return questions;}
 
+    /**
+     *
+     * @param questionNum the number of the Question
+     * @return the Question in this StudentAssignment with the given question number
+     */
+    public Question getQuestion(int questionNum){
+        for (int i =0; i < questions.size(); i++){
+            if (questions.get(i).getQuestionNumber() == questionNum){
+                return questions.get(i);
+            }
+        }
+        return null;
+    }
+
     //removed setAssignmentType method
     public void setAssignmentName(String assignmentName){this.assignmentName = assignmentName;}
 
@@ -81,7 +95,7 @@ public class StudentAssignment {
         }
     }
 
-    public void setFinalMarkSingleQuestion(int No, int mark){
+    public void setFinalMarkSingleQuestion(int No, float mark){
         for(Question q: questions) {
             if (q.getQuestionNumber() == No) {
                 q.setFinalMark(mark);

@@ -25,7 +25,7 @@ public class EntityTests {
         questionToMarks.put("question2", (float)4);
         a1 = new AssignmentOutline("Fractions1", questionToMarks);
         bundle1 = new AssignmentBundle(a1);
-        c1 = new Classroom("Math");
+        c1 = new Classroom("Math", "01");
 
     }
 
@@ -59,6 +59,12 @@ public class EntityTests {
         Assert.assertEquals((int)assignment.getFinalMark(), 11);
     }
 
+    @Test
+    public void getQuestion(){
+        assignment.addQuestion(q1);
+        Assert.assertEquals(assignment.getQuestion(1), q1);
+        Assert.assertNull(assignment.getQuestion(2));
+    }
     //Student Tests
     @Test
     public void addAssignments(){

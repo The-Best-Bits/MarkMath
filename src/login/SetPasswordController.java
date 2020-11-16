@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 public class SetPasswordController {
 
-    setPasswordModel setPasswordModel = new setPasswordModel();
+    SetPasswordModel setPasswordModel = new SetPasswordModel();
 
     @FXML
     private JFXButton setPasswordButton;

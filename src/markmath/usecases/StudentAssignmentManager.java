@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class StudentAssignmentManager {
     /**
      *  Manages a single student assignment by creating the copy, adding questions,
-     *  marking them, and putting them in the correcr bundle.
+     *  marking them, and putting them in the correct bundle.
      *
      *  Attributes:
      *  carbonCopy: the copy of a StudentAssignment
@@ -22,29 +22,30 @@ public class StudentAssignmentManager {
 
 
     public StudentAssignmentManager(int studentID, String studentName, String assignmentName, String assignmentType,
-                                    HashMap<String, Integer> finalParsedData){
+                                    HashMap<String, Integer> finalParsedData, AssignmentOutline outline){
         this.studentID = studentID;
         this.studentName = studentName;
         carbonCopy = new StudentAssignment(studentID, studentName, assignmentType, assignmentName);
+        carbonCopy.setOutline(outline);
         this.addQuestions(finalParsedData);
     }
 
-    /**
-    Sets the assignment outline for the StudentAssignment this StudentAssignmentManager manages
-     */
-    //changed
-    //we have the assignmentType of this document so why don't we just set the assignment outline ourself? No need for
-    //this method. But how do we get the assignment outline corresponding?
-    public void setCopy(AssignmentOutline outline){
-        //removed line
-        carbonCopy.setOutline(outline);
-    }
+//    /**
+//    Sets the assignment outline for the StudentAssignment this StudentAssignmentManager manages
+//     */
+//    //changed
+//    //we have the assignmentType of this document so why don't we just set the assignment outline ourself? No need for
+//    //this method. But how do we get the assignment outline corresponding?
+//    public void setCopy(AssignmentOutline outline){
+//        //removed line
+//        carbonCopy.setOutline(outline);
+//    }
 
     /**
     Uses the parsed data to add all of the Questions to the StudentAssignment this StudentAssignmentManager manages
     Pre condition: The outline for this carbon copy must be set before this method is called
      */
-    public void addQuestions(HashMap<String, Integer> finalParsedData){
+    private void addQuestions(HashMap<String, Integer> finalParsedData){
         HashMap<String, Float> questionToMarks = carbonCopy.getOutline().getQuestionToMarks();
         int numOfQuestions = questionToMarks.size();
         int i =1;
@@ -81,13 +82,13 @@ public class StudentAssignmentManager {
      */
     public void markAllQuestions(){
         ArrayList<Question> ques = carbonCopy.getQuestions();
+        HashMap<String, Float> outline = carbonCopy.getOutline().getQuestionToMarks();
         for(Question q: ques){
             MarkingCalculator calculator = new MarkingCalculator(q);
             carbonCopy.setFinalMarkSingleQuestion(
-                    q.getQuestionNumber(), calculator.getMark());
+                    q.getQuestionNumber(), calculator.getMark(outline.get("question" + q.getQuestionNumber())));
         }
         carbonCopy.setFinalMark();
-
     }
 
     /**
