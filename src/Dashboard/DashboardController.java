@@ -1,7 +1,7 @@
 package Dashboard;
 
 
-import AssignmentBundle.AssignmentBundlePageController;
+import Classroom.ClassroomController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import dbUtil.dbConnection;
@@ -138,7 +138,7 @@ public class DashboardController<MyType> implements Initializable {
                 //Load the assignment bundle page with selected class's assignment bundles presented
                 FXMLLoader Loader = new FXMLLoader();
 
-                Loader.setLocation(getClass().getResource("/AssignmentBundle/AssignmentBundlePage.fxml"));
+                Loader.setLocation(getClass().getResource("/Classroom/Classroom.fxml"));
 
                 try {
                     Loader.load();
@@ -147,9 +147,9 @@ public class DashboardController<MyType> implements Initializable {
                     e.printStackTrace();
                 }
 
-                AssignmentBundlePageController aBundlePage = Loader.getController();
-                aBundlePage.setClassroomID(this.classroomtable.getSelectionModel().getSelectedItem().getId());
-
+                ClassroomController classroomController = Loader.getController();
+                classroomController.setClassroomID(this.classroomtable.getSelectionModel().getSelectedItem().getId());
+                classroomController.loadData();
                 Parent p = Loader.getRoot();
                 Scene scene = new Scene(p);
 
