@@ -1,5 +1,7 @@
 package Classroom;
 
+import Server.CheckMathParser;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import dbUtil.dbConnection;
 import javafx.collections.FXCollections;
@@ -11,17 +13,23 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import markmath.controllers.ParsedDataPerAssignment;
+import markmath.controllers.ParsedDataPerAssignmentManager;
+import markmath.entities.AssignmentOutline;
+import markmath.entities.StudentAssignment;
+import markmath.usecases.StudentAssignmentManager;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class ClassroomController implements Initializable {
@@ -60,6 +68,11 @@ public class ClassroomController implements Initializable {
 
     private ObservableList<AssignmentData> assignment_data;
 
+    @FXML
+    private JFXButton markButton;
+
+    @FXML
+    private Label errorMarkingStudentAssignment;
 
     private String classroomID;
 
@@ -165,6 +178,158 @@ public class ClassroomController implements Initializable {
         window.show();
     }
 
+    @FXML
+    void markAssignment(ActionEvent event){
+        ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
+        ArrayList<ParsedDataPerAssignment> parsedDataAssignmnents = manager.getParsedDataAssignments();
+        for (ParsedDataPerAssignment assignment: parsedDataAssignmnents){
+            //check that the student exists in this classroom
+            //check that their is a corresponding assignment bundle in this classroom
+            if(!studentInClassroom(assignment.getStudentNum()) || !assignmentBundleInClassroom(assignment.getAssignmentType())){
+                this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with this student document is not in this classroom");
+            }
+            else{
+                //get assignment outline
+                AssignmentOutline outline = getAssignmentOutline(assignment.getAssignmentType());
+                //get student name
+                String studentName = getStudentNameFromDatabase(assignment.getStudentNum());
+                StudentAssignmentManager saManager = new StudentAssignmentManager(assignment.getStudentNum(),
+                        studentName, assignment.getAssignmentName(), assignment.getAssignmentType(),
+                        assignment.getFinalParsedData(), outline);
+                saManager.markAllQuestions();
+                StudentAssignment studentAssignment = saManager.getCarbonCopy();
+                //add StudentAssignment to Database
+                addStudentAssignmentToDatabase(studentAssignment);
+
+            }
+
+        }
+
+    }
+
+    private Boolean studentInClassroom(String studentNum){
+
+        try{
+            Connection conn = dbConnection.getConnection();
+//            ResultSet rs = conn.createStatement().executeQuery("SELECT student_id FROM students WHERE class_id LIKE concat('%', " + this.classroomID + ", '%'");
+            ResultSet rs = conn.createStatement().executeQuery("SELECT class_id FROM students WHERE student_id =" + studentNum);
+            String class_ids = rs.getString("class_id");
+            System.out.println(class_ids);
+            if (class_ids.contains(this.classroomID)){
+                conn.close();
+                return true;
+            }
+//            while (rs.next()){
+//                if(rs.getString("student_id").equals(studentNum)){
+//                    conn.close();
+//                    return true;
+//                }
+//            }
+            System.out.println("test");
+            conn.close();
+            return false;
+
+        }catch(SQLException e){
+            System.out.println("Error" + e);
+        }
+
+        return false;
+
+    }
+
+    private Boolean assignmentBundleInClassroom(String assignmentType){
+        try{
+            Connection conn = dbConnection.getConnection();
+            ResultSet rs = conn.createStatement().executeQuery("SELECT assignment_name FROM AssignmentBundles WHERE classroom_id =" + this.classroomID);
+            while (rs.next()){
+                if(rs.getString("assignment_name").equals(assignmentType)){
+                    conn.close();
+                    return true;
+                }
+            }
+            conn.close();
+            return false;
+
+        }catch(SQLException e){
+            System.out.println("Error" + e);
+        }
+
+        return false;
+    }
+
+    private AssignmentOutline getAssignmentOutline(String assignmentType){
+        try{
+            Connection conn = dbConnection.getConnection();
+            String sqlQuery = "SELECT * FROM " + assignmentType + " ORDER BY ROWID ASC LIMIT 1";
+            ResultSet rs = conn.createStatement().executeQuery(sqlQuery);
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int numColumns = rsmd.getColumnCount();
+            HashMap<String, Float> questionToMarks = new HashMap<>();
+            System.out.println(numColumns);
+            for (int i =1; i <= numColumns-4; i++){
+                String question = "question" + i;
+                questionToMarks.put(question, rs.getFloat(question));
+            }
+            conn.close();
+            AssignmentOutline outline = new AssignmentOutline(assignmentType, questionToMarks);
+            return outline;
+        }catch(SQLException e){
+            System.out.println("Error" + e);
+        }
+
+        return null;
+    }
+
+    private String getStudentNameFromDatabase(String studentNum){
+        try{
+            Connection conn = dbConnection.getConnection();
+            String sqlQuery = "SELECT student_name FROM students WHERE student_id = " + studentNum;
+            ResultSet rs = conn.createStatement().executeQuery(sqlQuery);
+            String studentName = rs.getString("student_name");
+            conn.close();
+            return studentName;
+        }
+        catch(SQLException e){
+            System.out.println("Error" + e);
+        }
+        return null;
+    }
+
+    private void addStudentAssignmentToDatabase(StudentAssignment assignment){
+
+        int numQuestions = assignment.getQuestions().size();
+        StringBuilder questions = new StringBuilder();
+        StringBuilder questionMarks = new StringBuilder("(?,?,?,?");
+        for (int i =1; i<=numQuestions; i++){
+            questions.append(", question").append(i);
+            questionMarks.append(",?");
+        }
+        questions.append(", total)");
+        questionMarks.append(")");
+        String sqlInsert = "INSERT INTO " + assignment.getAssignmentType() + "(student_id, student_name, document_name"
+                + questions + " VALUES " + questionMarks;
+        System.out.println(sqlInsert);
+        try{
+            Connection conn = dbConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sqlInsert);
+            stmt.setString(1, assignment.getStudentID());
+            stmt.setString(2, assignment.getStudentName());
+            stmt.setString(3, assignment.getAssignmentName());
+            int q = 1;
+            while(q<= numQuestions){
+                stmt.setFloat(q+3, assignment.getQuestion(q).getFinalMark());
+                q +=1;
+            }
+            stmt.setFloat(q+3, assignment.getFinalMark());
+            stmt.execute();
+            conn.close();
+
+        }catch(SQLException e){
+            System.out.println("Error" + e);
+        }
 
 
+
+
+    }
 }

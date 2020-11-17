@@ -46,7 +46,7 @@ public class CheckMathParser {
         HashMap<String, Object> resultsData = new HashMap<>();
         try{
             ArrayList<String> docInfo = docNameParser.getDocNameInfo((String)tempResultsMap.get("docname"));
-            resultsData.put("studentName", docInfo.get(0));
+            resultsData.put("studentNum", docInfo.get(0));
             resultsData.put("assignmentType", docInfo.get(1));
             resultsData.put("documentName", docInfo.get(2));
             resultsData.put("problemNumber", tempResultsMap.get("problem"));
