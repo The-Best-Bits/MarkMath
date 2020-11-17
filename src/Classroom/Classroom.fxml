@@ -127,6 +127,8 @@
                                     <Font name="Yu Gothic UI Regular" size="12.0" />
                                  </font>
                               </Label>
+                              <JFXButton fx:id="markButton" layoutX="62.0" layoutY="362.0" onAction="#markAssignment" prefHeight="25.0" prefWidth="165.0" text="Mark Assignment " />
+                              <Label fx:id="errorMarkingStudentAssignment" layoutX="46.0" layoutY="401.0" prefHeight="50.0" prefWidth="198.0" textFill="#d40404" />
                            </children>
                         </Pane>
                         <TableView fx:id="assignment_table" layoutX="151.0" layoutY="136.0" onSort="#loadStudentData" prefHeight="649.0" prefWidth="763.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="302.0" AnchorPane.topAnchor="0.0">

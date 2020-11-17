@@ -1,5 +1,7 @@
 package Classroom;
 
+import Server.CheckMathParser;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import dbUtil.dbConnection;
 import javafx.collections.FXCollections;
@@ -11,17 +13,24 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import markmath.controllers.ParsedDataPerAssignment;
+import markmath.controllers.ParsedDataPerAssignmentManager;
+import markmath.entities.AssignmentOutline;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class ClassroomController implements Initializable {
@@ -60,6 +69,11 @@ public class ClassroomController implements Initializable {
 
     private ObservableList<AssignmentData> assignment_data;
 
+    @FXML
+    private JFXButton markButton;
+
+    @FXML
+    private Label errorMarkingStudentAssignment;
 
     private String classroomID;
 
@@ -165,6 +179,86 @@ public class ClassroomController implements Initializable {
         window.show();
     }
 
+    @FXML
+    void markAssignment(ActionEvent event){
+        ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
+        ArrayList<ParsedDataPerAssignment> parsedDataAssignmnents = manager.getParsedDataAssignments();
+        for (ParsedDataPerAssignment assignment: parsedDataAssignmnents){
+            //check that the student exists in this classroom
+            //check that their is a corresponding assignment bundle in this classroom
+            if(!studentInClassroom(assignment.getStudentNum()) || !assignmentBundleInClassroom(assignment.getAssignmentType())){
+                this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with this student document is not in this classroom");
+            }
+            else{
+                //add student info to the assignment bundle for this classroom
 
+            }
+
+
+
+
+        }
+
+    }
+
+    private Boolean studentInClassroom(String studentNum){
+
+        try{
+            Connection conn = dbConnection.getConnection();
+            ResultSet rs = conn.createStatement().executeQuery("SELECT student_id FROM students WHERE CHARINDEX(':" + this.classroomID + ":', class_id)>0)");
+            while (rs.next()){
+                if(rs.getString("student_id").equals(studentNum)){
+                    conn.close();
+                    return true;
+                }
+            }
+            conn.close();
+            return false;
+
+        }catch(SQLException e){
+            System.out.println("Error" + e);
+        }
+
+        return false;
+
+    }
+
+    private Boolean assignmentBundleInClassroom(String assignmentType){
+        try{
+            Connection conn = dbConnection.getConnection();
+            ResultSet rs = conn.createStatement().executeQuery("SELECT assignment_name FROM AssignmentBundles WHERE classroom_id =" + this.classroomID);
+            while (rs.next()){
+                if(rs.getString("assignment_name").equals(assignmentType)){
+                    conn.close();
+                    return true;
+                }
+            }
+            conn.close();
+            return false;
+
+        }catch(SQLException e){
+            System.out.println("Error" + e);
+        }
+
+        return false;
+    }
+
+    private AssignmentOutline getAssignmentOutline(String assignmentType){
+        try{
+            Connection conn = dbConnection.getConnection();
+            String sqlQuery = "SELECT * FROM " + assignmentType + " ORDER BY ROWID ASC LIMIT 1";
+            ResultSet rs = conn.createStatement().executeQuery(sqlQuery);
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int numColumns = rsmd.getColumnCount();
+            HashMap<String, Float> questionToMarks = new HashMap<>();
+            System.out.println(numColumns);
+            for (int i =1; i <= numColumns-4; i++){
+                String question = "question" + i;
+                questionToMarks.put(question, rs.getFloat(question));
+            }
+        }catch(SQLException e){
+            System.out.println("Error" + e);
+        }
+    }
 
 }
