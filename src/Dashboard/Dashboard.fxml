@@ -28,7 +28,7 @@
                         </ImageView>
                     </children></Pane>
                 <Pane prefHeight="76.0" prefWidth="382.0" />
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="348.0" text="  Classroom" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="295.0" text="Classrooms" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -80,7 +80,7 @@
         </VBox>
         <Pane layoutX="304.0" prefHeight="93.0" prefWidth="1065.0" style="-fx-background-color: #FFFFFF;">
             <children>
-                <Text fill="#726d6d" layoutX="21.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Classroom" wrappingWidth="506.30029296875">
+                <Text fill="#726d6d" layoutX="21.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Classrooms" wrappingWidth="506.30029296875">
                     <font>
                         <Font name="Yu Gothic UI Regular" size="39.0" />
                     </font>
