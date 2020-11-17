@@ -14,7 +14,7 @@ public class ParsedDataPerAssignment {
      */
     private String assignmentName;
     private String assignmentType;
-    private String studentName;
+    private String studentNum;
     private HashMap<String, Integer> finalParsedData;
 
     /**
@@ -25,7 +25,7 @@ public class ParsedDataPerAssignment {
      */
     public ParsedDataPerAssignment(HashMap<String, Object> parsedData){
         this.assignmentName = (String) parsedData.get("documentName");
-        this.studentName = (String) parsedData.get("studentName");
+        this.studentNum = (String) parsedData.get("studentNum");
         this.assignmentType = (String) parsedData.get("assignmentType");
         this.finalParsedData = new HashMap<>();
         String question = ("question" + (int)  parsedData.get("problemNumber"));
@@ -51,11 +51,11 @@ public class ParsedDataPerAssignment {
     }
 
     /**
-     * Returns the name of the student of the document this ParsedDataPerAssignment object corresponds to
-     * @return studentName
+     * Returns the student number of the student of the document this ParsedDataPerAssignment object corresponds to
+     * @return studentNum
      */
-    public String getStudentName(){
-        return this.studentName;
+    public String getStudentNum(){
+        return this.studentNum;
     }
 
     /**
