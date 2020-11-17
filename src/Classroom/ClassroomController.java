@@ -306,30 +306,63 @@ public class ClassroomController implements Initializable {
         }
         questions.append(", total)");
         questionMarks.append(")");
-        String sqlInsert = "INSERT INTO " + assignment.getAssignmentType() + "(student_id, student_name, document_name"
-                + questions + " VALUES " + questionMarks;
+        String sqlInsert = "";
+        Boolean studentAssignmentInDatabase = false;
+        //check if student assignment is already in database
+        if (studentAssignmentInDatabase(assignment.getStudentID(), assignment.getAssignmentType())){
+            studentAssignmentInDatabase = true;
+            StringBuilder sqlUpdate = new StringBuilder("UPDATE " + assignment.getAssignmentType() + " SET ");
+            int q =1;
+            while(q< numQuestions){
+                sqlUpdate.append("question" + q + "=" + assignment.getQuestion(q).getFinalMark() + ", ");
+                q+=1;
+            }
+            sqlUpdate.append("question").append(q).append("=").append(assignment.getQuestion(q).getFinalMark());
+            sqlUpdate.append(" WHERE student_id=" + assignment.getStudentID());
+            sqlInsert = sqlUpdate.toString();
+        }
+        else {
+             sqlInsert = "INSERT INTO " + assignment.getAssignmentType() + "(student_id, student_name, document_name"
+                    + questions + " VALUES " + questionMarks;
+        }
         System.out.println(sqlInsert);
         try{
             Connection conn = dbConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sqlInsert);
-            stmt.setString(1, assignment.getStudentID());
-            stmt.setString(2, assignment.getStudentName());
-            stmt.setString(3, assignment.getAssignmentName());
-            int q = 1;
-            while(q<= numQuestions){
-                stmt.setFloat(q+3, assignment.getQuestion(q).getFinalMark());
-                q +=1;
+            if(!studentAssignmentInDatabase) {
+                stmt.setString(1, assignment.getStudentID());
+                stmt.setString(2, assignment.getStudentName());
+                stmt.setString(3, assignment.getAssignmentName());
+                int q = 1;
+                while (q <= numQuestions) {
+                    stmt.setFloat(q + 3, assignment.getQuestion(q).getFinalMark());
+                    q += 1;
+                }
+                stmt.setFloat(q + 3, assignment.getFinalMark());
             }
-            stmt.setFloat(q+3, assignment.getFinalMark());
             stmt.execute();
             conn.close();
 
         }catch(SQLException e){
             System.out.println("Error" + e);
         }
+    }
 
+    private Boolean studentAssignmentInDatabase(String studentNum, String assignmentType){
+        try{
+            Connection conn = dbConnection.getConnection();
+            String sqlQuery = "SELECT student_name FROM " + assignmentType + " WHERE student_id =" + studentNum;
+            ResultSet rs = conn.createStatement().executeQuery(sqlQuery);
+            if (rs.next()){
+                conn.close();
+                return true;
+            }
+            conn.close();
+            return false;
+        }catch(SQLException e){
+            System.out.println("Error" + e);
+        }
 
-
-
+        return false;
     }
 }
