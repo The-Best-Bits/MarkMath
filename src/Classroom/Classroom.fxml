@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="771.0" prefWidth="1369.0" style="-fx-background-color: #E4E4E4;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Classroom.ClassroomController">
+    <children>
+        <VBox layoutX="-4.0" layoutY="-4.0" prefHeight="775.0" prefWidth="308.0" style="-fx-background-color: #4C6AB7;">
+            <children>
+                <Pane prefHeight="220.0" prefWidth="410.0">
+                    <children>
+                        <ImageView fitHeight="115.0" fitWidth="287.0" layoutX="10.0" layoutY="65.0">
+                            <image>
+                                <Image url="@../../MMlogo.png" />
+                            </image>
+                        </ImageView>
+                    </children></Pane>
+                <Pane prefHeight="76.0" prefWidth="382.0" />
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openDashboard" prefHeight="146.0" prefWidth="348.0" text="Classrooms" textFill="WHITE">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                    <padding>
+                        <Insets left="50.0" />
+                    </padding>
+                    <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="FOLDER" size="30" />
+                    </graphic>
+                </JFXButton>
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openPeople" prefHeight="146.0" prefWidth="415.0" text="  People" textFill="WHITE">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets left="50.0" />
+                    </padding>
+                    <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="USERS" size="30" />
+                    </graphic>
+                </JFXButton>
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openSetting" prefHeight="146.0" prefWidth="410.0" text="  Settings" textFill="WHITE">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets left="50.0" />
+                    </padding>
+                    <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="GEAR" size="30" />
+                    </graphic>
+                </JFXButton>
+                <Pane prefHeight="197.0" prefWidth="349.0">
+                    <children>
+                        <JFXButton layoutX="109.0" layoutY="79.0" prefHeight="63.0" prefWidth="198.0" text=" Log Out" textFill="WHITE">
+                            <font>
+                                <Font size="20.0" />
+                            </font>
+                            <graphic>
+                                <FontAwesomeIconView fill="WHITE" glyphName="POWER_OFF" size="30" text="" />
+                            </graphic>
+                        </JFXButton>
+                    </children>
+                </Pane>
+            </children>
+        </VBox>
+        <Pane layoutX="304.0" prefHeight="93.0" prefWidth="1065.0" style="-fx-background-color: #FFFFFF;">
+            <children>
+                <Text fx:id="classroom_name" fill="#726d6d" layoutX="14.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="506.30029296875">
+                    <font>
+                        <Font name="Yu Gothic UI Regular" size="39.0" />
+                    </font>
+                </Text>
+            </children>
+        </Pane>
+      <TabPane layoutX="304.0" layoutY="93.0" prefHeight="678.0" prefWidth="1065.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="304.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="93.0">
+        <tabs>
+          <Tab text="Assignments">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Pane layoutX="763.0" layoutY="-23.0" prefHeight="649.0" prefWidth="302.0" style="-fx-background-color: #ffffff; -fx-border-color: #e4e4e4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="763.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <JFXButton layoutX="58.0" layoutY="266.0" onAction="#addStudent" prefHeight="41.0" prefWidth="182.0" style="-fx-background-color: #4C6AB7;" text="Add Assignment" textFill="WHITE">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </JFXButton>
+                              <JFXTextField fx:id="assignment_id" layoutX="34.0" layoutY="179.0" prefHeight="50.0" prefWidth="230.0" promptText="Enter name" style="-fx-background-color: #ffffff;">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                              </JFXTextField>
+                              <Text fill="#404040" layoutX="35.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment Name" wrappingWidth="178.50001215934753">
+                                 <font>
+                                    <Font name="Yu Gothic UI Regular" size="21.0" />
+                                 </font>
+                              </Text>
+                              <JFXTextField fx:id="assignment_id" layoutX="35.0" layoutY="54.0" prefHeight="50.0" prefWidth="227.0" promptText="Enter id" style="-fx-background-color: #ffffff;">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                              </JFXTextField>
+                              <Text fill="#404040" layoutX="35.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment ID" wrappingWidth="156.9669189453125">
+                                 <font>
+                                    <Font name="Yu Gothic UI Regular" size="21.0" />
+                                 </font>
+                              </Text>
+                              <Label fx:id="preExistingID1" layoutX="38.0" layoutY="374.0" prefHeight="17.0" prefWidth="203.0" textFill="RED">
+                                 <font>
+                                    <Font name="Yu Gothic UI Regular" size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <TableView fx:id="assignment_table" layoutX="151.0" layoutY="136.0" onSort="#loadStudentData" prefHeight="649.0" prefWidth="763.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="302.0" AnchorPane.topAnchor="0.0">
+                           <columns>
+                              <TableColumn fx:id="assignment_id_column" prefWidth="228.93954467773438" text="Assignment ID" />
+                              <TableColumn fx:id="assignment_name_column" prefWidth="533.0604248046875" text="Assignment Name" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </content>
+          </Tab>
+          <Tab text="Students">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Pane layoutX="763.0" layoutY="-23.0" prefHeight="649.0" prefWidth="302.0" style="-fx-background-color: #ffffff; -fx-border-color: #e4e4e4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="763.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <JFXButton layoutX="58.0" layoutY="266.0" onAction="#addStudent" prefHeight="41.0" prefWidth="182.0" style="-fx-background-color: #4C6AB7;" text="Add Student" textFill="WHITE">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </JFXButton>
+                              <JFXTextField fx:id="student_name" layoutX="34.0" layoutY="179.0" prefHeight="50.0" prefWidth="230.0" promptText="Enter name" style="-fx-background-color: #ffffff;">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                              </JFXTextField>
+                              <Text fill="#404040" layoutX="35.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student Name" wrappingWidth="178.50001215934753">
+                                 <font>
+                                    <Font name="Yu Gothic UI Regular" size="21.0" />
+                                 </font>
+                              </Text>
+                              <JFXTextField fx:id="student_ID" layoutX="35.0" layoutY="54.0" prefHeight="50.0" prefWidth="227.0" promptText="Enter id" style="-fx-background-color: #ffffff;">
+                                 <font>
+                                    <Font size="19.0" />
+                                 </font>
+                              </JFXTextField>
+                              <Text fill="#404040" layoutX="35.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student ID" wrappingWidth="156.9669189453125">
+                                 <font>
+                                    <Font name="Yu Gothic UI Regular" size="21.0" />
+                                 </font>
+                              </Text>
+                              <Label fx:id="preExistingID" layoutX="38.0" layoutY="374.0" prefHeight="17.0" prefWidth="203.0" textFill="RED">
+                                 <font>
+                                    <Font name="Yu Gothic UI Regular" size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <TableView fx:id="student_table" layoutX="151.0" layoutY="136.0" onSort="#loadStudentData" prefHeight="649.0" prefWidth="763.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="302.0" AnchorPane.topAnchor="0.0">
+                          <columns>
+                            <TableColumn fx:id="student_id_column" prefWidth="228.93954467773438" text="Student ID" />
+                            <TableColumn fx:id="student_name_column" prefWidth="533.0604248046875" text="Name" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+    </children>
+</AnchorPane>
