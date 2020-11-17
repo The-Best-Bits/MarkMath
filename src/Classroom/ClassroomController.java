@@ -22,6 +22,8 @@ import javafx.stage.Stage;
 import markmath.controllers.ParsedDataPerAssignment;
 import markmath.controllers.ParsedDataPerAssignmentManager;
 import markmath.entities.AssignmentOutline;
+import markmath.entities.StudentAssignment;
+import markmath.usecases.StudentAssignmentManager;
 
 import java.io.IOException;
 import java.net.URL;
@@ -190,7 +192,18 @@ public class ClassroomController implements Initializable {
                 this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with this student document is not in this classroom");
             }
             else{
-                //add student info to the assignment bundle for this classroom
+                //get assignment outline
+                AssignmentOutline outline = getAssignmentOutline(assignment.getAssignmentType());
+                //get student name
+                String studentName = getStudentNameFromDatabase(assignment.getStudentNum());
+                StudentAssignmentManager saManager = new StudentAssignmentManager(assignment.getStudentNum(),
+                        studentName, assignment.getAssignmentName(), assignment.getAssignmentType(),
+                        assignment.getFinalParsedData(), outline);
+                saManager.markAllQuestions();
+                StudentAssignment studentAssignment = saManager.getCarbonCopy();
+                //add StudentAssignment to Database
+
+
 
             }
 
@@ -256,9 +269,40 @@ public class ClassroomController implements Initializable {
                 String question = "question" + i;
                 questionToMarks.put(question, rs.getFloat(question));
             }
+            AssignmentOutline outline = new AssignmentOutline(assignmentType, questionToMarks);
+            return outline;
         }catch(SQLException e){
             System.out.println("Error" + e);
         }
+
+        return null;
     }
 
+    private String getStudentNameFromDatabase(String studentNum){
+        try{
+            Connection conn = dbConnection.getConnection();
+            String sqlQuery = "SELECT student_name FROM students WHERE student_id = " + studentNum;
+            ResultSet rs = conn.createStatement().executeQuery(sqlQuery);
+            return rs.getString("student_name");
+        }
+        catch(SQLException e){
+            System.out.println("Error" + e);
+        }
+        return null;
+    }
+
+    private void addStudentAssignmentToDatabase(StudentAssignment assignment){
+
+        int numQuestion = assignment.getQuestions().size();
+        String sqlInsert = "INSERT INTO " + assignment.getAssignmentType() + "(student_id, student_name, document_name";
+        StringBuilder questions = new StringBuilder();
+        for (int i =1; i<=numQuestion; i++){
+            questions.append(", question").append(i);
+        }
+
+
+
+
+
+    }
 }
