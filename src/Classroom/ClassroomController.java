@@ -27,10 +27,7 @@ import markmath.usecases.StudentAssignmentManager;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -202,13 +199,9 @@ public class ClassroomController implements Initializable {
                 saManager.markAllQuestions();
                 StudentAssignment studentAssignment = saManager.getCarbonCopy();
                 //add StudentAssignment to Database
-
-
+                addStudentAssignmentToDatabase(studentAssignment);
 
             }
-
-
-
 
         }
 
@@ -218,13 +211,21 @@ public class ClassroomController implements Initializable {
 
         try{
             Connection conn = dbConnection.getConnection();
-            ResultSet rs = conn.createStatement().executeQuery("SELECT student_id FROM students WHERE CHARINDEX(':" + this.classroomID + ":', class_id)>0)");
-            while (rs.next()){
-                if(rs.getString("student_id").equals(studentNum)){
-                    conn.close();
-                    return true;
-                }
+//            ResultSet rs = conn.createStatement().executeQuery("SELECT student_id FROM students WHERE class_id LIKE concat('%', " + this.classroomID + ", '%'");
+            ResultSet rs = conn.createStatement().executeQuery("SELECT class_id FROM students WHERE student_id =" + studentNum);
+            String class_ids = rs.getString("class_id");
+            System.out.println(class_ids);
+            if (class_ids.contains(this.classroomID)){
+                conn.close();
+                return true;
             }
+//            while (rs.next()){
+//                if(rs.getString("student_id").equals(studentNum)){
+//                    conn.close();
+//                    return true;
+//                }
+//            }
+            System.out.println("test");
             conn.close();
             return false;
 
@@ -269,6 +270,7 @@ public class ClassroomController implements Initializable {
                 String question = "question" + i;
                 questionToMarks.put(question, rs.getFloat(question));
             }
+            conn.close();
             AssignmentOutline outline = new AssignmentOutline(assignmentType, questionToMarks);
             return outline;
         }catch(SQLException e){
@@ -283,7 +285,9 @@ public class ClassroomController implements Initializable {
             Connection conn = dbConnection.getConnection();
             String sqlQuery = "SELECT student_name FROM students WHERE student_id = " + studentNum;
             ResultSet rs = conn.createStatement().executeQuery(sqlQuery);
-            return rs.getString("student_name");
+            String studentName = rs.getString("student_name");
+            conn.close();
+            return studentName;
         }
         catch(SQLException e){
             System.out.println("Error" + e);
@@ -293,13 +297,36 @@ public class ClassroomController implements Initializable {
 
     private void addStudentAssignmentToDatabase(StudentAssignment assignment){
 
-        int numQuestion = assignment.getQuestions().size();
-        String sqlInsert = "INSERT INTO " + assignment.getAssignmentType() + "(student_id, student_name, document_name";
+        int numQuestions = assignment.getQuestions().size();
         StringBuilder questions = new StringBuilder();
-        for (int i =1; i<=numQuestion; i++){
+        StringBuilder questionMarks = new StringBuilder("(?,?,?,?");
+        for (int i =1; i<=numQuestions; i++){
             questions.append(", question").append(i);
+            questionMarks.append(",?");
         }
+        questions.append(", total)");
+        questionMarks.append(")");
+        String sqlInsert = "INSERT INTO " + assignment.getAssignmentType() + "(student_id, student_name, document_name"
+                + questions + " VALUES " + questionMarks;
+        System.out.println(sqlInsert);
+        try{
+            Connection conn = dbConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sqlInsert);
+            stmt.setString(1, assignment.getStudentID());
+            stmt.setString(2, assignment.getStudentName());
+            stmt.setString(3, assignment.getAssignmentName());
+            int q = 1;
+            while(q<= numQuestions){
+                stmt.setFloat(q+3, assignment.getQuestion(q).getFinalMark());
+                q +=1;
+            }
+            stmt.setFloat(q+3, assignment.getFinalMark());
+            stmt.execute();
+            conn.close();
 
+        }catch(SQLException e){
+            System.out.println("Error" + e);
+        }
 
 
 
