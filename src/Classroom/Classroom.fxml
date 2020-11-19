@@ -166,7 +166,7 @@
                               <Label fx:id="errorCreatingAssignment" layoutX="49.0" layoutY="566.0" prefHeight="20.0" prefWidth="180.0" />
                            </children>
                         </Pane>
-                        <TableView fx:id="assignment_table" layoutX="151.0" layoutY="136.0" onSort="#loadStudentData" prefHeight="649.0" prefWidth="763.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="302.0" AnchorPane.topAnchor="0.0">
+                        <TableView fx:id="assignment_table" layoutX="151.0" layoutY="136.0" onMouseClicked="#RowSelect" onSort="#loadStudentData" prefHeight="649.0" prefWidth="763.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="302.0" AnchorPane.topAnchor="0.0">
                            <columns>
                               <TableColumn fx:id="assignment_id_column" prefWidth="228.93954467773438" text="Assignment ID" />
                               <TableColumn fx:id="assignment_name_column" prefWidth="533.0604248046875" text="Assignment Name" />

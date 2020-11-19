@@ -1,6 +1,8 @@
 package Classroom;
 
 import java.lang.Character;
+
+import Assignments.AssignmentPageController;
 import Server.CheckMathParser;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -34,8 +36,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.Date;
 
-public class ClassroomController implements Initializable {
+public class ClassroomController<MyType> implements Initializable {
     ClassroomModel classroomModel = new ClassroomModel();
 
     @FXML
@@ -116,6 +119,9 @@ public class ClassroomController implements Initializable {
 
     private String classroomID;
 
+    private MyType temp;
+    private Date lastClickTime;
+
     public String getClassroomID() {
         return classroomID;
     }
@@ -160,6 +166,45 @@ public class ClassroomController implements Initializable {
         this.assignment_table.setItems(null);
         this.assignment_table.setItems(this.assignment_data);
     }
+
+    @FXML
+    private void RowSelect() {
+        MyType row = (MyType) this.assignment_table.getSelectionModel().getSelectedItem();
+        if (row==null) return;
+        if (row!=temp) {
+            temp = row;
+            lastClickTime = new Date();
+        }else{
+            Date now = new Date();
+            long diff = now.getTime() - lastClickTime.getTime();
+            if (diff < 300){
+                FXMLLoader Loader = new FXMLLoader();
+
+                Loader.setLocation(getClass().getResource("/Assignments/AssignmentPage.fxml"));
+
+                try {
+                    Loader.load();
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                AssignmentPageController controller = Loader.getController();
+                controller.setBundleid(this.assignment_table.getSelectionModel().getSelectedItem().getID());
+                controller.setBundlename(this.assignment_table.getSelectionModel().getSelectedItem().getName());
+                controller.loadData();
+                Parent p = Loader.getRoot();
+                Scene scene = new Scene(p);
+                Stage stage = (Stage)assignment_table.getScene().getWindow();stage.setScene(scene);
+                stage.show();
+
+            } else {
+                lastClickTime = new Date();
+            }
+        }
+
+    }
+
+
 
     @FXML
     private void loadStudentData() throws SQLException {

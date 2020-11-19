@@ -68,6 +68,9 @@ public class StudentAssignment {
 
     public ArrayList<Question> getQuestions(){return questions;}
 
+    public String getStudentName(){return this.studentName;}
+
+
     /**
      *
      * @param questionNum the number of the Question
