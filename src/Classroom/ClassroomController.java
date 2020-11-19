@@ -1,5 +1,6 @@
 package Classroom;
 
+import java.lang.Character;
 import Server.CheckMathParser;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -13,14 +14,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import markmath.controllers.ParsedDataPerAssignment;
 import markmath.controllers.ParsedDataPerAssignmentManager;
+import markmath.entities.AssignmentBundle;
 import markmath.entities.AssignmentOutline;
 import markmath.entities.StudentAssignment;
 import markmath.usecases.StudentAssignmentManager;
@@ -43,6 +46,15 @@ public class ClassroomController implements Initializable {
 
     @FXML
     private JFXTextField student_name;
+
+    @FXML
+    private Label addStudentError;
+
+    @FXML
+    private Label studentNameError;
+
+    @FXML
+    private Label studentIDError;
 
     @FXML
     private TableView<StudentData> student_table;
@@ -72,7 +84,35 @@ public class ClassroomController implements Initializable {
     private JFXButton markButton;
 
     @FXML
+    private JFXButton btnQuestion;
+
+    @FXML
+    private JFXButton addAssignment;
+
+    @FXML
+    private GridPane pane;
+
+    @FXML
+    private TextField textField[] = new TextField[20];
+
+    @FXML
+    private int numOfQuestions = 1;
+
+    @FXML
+    private JFXTextField assignment_id;
+
+    @FXML
+    private JFXTextField assignment_name;
+
+
+    @FXML
+    private Label errorCreatingAssignment;
+
+    @FXML
     private Label errorMarkingStudentAssignment;
+
+    public int counterAddQuestions = 1;
+    public HashMap<String, Float> assignment_outline = new HashMap<String, Float>();
 
     private String classroomID;
 
@@ -144,8 +184,32 @@ public class ClassroomController implements Initializable {
     }
 
     @FXML
-    void addStudent(ActionEvent event) {
+    void addStudent(ActionEvent event) throws Exception {
+        this.studentIDError.setText("");
+        this.studentNameError.setText("");
+        this.addStudentError.setText("");
+        String studentID = this.student_id.getText().trim();
+        String studentName = this.student_name.getText().trim();
+        String classID = this.classroomID.trim();
 
+        if (studentID.isEmpty()) {
+            System.out.println("hi");
+            this.studentIDError.setText("This field cannot be empty.");
+            return;
+        }
+
+        if (studentName.isEmpty()) {
+            this.studentNameError.setText("This field cannot be empty.");
+            return;
+        }
+
+        boolean a = classroomModel.addStudentToClass(studentID, studentName, classID);
+
+        if (!a) {
+            this.addStudentError.setText("The student is already in the classroom.");
+        }
+
+        this.loadData();
     }
 
     @FXML
@@ -207,6 +271,115 @@ public class ClassroomController implements Initializable {
         }
 
     }
+
+    @FXML
+    void addQuestion(ActionEvent event) {
+
+       Label labels[] = new Label[20];
+
+       textField[counterAddQuestions] = new TextField();
+       labels[counterAddQuestions] = new Label("Question "+ counterAddQuestions);
+       pane.add(labels[counterAddQuestions], 0, (counterAddQuestions));
+       pane.add(textField[counterAddQuestions], 1, (counterAddQuestions));
+       counterAddQuestions = counterAddQuestions + 1;
+       numOfQuestions = numOfQuestions + 1;
+
+
+    }
+
+    @FXML
+    void createAssignment(ActionEvent event)
+    {
+
+        int i = 1;
+
+        while (i != numOfQuestions) {
+            String poss_number = textField[i].getText();
+            int j = 0;
+            boolean isValidMark;
+            if (poss_number.length() == 0){
+                isValidMark = false;
+            }
+            else{
+                isValidMark = true;
+            }
+            System.out.println(poss_number);
+            System.out.println(j);
+            System.out.println(poss_number.length());
+            while (j != poss_number.length()){
+                if (!Character.isDigit(poss_number.charAt(j))){
+                    isValidMark = false;}
+                j = j+1;
+            }
+
+            if (isValidMark) {
+                assignment_outline.put("Question "+ (i), Float.valueOf(textField[i].getText()));
+            }
+            else
+            {
+                errorCreatingAssignment.setText("Please complete the Outline.");
+            }
+            i = i+1;
+        }
+        String received_name;
+        String received_id;
+        //String name_field = assignment_name.getText();
+        //String id_field = assignment_name.getText();
+        if ( assignment_name != null  && !assignment_name.getText().equals("")){
+            received_name = assignment_name.getText();
+        }
+        else{
+            errorCreatingAssignment.setText("Please insert an Assignment name");
+            received_name = "Test";
+            System.out.println(assignment_name != null);
+            System.out.println(assignment_name.getText());
+
+        }
+
+        if (assignment_id != null  && !assignment_id.getText().equals("")){
+           received_id = assignment_id.getText();
+        }
+        else{
+            errorCreatingAssignment.setText("Please insert an Assignment id");
+            received_id = "99";
+        }
+        if (errorCreatingAssignment.getText().equals("")){
+            AssignmentOutline newOutline = new AssignmentOutline(received_name,assignment_outline );
+            AssignmentBundle newAssignment = new AssignmentBundle(newOutline);
+            System.out.println("Success");
+           // addAssignmentBundleToClassroomDatabase(received_id, newAssignment);
+        }
+
+        //System.out.println(assignment_outline.get("Question 1"));
+    }
+
+    private void addAssignmentBundleToClassroomDatabase(String received_id, AssignmentBundle assignment){
+        String sqlInsert = "";
+        Boolean studentBundleInDatabase = false;
+        if (assignmentBundleInClassroom(assignment.getName())){
+            errorCreatingAssignment.setText("The Assignment already exists.");
+        }
+        else{
+            sqlInsert = "INSERT INTO " + this.classroomID + "(assignment_id, assignment_name)";
+            try{
+                Connection conn = dbConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sqlInsert);
+
+                stmt.setString(1, received_id);
+                stmt.setString(2, assignment.getName());
+                int q = 1;
+                stmt.execute();
+                conn.close();
+
+            }catch(SQLException e){
+                System.out.println("Error" + e);
+            }
+        }
+        }
+
+
+
+
 
     private Boolean studentInClassroom(String studentNum){
 
