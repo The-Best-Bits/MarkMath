@@ -183,6 +183,7 @@ public class ClassroomController implements Initializable {
         ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
         ArrayList<ParsedDataPerAssignment> parsedDataAssignmnents = manager.getParsedDataAssignments();
         for (ParsedDataPerAssignment assignment: parsedDataAssignmnents){
+            System.out.println(assignment.getFinalParsedData());
             //check that the student exists in this classroom
             //check that their is a corresponding assignment bundle in this classroom
             if(!studentInClassroom(assignment.getStudentNum()) || !assignmentBundleInClassroom(assignment.getAssignmentType())){
@@ -313,11 +314,11 @@ public class ClassroomController implements Initializable {
             studentAssignmentInDatabase = true;
             StringBuilder sqlUpdate = new StringBuilder("UPDATE " + assignment.getAssignmentType() + " SET ");
             int q =1;
-            while(q< numQuestions){
+            while(q<= numQuestions){
                 sqlUpdate.append("question" + q + "=" + assignment.getQuestion(q).getFinalMark() + ", ");
                 q+=1;
             }
-            sqlUpdate.append("question").append(q).append("=").append(assignment.getQuestion(q).getFinalMark());
+            sqlUpdate.append("total =").append(assignment.getFinalMark());
             sqlUpdate.append(" WHERE student_id=" + assignment.getStudentID());
             sqlInsert = sqlUpdate.toString();
         }
@@ -362,7 +363,6 @@ public class ClassroomController implements Initializable {
         }catch(SQLException e){
             System.out.println("Error" + e);
         }
-
         return false;
     }
 }
