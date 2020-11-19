@@ -23,7 +23,7 @@ public class StudentAssignment {
     //added assignmentName, changed AssignmentName to assignmentType
     private String assignmentType;
     private String assignmentName;
-    private int studentID;
+    private String studentID;
     private ArrayList<Question> questions = new ArrayList<>();
     //do we need to store the assignment outline in a student assignment?
     private AssignmentOutline outline;
@@ -31,12 +31,18 @@ public class StudentAssignment {
     private float finalMark = 0;
 
     /* create a StudentAssignment with given student ID and name */
-    public StudentAssignment(int studentID, String studentName, String assignmentType, String assignmentName){
+    public StudentAssignment(String studentID, String studentName, String assignmentType, String assignmentName){
         this.studentID = studentID;
         this.studentName = studentName;
         this.assignmentType = assignmentType;
         this.assignmentName = assignmentName;
 
+    }
+
+    public StudentAssignment(String studentID, String studentName, String assignmentType){
+        this.studentID = studentID;
+        this.studentName = studentName;
+        this.assignmentType = assignmentType;
     }
 
 
@@ -52,7 +58,7 @@ public class StudentAssignment {
 
     public float getFullMark(){return fullMark;}
 
-    public int getStudentID(){return studentID;}
+    public String getStudentID(){return studentID;}
 
     //changed
     public String getAssignmentName(){return this.assignmentName;}
