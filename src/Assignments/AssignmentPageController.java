@@ -1,6 +1,9 @@
 package Assignments;
 
+import Classroom.ClassroomController;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
 import dbUtil.dbConnection;
 import javafx.beans.value.ObservableMapValue;
 import javafx.collections.FXCollections;
@@ -52,11 +55,19 @@ public class AssignmentPageController implements Initializable {
     @FXML
     private Text AssignmentName;
 
+    @FXML
+    private JFXButton backButton;
+
     private dbConnection db;
     private ObservableList<GradeData> data;
     private Stage stage;
     private String bundleid;
     private String bundlename;
+    private String classroomID;
+
+    public void setClassroomID(String classroomID) {
+        this.classroomID = classroomID;
+    }
 
     public String getBundlename() {
         return bundlename;
@@ -146,4 +157,23 @@ public class AssignmentPageController implements Initializable {
     }
 
 
+    public void backToBundle(ActionEvent event) throws IOException{
+        FXMLLoader Loader = new FXMLLoader();
+        Loader.setLocation(getClass().getResource("/Classroom/Classroom.fxml"));
+        try {
+            Loader.load();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        ClassroomController classroomController = Loader.getController();
+        classroomController.setClassroomID(this.classroomID);
+        classroomController.loadData();
+        Parent mainPageParent = Loader.getRoot();
+        Scene mainPage = new Scene(mainPageParent);
+
+        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        window.setScene(mainPage);
+        window.show();
+    }
 }

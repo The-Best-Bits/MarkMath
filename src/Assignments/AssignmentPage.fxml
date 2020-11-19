@@ -83,6 +83,11 @@
                         <Font name="Yu Gothic UI Regular" size="39.0" />
                     </font>
                 </Text>
+            <JFXButton fx:id="backButton" defaultButton="true" layoutX="943.0" layoutY="56.0" onAction="#backToBundle" prefHeight="38.0" prefWidth="81.0" style="-fx-background-color: #4C6AB7;" text="Back" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </JFXButton>
             </children>
         </Pane>
         <TableView fx:id="AssignmentTable" layoutX="304.0" layoutY="130.0" prefHeight="641.0" prefWidth="1065.0">

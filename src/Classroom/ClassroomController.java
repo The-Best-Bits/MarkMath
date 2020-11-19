@@ -191,6 +191,7 @@ public class ClassroomController<MyType> implements Initializable {
                 AssignmentPageController controller = Loader.getController();
                 controller.setBundleid(this.assignment_table.getSelectionModel().getSelectedItem().getID());
                 controller.setBundlename(this.assignment_table.getSelectionModel().getSelectedItem().getName());
+                controller.setClassroomID(this.classroomID);
                 controller.loadData();
                 Parent p = Loader.getRoot();
                 Scene scene = new Scene(p);
