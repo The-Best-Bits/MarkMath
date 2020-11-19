@@ -47,6 +47,7 @@ public class AssignmentPageController implements Initializable {
     private ObservableList<StudentAssignment> data;
     private Stage stage;
     private String bundleid;
+    private String bundlename;
 
     public String getBundleid() {
         return bundleid;
@@ -108,7 +109,7 @@ public class AssignmentPageController implements Initializable {
         this.idColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentID"));
         this.nameColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentName"));
         this.gradeColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment,String>("grade"));
-        this.AssignmentName.setText();
+        this.AssignmentName.setText(this.bundlename);
         this.AssignmentTable.setItems(null);
         this.AssignmentTable.setItems(this.data);
 
