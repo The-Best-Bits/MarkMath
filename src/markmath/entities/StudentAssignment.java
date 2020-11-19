@@ -119,11 +119,15 @@ public class StudentAssignment {
      */
     //added November 10
     public void setFinalMark(){
-        int temp = 0;
+        float temp = 0;
         for(Question q: questions){
+            System.out.println(q.getQuestionNumber());
+            System.out.println(q.getNumberOfErrors());
+            System.out.println(q.getFinalMark());
             temp += q.getFinalMark();
         }
         this.finalMark = temp;
+        System.out.println(this.finalMark);
     }
 
 

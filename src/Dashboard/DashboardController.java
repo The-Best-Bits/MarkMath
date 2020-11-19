@@ -85,6 +85,7 @@ public class DashboardController<MyType> implements Initializable {
                     stmt.setString(1, this.classroomid.getText());
                     stmt.setString(2, this.classroomname.getText());
                     stmt.execute();
+                    loadClassroom(event);
                 }
                 conn.close();
 

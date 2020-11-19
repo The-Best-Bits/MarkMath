@@ -28,7 +28,7 @@
                         </ImageView>
                     </children></Pane>
                 <Pane prefHeight="76.0" prefWidth="382.0" />
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="295.0" text="Classrooms" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="410.0" text="  Classrooms" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -42,7 +42,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="FOLDER" size="30" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openPeople" prefHeight="146.0" prefWidth="415.0" text="  People" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openPeople" prefHeight="146.0" prefWidth="410.0" text="  People" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -95,11 +95,6 @@
         </TableView>
       <Pane layoutX="1061.0" layoutY="93.0" prefHeight="678.0" prefWidth="308.0" style="-fx-background-color: #ffffff; -fx-border-color: #e4e4e4;">
          <children>
-            <JFXButton layoutX="58.0" layoutY="321.0" onAction="#loadClassroom" prefHeight="37.0" prefWidth="182.0" style="-fx-background-color: #4C6AB7;" text="Load Classroom" textFill="WHITE">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </JFXButton>
             <JFXButton layoutX="58.0" layoutY="266.0" onAction="#addClassroom" prefHeight="41.0" prefWidth="182.0" style="-fx-background-color: #4C6AB7;" text="Add Classroom" textFill="WHITE">
                <font>
                   <Font size="20.0" />
