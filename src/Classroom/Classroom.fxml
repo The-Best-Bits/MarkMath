@@ -97,7 +97,7 @@
                      <children>
                         <Pane layoutX="763.0" layoutY="-23.0" prefHeight="649.0" prefWidth="302.0" style="-fx-background-color: #ffffff; -fx-border-color: #e4e4e4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="763.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <JFXButton layoutX="58.0" layoutY="266.0" onAction="#addStudent" prefHeight="41.0" prefWidth="182.0" style="-fx-background-color: #4C6AB7;" text="Add Assignment" textFill="WHITE">
+                              <JFXButton layoutX="58.0" layoutY="266.0" prefHeight="41.0" prefWidth="182.0" style="-fx-background-color: #4C6AB7;" text="Add Assignment" textFill="WHITE">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -127,6 +127,8 @@
                                     <Font name="Yu Gothic UI Regular" size="12.0" />
                                  </font>
                               </Label>
+                              <JFXButton fx:id="markButton" layoutX="62.0" layoutY="362.0" onAction="#markAssignment" prefHeight="25.0" prefWidth="165.0" text="Mark Assignment " />
+                              <Label fx:id="errorMarkingStudentAssignment" layoutX="46.0" layoutY="401.0" prefHeight="50.0" prefWidth="198.0" textFill="#d40404" />
                            </children>
                         </Pane>
                         <TableView fx:id="assignment_table" layoutX="151.0" layoutY="136.0" onSort="#loadStudentData" prefHeight="649.0" prefWidth="763.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="302.0" AnchorPane.topAnchor="0.0">
@@ -145,7 +147,7 @@
                      <children>
                         <Pane layoutX="763.0" layoutY="-23.0" prefHeight="649.0" prefWidth="302.0" style="-fx-background-color: #ffffff; -fx-border-color: #e4e4e4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="763.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <JFXButton layoutX="58.0" layoutY="266.0" onAction="#addStudent" prefHeight="41.0" prefWidth="182.0" style="-fx-background-color: #4C6AB7;" text="Add Student" textFill="WHITE">
+                              <JFXButton layoutX="33.0" layoutY="266.0" onAction="#addStudent" prefHeight="44.0" prefWidth="233.0" style="-fx-background-color: #4C6AB7;" text="Add Student" textFill="WHITE">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -160,7 +162,7 @@
                                     <Font name="Yu Gothic UI Regular" size="21.0" />
                                  </font>
                               </Text>
-                              <JFXTextField fx:id="student_ID" layoutX="35.0" layoutY="54.0" prefHeight="50.0" prefWidth="227.0" promptText="Enter id" style="-fx-background-color: #ffffff;">
+                              <JFXTextField fx:id="student_id" layoutX="35.0" layoutY="54.0" prefHeight="50.0" prefWidth="227.0" promptText="Enter id" style="-fx-background-color: #ffffff;">
                                  <font>
                                     <Font size="19.0" />
                                  </font>
@@ -170,7 +172,17 @@
                                     <Font name="Yu Gothic UI Regular" size="21.0" />
                                  </font>
                               </Text>
-                              <Label fx:id="preExistingID" layoutX="38.0" layoutY="374.0" prefHeight="17.0" prefWidth="203.0" textFill="RED">
+                              <Label fx:id="addStudentError" layoutX="47.0" layoutY="316.0" prefHeight="17.0" prefWidth="203.0" textFill="RED">
+                                 <font>
+                                    <Font name="Yu Gothic UI Regular" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="studentNameError" layoutX="47.0" layoutY="238.0" prefHeight="17.0" prefWidth="203.0" textFill="RED">
+                                 <font>
+                                    <Font name="Yu Gothic UI Regular" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="studentIDError" layoutX="47.0" layoutY="117.0" prefHeight="17.0" prefWidth="203.0" textFill="RED">
                                  <font>
                                     <Font name="Yu Gothic UI Regular" size="12.0" />
                                  </font>

@@ -82,7 +82,6 @@ public class DashboardController<MyType> implements Initializable {
                 } else {
                     this.preExistingID.setText("Classroom successfully added");
                     PreparedStatement stmt = conn.prepareStatement(sqlInsert);
-                    //check if text fields are empty
                     stmt.setString(1, this.classroomid.getText());
                     stmt.setString(2, this.classroomname.getText());
                     stmt.execute();
