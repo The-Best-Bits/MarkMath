@@ -45,6 +45,15 @@ public class ClassroomController implements Initializable {
     private JFXTextField student_name;
 
     @FXML
+    private Label addStudentError;
+
+    @FXML
+    private Label studentNameError;
+
+    @FXML
+    private Label studentIDError;
+
+    @FXML
     private TableView<StudentData> student_table;
 
     @FXML
@@ -144,8 +153,32 @@ public class ClassroomController implements Initializable {
     }
 
     @FXML
-    void addStudent(ActionEvent event) {
+    void addStudent(ActionEvent event) throws Exception {
+        this.studentIDError.setText("");
+        this.studentNameError.setText("");
+        this.addStudentError.setText("");
+        String studentID = this.student_id.getText().trim();
+        String studentName = this.student_name.getText().trim();
+        String classID = this.classroomID.trim();
 
+        if (studentID.isEmpty()) {
+            System.out.println("hi");
+            this.studentIDError.setText("This field cannot be empty.");
+            return;
+        }
+
+        if (studentName.isEmpty()) {
+            this.studentNameError.setText("This field cannot be empty.");
+            return;
+        }
+
+        boolean a = classroomModel.addStudentToClass(studentID, studentName, classID);
+
+        if (!a) {
+            this.addStudentError.setText("The student is already in the classroom.");
+        }
+
+        this.loadData();
     }
 
     @FXML
