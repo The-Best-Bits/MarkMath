@@ -28,7 +28,7 @@
                         </ImageView>
                     </children></Pane>
                 <Pane prefHeight="76.0" prefWidth="382.0" />
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="295.0" text="Classrooms" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="124.0" prefWidth="308.0" text="  Classrooms" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -42,7 +42,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="FOLDER" size="30" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openPeople" prefHeight="146.0" prefWidth="415.0" text="  People" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openPeople" prefHeight="113.0" prefWidth="308.0" text="  People" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -53,7 +53,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="USERS" size="30" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openSetting" prefHeight="146.0" prefWidth="410.0" text="  Settings" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openSetting" prefHeight="117.0" prefWidth="308.0" text="  Settings" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
