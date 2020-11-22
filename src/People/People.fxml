@@ -11,22 +11,22 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="1032.0" prefWidth="1930.0" style="-fx-background-color: #E4E4E4;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="People.PeopleController">
+<AnchorPane prefHeight="771.0" prefWidth="1369.0" style="-fx-background-color: #E4E4E4;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="People.PeopleController">
     <children>
-        <VBox layoutX="-4.0" layoutY="-4.0" prefHeight="1038.0" prefWidth="382.0" style="-fx-background-color: #4C6AB7;">
+        <VBox layoutX="-4.0" layoutY="-4.0" prefHeight="775.0" prefWidth="308.0" style="-fx-background-color: #4C6AB7;">
             <children>
                 <Pane prefHeight="220.0" prefWidth="410.0">
                     <children>
-                        <ImageView fitHeight="146.0" fitWidth="334.0" layoutX="18.0" layoutY="57.0">
+                        <ImageView fitHeight="115.0" fitWidth="287.0" layoutX="10.0" layoutY="65.0">
                             <image>
                                 <Image url="@../../MMlogo.png" />
                             </image>
                         </ImageView>
                     </children></Pane>
                 <Pane prefHeight="76.0" prefWidth="382.0" />
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="410.0" ripplerFill="WHITE" text="  Classroom" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="348.0" ripplerFill="WHITE" text="  Classroom" textFill="WHITE">
                     <font>
-                        <Font size="32.0" />
+                        <Font size="20.0" />
                     </font>
                     <VBox.margin>
                         <Insets />
@@ -35,50 +35,50 @@
                         <Insets left="50.0" />
                     </padding>
                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="FOLDER" size="35" />
+                        <FontAwesomeIconView fill="WHITE" glyphName="FOLDER" size="30" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openPeople" prefHeight="146.0" prefWidth="415.0" text="  People" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openPeople" prefHeight="146.0" prefWidth="348.0" text="  People" textFill="WHITE">
                     <font>
-                        <Font size="32.0" />
+                        <Font size="20.0" />
                     </font>
                     <padding>
                         <Insets left="50.0" />
                     </padding>
                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="USERS" size="35" />
+                        <FontAwesomeIconView fill="WHITE" glyphName="USERS" size="30" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openSetting" prefHeight="146.0" prefWidth="410.0" text="  Settings" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openSetting" prefHeight="146.0" prefWidth="348.0" text="  Settings" textFill="WHITE">
                     <font>
-                        <Font size="32.0" />
+                        <Font size="20" />
                     </font>
                     <padding>
                         <Insets left="50.0" />
                     </padding>
                     <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="GEAR" size="35" />
+                        <FontAwesomeIconView fill="WHITE" glyphName="GEAR" size="30" />
                     </graphic>
                 </JFXButton>
-                <Pane prefHeight="221.0" prefWidth="452.0">
+                <Pane prefHeight="197.0" prefWidth="349.0">
                     <children>
-                        <JFXButton layoutX="186.0" layoutY="144.0" prefHeight="73.0" prefWidth="196.0" text=" Log Out" textFill="WHITE">
+                        <JFXButton layoutX="109.0" layoutY="79.0" prefHeight="63.0" prefWidth="198.0" text=" Log Out" textFill="WHITE">
                             <font>
-                                <Font size="28.0" />
+                                <Font size="20.0" />
                             </font>
                             <graphic>
-                                <FontAwesomeIconView fill="WHITE" glyphName="POWER_OFF" size="35" text="" />
+                                <FontAwesomeIconView fill="WHITE" glyphName="POWER_OFF" size="30" text="" />
                             </graphic>
                         </JFXButton>
                     </children>
                 </Pane>
             </children>
         </VBox>
-        <Pane layoutX="378.0" layoutY="-2.0" prefHeight="120.0" prefWidth="1556.0" style="-fx-background-color: #FFFFFF;">
+        <Pane layoutX="304.0" prefHeight="101.0" prefWidth="1065.0" style="-fx-background-color: #FFFFFF;">
             <children>
-                <Text fill="#726d6d" layoutX="25.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="People" wrappingWidth="506.30029296875">
+                <Text fill="#726d6d" layoutX="21.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="People" wrappingWidth="506.30029296875">
                     <font>
-                        <Font name="Yu Gothic UI Regular" size="50.0" />
+                        <Font name="Yu Gothic UI Regular" size="39.0" />
                     </font>
                 </Text>
             </children>

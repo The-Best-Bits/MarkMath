@@ -78,11 +78,11 @@ public class AssignmentBundle {
      * @param studentID The ID of the student used to look for their assignment.
      * @return The assignment in this bundle that belongs to the specified student.
      * @throws NoAssignmentFoundException No assignment was found for the specified student.*/
-    public StudentAssignment getStudentAssignment(int studentID) throws NoAssignmentFoundException{
+    public StudentAssignment getStudentAssignment(String studentID) throws NoAssignmentFoundException{
 
        if (assignments.size() != 0) {
            for (StudentAssignment assignment: assignments){
-               if (assignment.getStudentID() == studentID) {
+               if (assignment.getStudentID().equals(studentID)) {
                    return assignment;
                }
            }

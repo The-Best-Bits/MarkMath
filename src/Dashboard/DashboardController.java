@@ -1,6 +1,8 @@
 package Dashboard;
 
 
+import Classroom.ClassroomController;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import dbUtil.dbConnection;
 import javafx.collections.FXCollections;
@@ -13,7 +15,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -27,11 +28,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 
 
-public class DashboardController implements Initializable {
+public class DashboardController<MyType> implements Initializable {
     @FXML
     private TableView<Classroom> classroomtable;
 
@@ -54,35 +56,49 @@ public class DashboardController implements Initializable {
     private dbConnection dbc;
 
     private ObservableList<Classroom> data;
+    private MyType temp;
+    private Date lastClickTime;
+    private Stage stage;
 
     @FXML
     private void addClassroom(ActionEvent event) {
-        String sqlInsert = "INSERT INTO classrooms(class_id, class_name) VALUES (?,?)";
-        try {
-            Connection conn = dbConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sqlInsert);
-            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM classrooms");
-            ArrayList<String> preExistingClassroomIDs = new ArrayList<>();
-            while(rs.next()){
-                preExistingClassroomIDs.add(rs.getString("class_id"));
+        //first check if the user has left the classroomid or classroomname text fields empty
+        if(this.classroomid.getText().equals("") || this.classroomname.getText().equals(""))
+        {
+            this.preExistingID.setText("Error! Text field left blank");
+        }
+        else {
+            String sqlInsert = "INSERT INTO classrooms(class_id, class_name) VALUES (?,?)";
+            try {
+                Connection conn = dbConnection.getConnection();
+                ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM classrooms");
+                ArrayList<String> preExistingClassroomIDs = new ArrayList<>();
+                while (rs.next()) {
+                    preExistingClassroomIDs.add(rs.getString("class_id"));
+                }
+                //check if there already exists a classroom with the passed id
+                if (preExistingClassroomIDs.contains(this.classroomid.getText())) {
+                    this.preExistingID.setText("Error! Pre-existing Classroom ID");
+                } else {
+                    this.preExistingID.setText("Classroom successfully added");
+                    PreparedStatement stmt = conn.prepareStatement(sqlInsert);
+                    stmt.setString(1, this.classroomid.getText());
+                    stmt.setString(2, this.classroomname.getText());
+                    stmt.execute();
+                    loadClassroom(event);
+                }
+                conn.close();
+
+            } catch (SQLException throwable) {
+                throwable.printStackTrace();
             }
-            if (preExistingClassroomIDs.contains(this.classroomid.getText())){
-                 this.preExistingID.setText("Error! Pre-existing Classroom ID");
-            }
-            else {
-                stmt.setString(1, this.classroomid.getText());
-                stmt.setString(2, this.classroomname.getText());
-            }
-            stmt.execute();
-            conn.close();
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
         }
 
     }
 
     @FXML
     private void loadClassroom(ActionEvent event) throws SQLException {
+        this.preExistingID.setText("");
         try {                                                                                                 //establish connection
             Connection conn = dbConnection.getConnection();
             this.data = FXCollections.observableArrayList();
@@ -106,22 +122,47 @@ public class DashboardController implements Initializable {
 
     }
 
+    private JFXButton openClassroom;
     @FXML
-    void createClassroom(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/CreateClassroom/CreateClassroom.fxml"));
-            Parent root = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
+    private void handleRowSelect() {
+        //Detect double click
+        MyType row = (MyType) this.classroomtable.getSelectionModel().getSelectedItem();
+        if (row == null) return;
+        if(row != temp){
+            temp = row;
+            lastClickTime = new Date();
+        } else if(row == temp) {
+            Date now = new Date();
+            long diff = now.getTime() - lastClickTime.getTime();
+            if (diff < 300){ //another click registered in 300 millis
+                //Load the assignment bundle page with selected class's assignment bundles presented
+                FXMLLoader Loader = new FXMLLoader();
 
-            stage.setTitle("Create New Classroom");
-            stage.setScene(new Scene(root));
-            stage.show();
+                Loader.setLocation(getClass().getResource("/Classroom/Classroom.fxml"));
 
-        } catch (IOException e) {
-            e.printStackTrace();
+                try {
+                    Loader.load();
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                ClassroomController classroomController = Loader.getController();
+                classroomController.setClassroomID(this.classroomtable.getSelectionModel().getSelectedItem().getId());
+                classroomController.loadData();
+                Parent p = Loader.getRoot();
+                Scene scene = new Scene(p);
+
+                Stage stage = (Stage)classroomtable.getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
+
+            } else {
+                lastClickTime = new Date();
+            }
         }
-
     }
+
 
     @FXML
     void openClassroom(ActionEvent event) throws IOException {

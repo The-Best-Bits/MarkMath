@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
@@ -15,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="771.0" prefWidth="1369.0" style="-fx-background-color: #E4E4E4;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Dashboard.DashboardController">
+<AnchorPane prefHeight="771.0" prefWidth="1369.0" style="-fx-background-color: #E4E4E4;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Assignments.AssignmentPageController">
     <children>
         <VBox layoutX="-4.0" layoutY="-4.0" prefHeight="775.0" prefWidth="308.0" style="-fx-background-color: #4C6AB7;">
             <children>
@@ -28,7 +26,7 @@
                         </ImageView>
                     </children></Pane>
                 <Pane prefHeight="76.0" prefWidth="382.0" />
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="410.0" text="  Classrooms" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="348.0" text="  Classroom" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -42,7 +40,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="FOLDER" size="30" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openPeople" prefHeight="146.0" prefWidth="410.0" text="  People" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openPeople" prefHeight="146.0" prefWidth="415.0" text="  People" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -80,54 +78,35 @@
         </VBox>
         <Pane layoutX="304.0" prefHeight="93.0" prefWidth="1065.0" style="-fx-background-color: #FFFFFF;">
             <children>
-                <Text fill="#726d6d" layoutX="21.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Classrooms" wrappingWidth="506.30029296875">
+                <Text fx:id="AssignmentName" fill="#726d6d" layoutX="14.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment" wrappingWidth="506.30029296875">
                     <font>
                         <Font name="Yu Gothic UI Regular" size="39.0" />
                     </font>
                 </Text>
-            </children>
-        </Pane>
-        <TableView fx:id="classroomtable" layoutX="304.0" layoutY="120.0" onMouseClicked="#handleRowSelect" prefHeight="651.0" prefWidth="757.0">
-            <columns>
-                <TableColumn fx:id="idcolumn" prefWidth="211.33331298828125" text="Classroom Id" />
-                <TableColumn fx:id="namecolumn" minWidth="0.0" prefWidth="544.0" text="Classroom name" />
-            </columns>
-        </TableView>
-      <Pane layoutX="1061.0" layoutY="93.0" prefHeight="678.0" prefWidth="308.0" style="-fx-background-color: #ffffff; -fx-border-color: #e4e4e4;">
-         <children>
-            <JFXButton layoutX="58.0" layoutY="266.0" onAction="#addClassroom" prefHeight="41.0" prefWidth="182.0" style="-fx-background-color: #4C6AB7;" text="Add Classroom" textFill="WHITE">
+            <JFXButton fx:id="backButton" defaultButton="true" layoutX="943.0" layoutY="56.0" onAction="#backToBundle" prefHeight="38.0" prefWidth="81.0" style="-fx-background-color: #4C6AB7;" text="Back" textFill="WHITE" wrapText="true">
                <font>
-                  <Font size="20.0" />
+                  <Font name="System Bold" size="17.0" />
                </font>
             </JFXButton>
-            <JFXTextField fx:id="classroomname" layoutX="34.0" layoutY="179.0" prefHeight="50.0" prefWidth="230.0" promptText="Enter name" style="-fx-background-color: #ffffff;">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </JFXTextField>
-            <Text fill="#404040" layoutX="35.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Classroom name:" wrappingWidth="178.50001215934753">
-               <font>
-                  <Font name="Yu Gothic UI Regular" size="21.0" />
-               </font>
-            </Text>
-            <JFXTextField fx:id="classroomid" layoutX="35.0" layoutY="54.0" prefHeight="50.0" prefWidth="227.0" promptText="Enter id" style="-fx-background-color: #ffffff;">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </JFXTextField>
-            <Text fill="#404040" layoutX="35.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Classroom id:" wrappingWidth="156.9669189453125">
-               <font>
-                  <Font name="Yu Gothic UI Regular" size="21.0" />
-               </font>
-            </Text>
-            <Label fx:id="preExistingID" layoutX="119.0" layoutY="342.0" prefHeight="17.0" prefWidth="203.0" textFill="RED">
-               <font>
-                  <Font name="Yu Gothic UI Regular" size="12.0" />
-               </font>
-            </Label>
-         </children>
-      </Pane>
-      <Text layoutX="397.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1.0" />
-      <Text layoutX="318.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double click to view classroom details." wrappingWidth="689.30029296875" />
+            </children>
+        </Pane>
+        <TableView fx:id="AssignmentTable" layoutX="304.0" layoutY="130.0" prefHeight="641.0" prefWidth="1065.0">
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="198.0" text="Student ID" />
+                <TableColumn fx:id="nameColumn" minWidth="0.0" prefWidth="266.0" text="Student Name" />
+            <TableColumn fx:id="gradeColumn" prefWidth="187.0" text="Grade" />
+            <TableColumn fx:id="markColumn" prefWidth="413.0" text="Mark breakdown" />
+            </columns>
+        </TableView>
+      <Text fx:id="AssignmentOutline" layoutX="452.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="479.21630859375">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Text layoutX="312.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Full Mark Outline:" wrappingWidth="132.9999829530716">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
     </children>
 </AnchorPane>

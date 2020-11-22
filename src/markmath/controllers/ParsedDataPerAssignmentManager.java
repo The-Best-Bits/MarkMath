@@ -53,4 +53,9 @@ public class ParsedDataPerAssignmentManager {
      * @return ArrayList of ParsedDataAssignments
      */
     public ArrayList<ParsedDataPerAssignment> getParsedDataAssignments(){return this.parsedDataAssignments;}
+
+    /**
+     * Clear parsedDataAssignments list (once the mark button has been clicked)
+     */
+    public void clearParsedDataAssignments(){this.parsedDataAssignments.clear();}
 }
