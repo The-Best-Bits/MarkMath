@@ -4,17 +4,19 @@ import javafx.beans.property.*;
 import javafx.beans.value.ObservableMapValue;
 import javafx.collections.ObservableMap;
 
+import java.util.HashMap;
+
 public class GradeData {
     private final StringProperty ID;
     private final StringProperty name;
     private final FloatProperty grade;
-//    private final MapProperty<String, Float> breakdown;
+    private final MapProperty<String, Float> breakdown;
 
     public GradeData(String student_id, String student_name, float grade, ObservableMap<String, Float> breakdown){
         this.ID = new SimpleStringProperty(student_id);
         this.name = new SimpleStringProperty(student_name);
         this.grade = new SimpleFloatProperty(grade);
-//        this.breakdown = new SimpleMapProperty<>(breakdown);
+        this.breakdown = new SimpleMapProperty<>(breakdown);
 
     }
 

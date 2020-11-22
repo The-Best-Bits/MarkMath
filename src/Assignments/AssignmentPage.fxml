@@ -95,8 +95,18 @@
                 <TableColumn fx:id="idColumn" prefWidth="198.0" text="Student ID" />
                 <TableColumn fx:id="nameColumn" minWidth="0.0" prefWidth="266.0" text="Student Name" />
             <TableColumn fx:id="gradeColumn" prefWidth="187.0" text="Grade" />
-            <TableColumn fx:id="markcolumn" prefWidth="413.0" text="Mark breakdown" />
+            <TableColumn fx:id="markColumn" prefWidth="413.0" text="Mark breakdown" />
             </columns>
         </TableView>
+      <Text fx:id="AssignmentOutline" layoutX="452.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="479.21630859375">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Text layoutX="312.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Full Mark Outline:" wrappingWidth="132.9999829530716">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
     </children>
 </AnchorPane>
