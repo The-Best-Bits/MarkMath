@@ -27,7 +27,7 @@ public class UseCaseTests {
         questionToMarks.put("question3", (float)4);
         questionToMarks.put("question4", (float)3);
         outline = new AssignmentOutline("Fractions1", questionToMarks);
-        manager = new StudentAssignmentManager("1", "JasminaBrar",
+        manager = new StudentAssignmentManager(1, "JasminaBrar",
                 "JasminaBrar-Fractions1", "Fractions1", finalParsedData, outline);
 
     }

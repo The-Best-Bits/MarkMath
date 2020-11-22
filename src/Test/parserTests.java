@@ -20,7 +20,7 @@ public class parserTests {
     @BeforeClass
     public static void setUp(){
         parsedData = new HashMap<String, Object>();
-        parsedData.put("studentNum", "JasminaBrar");
+        parsedData.put("studentName", "JasminaBrar");
         parsedData.put("assignmentType", "Fractions1");
         parsedData.put("documentName", "JasminaBrar-Fractions1");
         parsedData.put("problemNumber", 1);
@@ -93,7 +93,7 @@ public class parserTests {
         new key-value pair in finalParsedData
          */
         HashMap<String, Object> newParsedData = new HashMap<String, Object>();
-        newParsedData.put("studentNum", "JasminaBrar");
+        newParsedData.put("studentName", "JasminaBrar");
         newParsedData.put("assignmentType", "Fractions1");
         newParsedData.put("documentName", "JasminaBrar-Fractions1");
         newParsedData.put("problemNumber", 2);
@@ -112,7 +112,7 @@ public class parserTests {
          */
 
         HashMap<String, Object> newParsedData = new HashMap<String, Object>();
-        newParsedData.put("studentNum", "JasminaBrar");
+        newParsedData.put("studentName", "JasminaBrar");
         newParsedData.put("assignmentType", "Fractions1");
         newParsedData.put("documentName", "JasminaBrar-Fractions1");
         newParsedData.put("problemNumber", 1);
@@ -129,7 +129,7 @@ public class parserTests {
         with a ParsedDataPerAssignment that a new ParsedDataPerAssignment will be created and added to the list
          */
         HashMap<String, Object> newParsedData = new HashMap<String, Object>();
-        newParsedData.put("studentNum", "JasminaBrar");
+        newParsedData.put("studentName", "JasminaBrar");
         newParsedData.put("assignmentType", "Fractions1");
         newParsedData.put("documentName", "JasminaBrar-Fractions1");
         newParsedData.put("problemNumber", 1);
@@ -147,7 +147,7 @@ public class parserTests {
         the list
          */
         HashMap<String, Object> newParsedData = new HashMap<String, Object>();
-        newParsedData.put("studentNum", "JasminaBrar");
+        newParsedData.put("studentName", "JasminaBrar");
         newParsedData.put("assignmentType", "Fractions1");
         newParsedData.put("documentName", "JasminaBrar-Fractions1");
         newParsedData.put("problemNumber", 1);
@@ -155,7 +155,7 @@ public class parserTests {
 
         manager.manageParsedData(newParsedData);
         HashMap<String, Object> newParsedData2 = new HashMap<String, Object>();
-        newParsedData2.put("studentNum", "JasminaBrar");
+        newParsedData2.put("studentName", "JasminaBrar");
         newParsedData2.put("assignmentType", "Fractions1");
         newParsedData2.put("documentName", "JasminaBrar-Fractions1");
         newParsedData2.put("problemNumber", 1);

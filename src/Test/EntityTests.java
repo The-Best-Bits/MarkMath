@@ -15,7 +15,7 @@ public class EntityTests {
 
     @BeforeClass
     public static void setUp(){
-        assignment = new StudentAssignment("1", "JasminaBrar",
+        assignment = new StudentAssignment(1, "JasminaBrar",
                 "Fractions1", "JasminaBrar-Fractions1" );
         q1 = new Question(1, 3);
         q2 = new Question(2, 0);
@@ -115,14 +115,14 @@ public class EntityTests {
     public void getStudentAssignment(){
         bundle1.addStudentAssignment(assignment);
         try{
-        Assert.assertEquals(bundle1.getStudentAssignment("1"), assignment);
+        Assert.assertEquals(bundle1.getStudentAssignment(1), assignment);
         }catch(NoAssignmentFoundException e){
             System.out.println("No assignment found");
         }
 
         try
         {
-            bundle1.getStudentAssignment("2");
+            bundle1.getStudentAssignment(2);
         }catch(NoAssignmentFoundException e)
         {
             Assert.assertEquals(1, 1);
