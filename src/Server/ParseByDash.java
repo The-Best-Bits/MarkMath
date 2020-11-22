@@ -24,10 +24,10 @@ public class ParseByDash implements DocumentNameParsingAlgorithm {
         //replaceAll removes all of the white spaces in the string
         /*for example, if we had a document name Jasmina Brar -    Fractions1, the document name
         would become JasminaBrar-Fractions1*/
-        String studentNum = docname.substring(0, slashIndex).replaceAll("\\s", "");
+        String studentName = docname.substring(0, slashIndex).replaceAll("\\s", "");
         String assignmentType = docname.substring(slashIndex + 1, periodIndex).replaceAll("\\s", "");
         String documentName = docname.substring(0, periodIndex).replaceAll("\\s", "");
-        docInfo.add(studentNum);
+        docInfo.add(studentName);
         docInfo.add(assignmentType);
         docInfo.add(documentName);
         return docInfo;

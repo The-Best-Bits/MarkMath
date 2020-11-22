@@ -1,9 +1,6 @@
 package markmath.entities;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.stream.Collectors;
 
 public class StudentAssignment {
     /* It represents a single student assignment;
@@ -26,30 +23,20 @@ public class StudentAssignment {
     //added assignmentName, changed AssignmentName to assignmentType
     private String assignmentType;
     private String assignmentName;
-    private String studentID;
+    private int studentID;
     private ArrayList<Question> questions = new ArrayList<>();
     //do we need to store the assignment outline in a student assignment?
     private AssignmentOutline outline;
-    private String gradeMap;
     private float fullMark = 0;
     private float finalMark = 0;
 
     /* create a StudentAssignment with given student ID and name */
-    public StudentAssignment(String studentID, String studentName, String assignmentType, String assignmentName){
+    public StudentAssignment(int studentID, String studentName, String assignmentType, String assignmentName){
         this.studentID = studentID;
         this.studentName = studentName;
         this.assignmentType = assignmentType;
         this.assignmentName = assignmentName;
 
-    }
-
-    public StudentAssignment(String studentID, String studentName, float total, LinkedHashMap<String, Float> map){
-        this.studentID = studentID;
-        this.studentName = studentName;
-        this.finalMark = total;
-        this.gradeMap = map.keySet().stream().map(
-                key -> key + ": " + map.get(key)).collect(
-                        Collectors.joining(", ", "{", "}"));
     }
 
 
@@ -60,13 +47,12 @@ public class StudentAssignment {
         this.fullMark = outline.returnFullMark();
     }
 
-    public String getGradeMap() {return gradeMap;}
 
     public float getFinalMark(){return finalMark;}
 
     public float getFullMark(){return fullMark;}
 
-    public String getStudentID(){return studentID;}
+    public int getStudentID(){return studentID;}
 
     //changed
     public String getAssignmentName(){return this.assignmentName;}
@@ -75,9 +61,6 @@ public class StudentAssignment {
     public String getAssignmentType(){return this.assignmentType;}
 
     public ArrayList<Question> getQuestions(){return questions;}
-
-    public String getStudentName(){return this.studentName;}
-
 
     /**
      *
@@ -127,15 +110,11 @@ public class StudentAssignment {
      */
     //added November 10
     public void setFinalMark(){
-        float temp = 0;
+        int temp = 0;
         for(Question q: questions){
-            System.out.println(q.getQuestionNumber());
-            System.out.println(q.getNumberOfErrors());
-            System.out.println(q.getFinalMark());
             temp += q.getFinalMark();
         }
         this.finalMark = temp;
-        System.out.println(this.finalMark);
     }
 
 

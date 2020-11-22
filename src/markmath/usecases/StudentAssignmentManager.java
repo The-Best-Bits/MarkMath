@@ -17,11 +17,11 @@ public class StudentAssignmentManager {
      */
 
     private StudentAssignment carbonCopy;
-    private String studentID;
+    private int studentID;
     private String studentName;
 
 
-    public StudentAssignmentManager(String studentID, String studentName, String assignmentName, String assignmentType,
+    public StudentAssignmentManager(int studentID, String studentName, String assignmentName, String assignmentType,
                                     HashMap<String, Integer> finalParsedData, AssignmentOutline outline){
         this.studentID = studentID;
         this.studentName = studentName;
