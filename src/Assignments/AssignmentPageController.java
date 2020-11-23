@@ -23,6 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import markmath.entities.Student;
 import markmath.entities.StudentAssignment;
 
 import java.io.IOException;
@@ -30,40 +31,42 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Observable;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AssignmentPageController implements Initializable {
 
     @FXML
-    private TableView<GradeData> AssignmentTable;
+    private TableView<StudentAssignment> AssignmentTable;
 
     @FXML
-    private TableColumn<GradeData, String> idColumn;
+    private TableColumn<StudentAssignment, String> idColumn;
 
     @FXML
-    private TableColumn<GradeData, String> nameColumn;
+    private TableColumn<StudentAssignment, String> nameColumn;
 
     @FXML
-    private TableColumn<GradeData, String> gradeColumn;
+    private TableColumn<StudentAssignment, String> gradeColumn;
 
     @FXML
-    private TableColumn<GradeData, ObservableMapValue<String, Float>> markColumn;
+    private TableColumn<StudentAssignment, String> markColumn;
 
     @FXML
     private Text AssignmentName;
 
     @FXML
+    private Text AssignmentOutline;
+
+    @FXML
     private JFXButton backButton;
 
     private dbConnection db;
-    private ObservableList<GradeData> data;
+    private ObservableList<StudentAssignment> data;
     private Stage stage;
     private String bundleid;
     private String bundlename;
     private String classroomID;
+    private String outline;
 
     public void setClassroomID(String classroomID) {
         this.classroomID = classroomID;
@@ -129,15 +132,21 @@ public class AssignmentPageController implements Initializable {
             Connection conn = dbConnection.getConnection();
             this.data = FXCollections.observableArrayList();
             assert conn != null;
-
-            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM " + this.bundlename);
+            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM " + this.bundleid);
             rs.next();
+            int count = rs.getMetaData().getColumnCount();
+            LinkedHashMap<String, Float> out = new LinkedHashMap<>();
+            for(int i=4; i<count; i++){
+                out.put(rs.getMetaData().getColumnName(i), rs.getFloat(i));
+            }
+            this.outline = out.keySet().stream().map(key -> key + ": " + out.get(key)).collect(
+                    Collectors.joining(", ", "{", "}"));
             while(rs.next()){
-                ObservableMap<String, Float> map = FXCollections.observableMap(new HashMap<>());
-                for (int i=4; i<rs.getMetaData().getColumnCount(); i++){
+                LinkedHashMap<String, Float> map = new LinkedHashMap<>();
+                for(int i=4; i<count; i++){
                     map.put(rs.getMetaData().getColumnName(i), rs.getFloat(i));
                 }
-                this.data.add(new GradeData(
+                this.data.add(new StudentAssignment(
                         rs.getString("student_id"),
                         rs.getString("student_name"),
                         rs.getFloat("total"), map));
@@ -147,12 +156,12 @@ public class AssignmentPageController implements Initializable {
             System.err.println("Error" + e);
         }
 
-        this.idColumn.setCellValueFactory(new PropertyValueFactory<GradeData, String>("ID"));
-        this.nameColumn.setCellValueFactory(new PropertyValueFactory<GradeData, String>("name"));
-        this.gradeColumn.setCellValueFactory(new PropertyValueFactory<GradeData, String>("grade"));
-//        this.markColumn.setCellValueFactory(new PropertyValueFactory<GradeData, ObservableMapValue<String, Float>>("breakdown"));
+        this.idColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentID"));
+        this.nameColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentName"));
+        this.gradeColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("finalMark"));
+        this.markColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("gradeMap"));
         this.AssignmentName.setText(this.bundlename);
-        this.AssignmentTable.setItems(null);
+        this.AssignmentOutline.setText(this.outline);
         this.AssignmentTable.setItems(this.data);
     }
 
@@ -162,7 +171,6 @@ public class AssignmentPageController implements Initializable {
         Loader.setLocation(getClass().getResource("/Classroom/Classroom.fxml"));
         try {
             Loader.load();
-
         }catch (Exception e){
             e.printStackTrace();
         }

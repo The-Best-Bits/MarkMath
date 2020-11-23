@@ -1,6 +1,9 @@
 package markmath.entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.stream.Collectors;
 
 public class StudentAssignment {
     /* It represents a single student assignment;
@@ -27,6 +30,7 @@ public class StudentAssignment {
     private ArrayList<Question> questions = new ArrayList<>();
     //do we need to store the assignment outline in a student assignment?
     private AssignmentOutline outline;
+    private String gradeMap;
     private float fullMark = 0;
     private float finalMark = 0;
 
@@ -39,10 +43,13 @@ public class StudentAssignment {
 
     }
 
-    public StudentAssignment(String studentID, String studentName, String assignmentType){
+    public StudentAssignment(String studentID, String studentName, float total, LinkedHashMap<String, Float> map){
         this.studentID = studentID;
         this.studentName = studentName;
-        this.assignmentType = assignmentType;
+        this.finalMark = total;
+        this.gradeMap = map.keySet().stream().map(
+                key -> key + ": " + map.get(key)).collect(
+                        Collectors.joining(", ", "{", "}"));
     }
 
 
@@ -53,6 +60,7 @@ public class StudentAssignment {
         this.fullMark = outline.returnFullMark();
     }
 
+    public String getGradeMap() {return gradeMap;}
 
     public float getFinalMark(){return finalMark;}
 
