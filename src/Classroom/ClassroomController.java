@@ -288,35 +288,6 @@ public class ClassroomController<MyType> implements Initializable {
         window.show();
     }
 
-    @FXML
-    void markAssignment(ActionEvent event){
-        ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
-        ArrayList<ParsedDataPerAssignment> parsedDataAssignmnents = manager.getParsedDataAssignments();
-        for (ParsedDataPerAssignment assignment: parsedDataAssignmnents){
-            System.out.println(assignment.getFinalParsedData());
-            //check that the student exists in this classroom
-            //check that their is a corresponding assignment bundle in this classroom
-            if(!studentInClassroom(assignment.getStudentNum()) || !assignmentBundleInClassroom(assignment.getAssignmentType())){
-                this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with this student document is not in this classroom");
-            }
-            else{
-                //get assignment outline
-                AssignmentOutline outline = getAssignmentOutline(assignment.getAssignmentType());
-                //get student name
-                String studentName = getStudentNameFromDatabase(assignment.getStudentNum());
-                StudentAssignmentManager saManager = new StudentAssignmentManager(assignment.getStudentNum(),
-                        studentName, assignment.getAssignmentName(), assignment.getAssignmentType(),
-                        assignment.getFinalParsedData(), outline);
-                saManager.markAllQuestions();
-                StudentAssignment studentAssignment = saManager.getCarbonCopy();
-                //add StudentAssignment to Database
-                addStudentAssignmentToDatabase(studentAssignment);
-
-            }
-
-        }
-
-    }
 
     @FXML
     void addQuestion(ActionEvent event) {
@@ -423,10 +394,47 @@ public class ClassroomController<MyType> implements Initializable {
         }
         }
 
+    /**
+     *  When a user clicks the MarkAssignment button within a classroom this method goes through all of the parsed data
+     *  received by the server, creates a mock student assignment corresponding to the parsed data of each specific
+     *  document that the teacher has opened and clicked through, and adds the required data to the database
+     * @param event User clicks the MarkAssignment Button
+     */
+    @FXML
+    void markAssignment(ActionEvent event){
+        ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
+        ArrayList<ParsedDataPerAssignment> parsedDataAssignmnents = manager.getParsedDataAssignments();
+        for (ParsedDataPerAssignment assignment: parsedDataAssignmnents){
+            System.out.println(assignment.getFinalParsedData());
+            //check that the student exists in this classroom
+            //check that their is a corresponding assignment bundle in this classroom
+            if(!studentInClassroom(assignment.getStudentNum()) || !assignmentBundleInClassroom(assignment.getAssignmentType())){
+                this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with this student document is not in this classroom");
+            }
+            else{
+                //get assignment outline
+                AssignmentOutline outline = getAssignmentOutline(assignment.getAssignmentType());
+                //get student name
+                String studentName = getStudentNameFromDatabase(assignment.getStudentNum());
+                StudentAssignmentManager saManager = new StudentAssignmentManager(assignment.getStudentNum(),
+                        studentName, assignment.getAssignmentName(), assignment.getAssignmentType(),
+                        assignment.getFinalParsedData(), outline);
+                saManager.markAllQuestions();
+                StudentAssignment studentAssignment = saManager.getCarbonCopy();
+                //add StudentAssignment to Database
+                addStudentAssignmentToDatabase(studentAssignment);
 
+            }
 
+        }
 
+    }
 
+    /**
+     * Helper function to markStudentAssignment
+      * @param studentNum StudentID of a student
+     * @return True iff there exists a student in this classroom with the given studentID
+     */
     private Boolean studentInClassroom(String studentNum){
 
         try{
@@ -457,6 +465,11 @@ public class ClassroomController<MyType> implements Initializable {
 
     }
 
+    /**
+     * Helper function to markStudentAssignment
+     * @param assignmentType Name of the assignmentbundle
+     * @return True iff this classroom contains an assignmentbundle with this name
+     */
     private Boolean assignmentBundleInClassroom(String assignmentType){
         try{
             Connection conn = dbConnection.getConnection();
@@ -477,6 +490,11 @@ public class ClassroomController<MyType> implements Initializable {
         return false;
     }
 
+    /**
+     * Helper function to markStudentAssignment
+     * @param assignmentType Name of the assignmentbundle
+     * @return the assignmentoutline of the assignmentbundle with the give name
+     */
     private AssignmentOutline getAssignmentOutline(String assignmentType){
         try{
             Connection conn = dbConnection.getConnection();
@@ -496,10 +514,14 @@ public class ClassroomController<MyType> implements Initializable {
         }catch(SQLException e){
             System.out.println("Error" + e);
         }
-
         return null;
     }
 
+    /**
+     * Helper function to markStudentAssignment
+     * @param studentNum StudentID of a student in this classroom
+     * @return Name of the student with this StudentID
+     */
     private String getStudentNameFromDatabase(String studentNum){
         try{
             Connection conn = dbConnection.getConnection();
@@ -515,6 +537,11 @@ public class ClassroomController<MyType> implements Initializable {
         return null;
     }
 
+    /**
+     * Helper function to markStudentAssignment
+     * Adds a student's assignment to the database in the corresponding assignmentbundle table
+     * @param assignment StudentAssignment that has been marked
+     */
     private void addStudentAssignmentToDatabase(StudentAssignment assignment){
 
         int numQuestions = assignment.getQuestions().size();
@@ -568,6 +595,13 @@ public class ClassroomController<MyType> implements Initializable {
         }
     }
 
+    /**
+     * Helper function to markStudentAssignment
+     * @param studentNum StudentID of a student
+     * @param assignmentType Name of an assignmentbundle in this classroom
+     * @return True iff there already exists an assignment in the given assignment bundle in this classroom for a
+     * student with the given studentID
+     */
     private Boolean studentAssignmentInDatabase(String studentNum, String assignmentType){
         try{
             Connection conn = dbConnection.getConnection();
