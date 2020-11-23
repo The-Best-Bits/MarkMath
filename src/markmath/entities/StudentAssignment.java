@@ -1,6 +1,9 @@
 package markmath.entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.stream.Collectors;
 
 public class StudentAssignment {
     /* It represents a single student assignment;
@@ -27,6 +30,7 @@ public class StudentAssignment {
     private ArrayList<Question> questions = new ArrayList<>();
     //do we need to store the assignment outline in a student assignment?
     private AssignmentOutline outline;
+    private String gradeMap;
     private float fullMark = 0;
     private float finalMark = 0;
 
@@ -39,6 +43,16 @@ public class StudentAssignment {
 
     }
 
+    public StudentAssignment(String studentID, String studentName, float total, LinkedHashMap<String, Float> map){
+        this.studentID = studentID;
+        this.studentName = studentName;
+        this.finalMark = total;
+        this.gradeMap = map.keySet().stream().map(
+                key -> key + ": " + map.get(key)).collect(
+                        Collectors.joining(", ", "{", "}"));
+    }
+
+
     public AssignmentOutline getOutline() {return outline;}
 
     public void setOutline(AssignmentOutline outline) {
@@ -46,6 +60,7 @@ public class StudentAssignment {
         this.fullMark = outline.returnFullMark();
     }
 
+    public String getGradeMap() {return gradeMap;}
 
     public float getFinalMark(){return finalMark;}
 
@@ -62,6 +77,7 @@ public class StudentAssignment {
     public ArrayList<Question> getQuestions(){return questions;}
 
     public String getStudentName(){return this.studentName;}
+
 
     /**
      *
@@ -111,11 +127,15 @@ public class StudentAssignment {
      */
     //added November 10
     public void setFinalMark(){
-        int temp = 0;
+        float temp = 0;
         for(Question q: questions){
+            System.out.println(q.getQuestionNumber());
+            System.out.println(q.getNumberOfErrors());
+            System.out.println(q.getFinalMark());
             temp += q.getFinalMark();
         }
         this.finalMark = temp;
+        System.out.println(this.finalMark);
     }
 
 

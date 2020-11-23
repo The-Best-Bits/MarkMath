@@ -1,6 +1,8 @@
 package Classroom;
 
 import java.lang.Character;
+
+import Assignments.AssignmentPageController;
 import Server.CheckMathParser;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -34,9 +36,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.Date;
 
-public class ClassroomController implements Initializable {
-
+public class ClassroomController<MyType> implements Initializable {
     ClassroomModel classroomModel = new ClassroomModel();
 
     @FXML
@@ -107,7 +109,7 @@ public class ClassroomController implements Initializable {
 
 
     @FXML
-    public Label errorCreatingAssignment;
+    private Label errorCreatingAssignment;
 
     @FXML
     private Label errorMarkingStudentAssignment;
@@ -116,6 +118,9 @@ public class ClassroomController implements Initializable {
     public HashMap<String, Float> assignment_outline = new HashMap<String, Float>();
 
     private String classroomID;
+
+    private MyType temp;
+    private Date lastClickTime;
 
     public String getClassroomID() {
         return classroomID;
@@ -161,6 +166,46 @@ public class ClassroomController implements Initializable {
         this.assignment_table.setItems(null);
         this.assignment_table.setItems(this.assignment_data);
     }
+
+    @FXML
+    private void RowSelect() {
+        MyType row = (MyType) this.assignment_table.getSelectionModel().getSelectedItem();
+        if (row==null) return;
+        if (row!=temp) {
+            temp = row;
+            lastClickTime = new Date();
+        }else{
+            Date now = new Date();
+            long diff = now.getTime() - lastClickTime.getTime();
+            if (diff < 300){
+                FXMLLoader Loader = new FXMLLoader();
+
+                Loader.setLocation(getClass().getResource("/Assignments/AssignmentPage.fxml"));
+
+                try {
+                    Loader.load();
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                AssignmentPageController controller = Loader.getController();
+                controller.setBundleid(this.assignment_table.getSelectionModel().getSelectedItem().getID());
+                controller.setBundlename(this.assignment_table.getSelectionModel().getSelectedItem().getName());
+                controller.setClassroomID(this.classroomID);
+                controller.loadData();
+                Parent p = Loader.getRoot();
+                Scene scene = new Scene(p);
+                Stage stage = (Stage)assignment_table.getScene().getWindow();stage.setScene(scene);
+                stage.show();
+
+            } else {
+                lastClickTime = new Date();
+            }
+        }
+
+    }
+
+
 
     @FXML
     private void loadStudentData() throws SQLException {
@@ -248,6 +293,7 @@ public class ClassroomController implements Initializable {
         ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
         ArrayList<ParsedDataPerAssignment> parsedDataAssignmnents = manager.getParsedDataAssignments();
         for (ParsedDataPerAssignment assignment: parsedDataAssignmnents){
+            System.out.println(assignment.getFinalParsedData());
             //check that the student exists in this classroom
             //check that their is a corresponding assignment bundle in this classroom
             if(!studentInClassroom(assignment.getStudentNum()) || !assignmentBundleInClassroom(assignment.getAssignmentType())){
@@ -522,11 +568,11 @@ public class ClassroomController implements Initializable {
             studentAssignmentInDatabase = true;
             StringBuilder sqlUpdate = new StringBuilder("UPDATE " + assignment.getAssignmentType() + " SET ");
             int q =1;
-            while(q< numQuestions){
+            while(q<= numQuestions){
                 sqlUpdate.append("question" + q + "=" + assignment.getQuestion(q).getFinalMark() + ", ");
                 q+=1;
             }
-            sqlUpdate.append("question").append(q).append("=").append(assignment.getQuestion(q).getFinalMark());
+            sqlUpdate.append("total =").append(assignment.getFinalMark());
             sqlUpdate.append(" WHERE student_id=" + assignment.getStudentID());
             sqlInsert = sqlUpdate.toString();
         }
@@ -571,27 +617,6 @@ public class ClassroomController implements Initializable {
         }catch(SQLException e){
             System.out.println("Error" + e);
         }
-
         return false;
     }
-
-   /* private Boolean AssignmentBundleInDatabase(String assignmentID, String classroomID){
-        try{
-            Connection conn = dbConnection.getConnection();
-            String sqlQuery = "SELECT assignment_id FROM " + classroomID + " WHERE assignmentBundle_id =" + assignmentID;
-            ResultSet rs = conn.createStatement().executeQuery(sqlQuery);
-            if (rs.next()){
-                conn.close();
-                return true;
-            }
-            conn.close();
-            return false;
-        }catch(SQLException e){
-            errorCreatingAssignment.setText("Please put a valid ID");
-        }
-
-        return false;
-   } */
-
-
 }

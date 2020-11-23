@@ -82,7 +82,7 @@ public class AssignmentBundle {
 
        if (assignments.size() != 0) {
            for (StudentAssignment assignment: assignments){
-               if (assignment.getStudentID() == studentID) {
+               if (assignment.getStudentID().equals(studentID)) {
                    return assignment;
                }
            }
