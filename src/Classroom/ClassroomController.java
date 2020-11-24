@@ -288,6 +288,177 @@ public class ClassroomController<MyType> implements Initializable {
         window.show();
     }
 
+
+    /**
+     * Allows the user to add one extra question to the outline of a new assignment they wish to create.
+     * It creates a label indicating the appropriate question number and a text field that allows the user to insert
+     * a mark.
+     * NOTE: MAX CAPACITY 20 QUESTIONS
+     * @param event This method takes place when the add question button in the interface is clicked.
+     */
+
+    @FXML
+    void addQuestion(ActionEvent event) {
+
+       Label labels[] = new Label[20];
+
+       textField[counterAddQuestions] = new TextField();
+       labels[counterAddQuestions] = new Label("Question "+ counterAddQuestions);
+       pane.add(labels[counterAddQuestions], 0, (counterAddQuestions));
+       pane.add(textField[counterAddQuestions], 1, (counterAddQuestions));
+       counterAddQuestions = counterAddQuestions + 1;
+       numOfQuestions = numOfQuestions + 1;
+
+
+    }
+
+    /**
+     * Allows the user to add a new Assignment to a classroom with specified id, name and outline.
+     * It creates a new AssignmentBundle object and adds it to the AssignmentBundles database of this classroom by
+     * getting the needed data from the text fields.
+     * The method fails and communicates the user such failure if one of the text fields is empty or if the Assignment
+     * already exists.
+     * @param event This method takes place when the Add Assignment button in the interface is clicked.
+     */
+    @FXML
+    void createAssignment(ActionEvent event)
+    {
+
+        int i = 1;
+
+        //This clears the previous attempt of creating an assignment so that we are not making the outline larger
+        assignment_outline.clear();
+        createOutline();
+
+        String received_name;
+        String received_id;
+
+        if ( assignment_name != null  && !assignment_name.getText().equals("")){
+            received_name = assignment_name.getText().trim();
+        }
+        else{
+            errorCreatingAssignment.setText("Please insert an Assignment name");
+            received_name = "Test";
+        }
+
+        if (assignment_id != null  && !assignment_id.getText().equals("")){
+           received_id = assignment_id.getText().trim();
+        }
+        else{
+            errorCreatingAssignment.setText("Please insert an Assignment id");
+            received_id = "99";
+        }
+        if (errorCreatingAssignment.getText().trim().equals("")){
+            AssignmentOutline newOutline = new AssignmentOutline(received_name,assignment_outline );
+            AssignmentBundle newAssignment = new AssignmentBundle(newOutline);
+            System.out.println("Success");
+            addAssignmentBundleToClassroomDatabase(received_id, newAssignment);
+            loadBundleData();
+            //createNewBundlePage(received_id, newAssignment);
+        }
+
+        //System.out.println(assignment_outline.get("Question 1"));
+    }
+
+    /**
+     * Creates the Outline as the user inserted it in the interface through the various AddQuestion buttons and prepares
+     * it to be used to create an assignment.
+     * It checks if the input is a valid number and if no one of the fields is empty, and if any of these two conditions
+     * fail, the user gets a prompt to input the outline correctly.
+     */
+    private void createOutline(){
+        int i = 1;
+        while (i != numOfQuestions) {
+            String poss_number = textField[i].getText().trim();
+            int j = 0;
+            boolean isValidMark;
+            isValidMark = poss_number.length() != 0;
+            //System.out.println(poss_number);
+            //System.out.println(j);
+            //System.out.println(poss_number.length());
+            while (j != poss_number.length()){
+                if (!Character.isDigit(poss_number.charAt(j))){
+                    isValidMark = false;}
+                j = j+1;
+                errorCreatingAssignment.setText("Please use only numbers");
+            }
+
+            if (isValidMark) {
+                assignment_outline.put("question"+ (i), Float.valueOf(textField[i].getText()));
+            }
+            else
+            {
+                errorCreatingAssignment.setText("Please complete the Outline.");
+            }
+            i = i+1;
+        }
+    }
+
+
+    /**
+     * Adds assignment to the AssignmentBundles table of the database for this classroom with the specified id.
+     * If the assignment already exists, nothing is added and the user is communicated so.
+     * @param received_id The id the user wishes the new Assignment to have.
+     * @param assignment The assignment the user has created with a specified name and outline.
+     */
+    private void addAssignmentBundleToClassroomDatabase(String received_id, AssignmentBundle assignment){
+
+        String curr_class = this.classroomID;
+        String sqlInsert = "INSERT INTO AssignmentBundles(assignmentbundle_id, assignment_name, classroom_id) VALUES (?,?,?)";
+        if (assignmentBundleInClassroom(assignment.getName())){
+            errorCreatingAssignment.setText("The Assignment already exists.");
+        }
+        else{
+            try{
+
+                Connection conn = dbConnection.getConnection();
+                int received_id_int = Integer.parseInt(received_id);
+               // ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM assignmentBundles");
+                PreparedStatement stmt = conn.prepareStatement(sqlInsert);
+                stmt.setInt(1, received_id_int);
+                stmt.setString(2, assignment.getName());
+                stmt.setString(3, curr_class);
+                int q = 1;
+                stmt.execute();
+                conn.close();
+
+            }catch(SQLException e){
+                System.out.println("Error" + e);
+            }
+        }
+        }
+
+    private void createNewBundlePage(String received_id, AssignmentBundle assignment) {
+
+    }
+
+    //Luca's
+    private Boolean assignmentBundleInClassroom(String assignmentID){
+        try{
+            Connection conn = dbConnection.getConnection();
+            ResultSet rs = conn.createStatement().executeQuery("SELECT assignmentbundle_id FROM AssignmentBundles WHERE classroom_id =" + this.classroomID);
+            while (rs.next()){
+                if(rs.getString("assignmentbundle_id").equals(assignmentID)){
+                    conn.close();
+                    return true;
+                }
+            }
+            conn.close();
+            return false;
+
+        }catch(SQLException e){
+            System.out.println("Error" + e);
+        }
+
+        return false;
+    }
+
+    /**
+     *  When a user clicks the MarkAssignment button within a classroom this method goes through all of the parsed data
+     *  received by the server, creates a mock student assignment corresponding to the parsed data of each specific
+     *  document that the teacher has opened and clicked through, and adds the required data to the database
+     * @param event User clicks the MarkAssignment Button
+     */
     @FXML
     void markAssignment(ActionEvent event){
         ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
@@ -296,7 +467,7 @@ public class ClassroomController<MyType> implements Initializable {
             System.out.println(assignment.getFinalParsedData());
             //check that the student exists in this classroom
             //check that their is a corresponding assignment bundle in this classroom
-            if(!studentInClassroom(assignment.getStudentNum()) || !assignmentBundleInClassroom(assignment.getAssignmentType())){
+            if(!studentInClassroom(assignment.getStudentNum()) || !assignmentBundleNameInClassroom(assignment.getAssignmentType())){
                 this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with this student document is not in this classroom");
             }
             else{
@@ -318,146 +489,13 @@ public class ClassroomController<MyType> implements Initializable {
 
     }
 
-    @FXML
-    void addQuestion(ActionEvent event) {
-
-       Label labels[] = new Label[20];
-
-       textField[counterAddQuestions] = new TextField();
-       labels[counterAddQuestions] = new Label("Question "+ counterAddQuestions);
-       pane.add(labels[counterAddQuestions], 0, (counterAddQuestions));
-       pane.add(textField[counterAddQuestions], 1, (counterAddQuestions));
-       counterAddQuestions = counterAddQuestions + 1;
-       numOfQuestions = numOfQuestions + 1;
-
-
-    }
-
-    @FXML
-    void createAssignment(ActionEvent event)
-    {
-
-        int i = 1;
-
-        while (i != numOfQuestions) {
-            String poss_number = textField[i].getText();
-            int j = 0;
-            boolean isValidMark;
-            if (poss_number.length() == 0){
-                isValidMark = false;
-            }
-            else{
-                isValidMark = true;
-            }
-            System.out.println(poss_number);
-            System.out.println(j);
-            System.out.println(poss_number.length());
-            while (j != poss_number.length()){
-                if (!Character.isDigit(poss_number.charAt(j))){
-                    isValidMark = false;}
-                j = j+1;
-            }
-
-            if (isValidMark) {
-                assignment_outline.put("Question "+ (i), Float.valueOf(textField[i].getText()));
-            }
-            else
-            {
-                errorCreatingAssignment.setText("Please complete the Outline.");
-            }
-            i = i+1;
-        }
-        String received_name;
-        String received_id;
-        //String name_field = assignment_name.getText();
-        //String id_field = assignment_name.getText();
-        if ( assignment_name != null  && !assignment_name.getText().equals("")){
-            received_name = assignment_name.getText();
-        }
-        else{
-            errorCreatingAssignment.setText("Please insert an Assignment name");
-            received_name = "Test";
-            System.out.println(assignment_name != null);
-            System.out.println(assignment_name.getText());
-
-        }
-
-        if (assignment_id != null  && !assignment_id.getText().equals("")){
-           received_id = assignment_id.getText();
-        }
-        else{
-            errorCreatingAssignment.setText("Please insert an Assignment id");
-            received_id = "99";
-        }
-        if (errorCreatingAssignment.getText().equals("")){
-            AssignmentOutline newOutline = new AssignmentOutline(received_name,assignment_outline );
-            AssignmentBundle newAssignment = new AssignmentBundle(newOutline);
-            System.out.println("Success");
-           // addAssignmentBundleToClassroomDatabase(received_id, newAssignment);
-        }
-
-        //System.out.println(assignment_outline.get("Question 1"));
-    }
-
-    private void addAssignmentBundleToClassroomDatabase(String received_id, AssignmentBundle assignment){
-        String sqlInsert = "";
-        Boolean studentBundleInDatabase = false;
-        if (assignmentBundleInClassroom(assignment.getName())){
-            errorCreatingAssignment.setText("The Assignment already exists.");
-        }
-        else{
-            sqlInsert = "INSERT INTO " + this.classroomID + "(assignment_id, assignment_name)";
-            try{
-                Connection conn = dbConnection.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sqlInsert);
-
-                stmt.setString(1, received_id);
-                stmt.setString(2, assignment.getName());
-                int q = 1;
-                stmt.execute();
-                conn.close();
-
-            }catch(SQLException e){
-                System.out.println("Error" + e);
-            }
-        }
-        }
-
-
-
-
-
-    private Boolean studentInClassroom(String studentNum){
-
-        try{
-            Connection conn = dbConnection.getConnection();
-//            ResultSet rs = conn.createStatement().executeQuery("SELECT student_id FROM students WHERE class_id LIKE concat('%', " + this.classroomID + ", '%'");
-            ResultSet rs = conn.createStatement().executeQuery("SELECT class_id FROM students WHERE student_id =" + studentNum);
-            String class_ids = rs.getString("class_id");
-            System.out.println(class_ids);
-            if (class_ids.contains(this.classroomID)){
-                conn.close();
-                return true;
-            }
-//            while (rs.next()){
-//                if(rs.getString("student_id").equals(studentNum)){
-//                    conn.close();
-//                    return true;
-//                }
-//            }
-            System.out.println("test");
-            conn.close();
-            return false;
-
-        }catch(SQLException e){
-            System.out.println("Error" + e);
-        }
-
-        return false;
-
-    }
-
-    private Boolean assignmentBundleInClassroom(String assignmentType){
+    /**
+     * Helper function to markStudentAssignment. Differs from assignmentBundleInClassroom as this method checks if
+     * there exists an assignmentbundle with the given name in this classroom.
+     * @param assignmentType Name of the assignmentbundle
+     * @return True iff this classroom contains an assignmentbundle with this name
+     */
+    private Boolean assignmentBundleNameInClassroom(String assignmentType){
         try{
             Connection conn = dbConnection.getConnection();
             ResultSet rs = conn.createStatement().executeQuery("SELECT assignment_name FROM AssignmentBundles WHERE classroom_id =" + this.classroomID);
@@ -471,16 +509,63 @@ public class ClassroomController<MyType> implements Initializable {
             return false;
 
         }catch(SQLException e){
+                System.out.println("Assignment bundle name in classroom");
             System.out.println("Error" + e);
         }
 
         return false;
     }
 
-    private AssignmentOutline getAssignmentOutline(String assignmentType){
+    /**
+     * Helper function to markStudentAssignment
+     * @param studentNum StudentID of a student
+     * @return True iff there exists a student in this classroom with the given studentID
+     */
+    private Boolean studentInClassroom(String studentNum){
+
         try{
             Connection conn = dbConnection.getConnection();
-            String sqlQuery = "SELECT * FROM " + assignmentType + " ORDER BY ROWID ASC LIMIT 1";
+//            ResultSet rs = conn.createStatement().executeQuery("SELECT student_id FROM students WHERE class_id LIKE concat('%', " + this.classroomID + ", '%'");
+            String sql = "SELECT * FROM students WHERE student_id = " + studentNum + " AND CHARINDEX(':" + this.classroomID + ":', class_id) > 0";
+//            ResultSet rs = conn.createStatement().executeQuery("SELECT class_id FROM students WHERE student_id =" + studentNum);
+            ResultSet rs = conn.createStatement().executeQuery(sql);
+            Boolean result = rs.next();
+            rs.close();
+            conn.close();
+            return result;
+
+//            String class_ids = rs.getString("class_id");
+            //this wont work as if we have :11: as a students classroom_ids, when we check if they are in class with
+            //id 1 it will return true
+//            if (class_ids.contains(this.classroomID)){
+//                conn.close();
+//                return true;
+//            }
+//            System.out.println("test");
+//            conn.close();
+//            return false;
+
+        }catch(SQLException e){
+            System.out.println("Student in classroom");
+            System.out.println("Error" + e);
+            return false;
+        }
+    }
+
+
+    /**
+     * Helper function to markStudentAssignment
+     * @param assignmentType Name of the assignmentbundle
+     * @return the assignmentoutline of the assignmentbundle with the give name
+     */
+    private AssignmentOutline getAssignmentOutline(String assignmentType){
+
+        String assignmentBundleID = getIDOfAssignmentBundle(assignmentType);
+
+        try{
+            Connection conn = dbConnection.getConnection();
+            String sqlQuery = "SELECT * FROM '" + assignmentBundleID + "' ORDER BY ROWID ASC LIMIT 1";
+            System.out.println(sqlQuery);
             ResultSet rs = conn.createStatement().executeQuery(sqlQuery);
             ResultSetMetaData rsmd = rs.getMetaData();
             int numColumns = rsmd.getColumnCount();
@@ -494,12 +579,48 @@ public class ClassroomController<MyType> implements Initializable {
             AssignmentOutline outline = new AssignmentOutline(assignmentType, questionToMarks);
             return outline;
         }catch(SQLException e){
+            System.out.println("Get Assignment Outline");
             System.out.println("Error" + e);
         }
 
         return null;
     }
 
+    /**
+     * Helper function to markStudentAssignment
+     * @param assignmentBundleName
+     * @return ID of the assignmentbundle with the given name in this classroom
+     * Note: There is only ever one assignmentbundle with a given name in a classroom, so there can only be one ID
+     * returned
+     */
+    private String getIDOfAssignmentBundle(String assignmentBundleName){
+        try{
+            Connection conn = dbConnection.getConnection();
+            String sql = "SELECT assignmentbundle_id FROM AssignmentBundles WHERE assignment_name = '"
+                    + assignmentBundleName + "'"+ " AND classroom_id ='" + this.classroomID + "'";
+            System.out.println(sql);
+            ResultSet rs = conn.createStatement().executeQuery(sql);
+            System.out.println(rs.next());
+            System.out.println(this.classroomID);
+            String result = rs.getString("assignmentbundle_id");
+            System.out.println(result);
+            rs.close();
+            conn.close();
+            return result;
+
+        }catch(SQLException e){
+            System.out.println("Get Assignment bundle ID");
+            System.out.println("Error" + e);
+        }
+        return null;
+    }
+
+
+    /**
+     * Helper function to markStudentAssignment
+     * @param studentNum StudentID of a student in this classroom
+     * @return Name of the student with this StudentID
+     */
     private String getStudentNameFromDatabase(String studentNum){
         try{
             Connection conn = dbConnection.getConnection();
@@ -515,7 +636,13 @@ public class ClassroomController<MyType> implements Initializable {
         return null;
     }
 
+    /**
+     * Helper function to markStudentAssignment
+     * Adds a student's assignment to the database in the corresponding assignmentbundle table
+     * @param assignment StudentAssignment that has been marked
+     */
     private void addStudentAssignmentToDatabase(StudentAssignment assignment){
+        String assignmentBundleID = getIDOfAssignmentBundle(assignment.getAssignmentType());
 
         int numQuestions = assignment.getQuestions().size();
         StringBuilder questions = new StringBuilder();
@@ -527,11 +654,11 @@ public class ClassroomController<MyType> implements Initializable {
         questions.append(", total)");
         questionMarks.append(")");
         String sqlInsert = "";
-        Boolean studentAssignmentInDatabase = false;
+        boolean studentAssignmentInDatabase = false;
         //check if student assignment is already in database
         if (studentAssignmentInDatabase(assignment.getStudentID(), assignment.getAssignmentType())){
             studentAssignmentInDatabase = true;
-            StringBuilder sqlUpdate = new StringBuilder("UPDATE " + assignment.getAssignmentType() + " SET ");
+            StringBuilder sqlUpdate = new StringBuilder("UPDATE '" + assignmentBundleID + "' SET ");
             int q =1;
             while(q<= numQuestions){
                 sqlUpdate.append("question" + q + "=" + assignment.getQuestion(q).getFinalMark() + ", ");
@@ -542,7 +669,7 @@ public class ClassroomController<MyType> implements Initializable {
             sqlInsert = sqlUpdate.toString();
         }
         else {
-             sqlInsert = "INSERT INTO " + assignment.getAssignmentType() + "(student_id, student_name, document_name"
+             sqlInsert = "INSERT INTO '" + assignmentBundleID + "'(student_id, student_name, document_name"
                     + questions + " VALUES " + questionMarks;
         }
         System.out.println(sqlInsert);
@@ -564,14 +691,23 @@ public class ClassroomController<MyType> implements Initializable {
             conn.close();
 
         }catch(SQLException e){
+            System.out.println("Add Student assignment to database");
             System.out.println("Error" + e);
         }
     }
 
+    /**
+     * Helper function to markStudentAssignment
+     * @param studentNum StudentID of a student
+     * @param assignmentType Name of an assignmentbundle in this classroom
+     * @return True iff there already exists an assignment in the given assignment bundle in this classroom for a
+     * student with the given studentID
+     */
     private Boolean studentAssignmentInDatabase(String studentNum, String assignmentType){
+        String assignmentbundleID = getIDOfAssignmentBundle(assignmentType);
         try{
             Connection conn = dbConnection.getConnection();
-            String sqlQuery = "SELECT student_name FROM " + assignmentType + " WHERE student_id =" + studentNum;
+            String sqlQuery = "SELECT student_name FROM '" + assignmentbundleID + "' WHERE student_id =" + studentNum;
             ResultSet rs = conn.createStatement().executeQuery(sqlQuery);
             if (rs.next()){
                 conn.close();
