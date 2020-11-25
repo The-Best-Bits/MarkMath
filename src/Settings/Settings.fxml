@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -83,5 +85,32 @@
                 </Text>
             </children>
         </Pane>
+      <Text fill="#616161" layoutX="342.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Change Password" wrappingWidth="366.30029296875">
+         <font>
+            <Font name="Yu Gothic UI Regular" size="25.0" />
+         </font>
+      </Text>
+      <JFXTextField fx:id="newPass" layoutX="525.0" layoutY="188.0" prefHeight="42.0" prefWidth="232.0" style="-fx-background-color: #FFFFFF;" />
+      <Text fill="#616161" layoutX="373.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Password:" wrappingWidth="144.99997651576996">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Text>
+      <JFXButton fx:id="savePassword" layoutX="628.0" layoutY="343.0" onAction="#savePassword" prefHeight="52.0" prefWidth="129.0" style="-fx-background-color: #4C6AB7;" text="Save" textFill="WHITE">
+         <font>
+            <Font name="Yu Gothic UI Regular" size="22.0" />
+         </font>
+      </JFXButton>
+      <JFXTextField fx:id="cfrmPass" layoutX="525.0" layoutY="257.0" prefHeight="42.0" prefWidth="232.0" style="-fx-background-color: #FFFFFF;" />
+      <Text fill="#616161" layoutX="342.0" layoutY="285.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password:" wrappingWidth="172.99997651576996">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Text>
+      <Label fx:id="passRemind" layoutX="342.0" layoutY="311.0" prefHeight="24.0" prefWidth="464.0" textFill="#bc0c0c">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>
