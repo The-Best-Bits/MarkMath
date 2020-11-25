@@ -132,7 +132,7 @@ public class AssignmentPageController implements Initializable {
             Connection conn = dbConnection.getConnection();
             this.data = FXCollections.observableArrayList();
             assert conn != null;
-            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM " + this.bundleid);
+            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM '" + this.bundleid + "'");
             rs.next();
             int count = rs.getMetaData().getColumnCount();
             LinkedHashMap<String, Float> out = new LinkedHashMap<>();

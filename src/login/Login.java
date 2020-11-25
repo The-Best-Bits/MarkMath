@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 public class Login extends Application {
 
     LoginModel loginModel = new LoginModel();
+    public static SocketIOServer server;
 
     public static void main(String[] args) {
         launch(args);
@@ -23,8 +24,7 @@ public class Login extends Application {
         stage.setScene(scene);
         stage.show();
         //start the server
-        SocketIOServer server = new SocketIOServer();
-        server.start();
+        server = new SocketIOServer();
         //configure app to screen size of current device
         
 
