@@ -493,8 +493,8 @@ public class ClassroomController<MyType> implements Initializable {
                     addStudentAssignmentToDatabase(studentAssignment);
 
                 }
-
             }
+            manager.clearParsedDataAssignments();
         }catch(InterruptedException e){
             System.out.println("Error" + e);
         }
