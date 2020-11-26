@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public class Login extends Application {
 
     LoginModel loginModel = new LoginModel();
-    public static SocketIOServer server;
+    private static SocketIOServer server;
 
     public static void main(String[] args) {
         launch(args);
@@ -37,4 +37,6 @@ public class Login extends Application {
             return FXMLLoader.load(getClass().getResource("SetPassword.fxml"));
         }
     }
+
+    public static SocketIOServer getServer(){return server;}
 }

@@ -425,7 +425,6 @@ public class ClassroomController<MyType> implements Initializable {
                 int q = 1;
                 stmt.execute();
                 conn.close();
-
             }catch(SQLException e){
                 System.out.println("Error" + e);
             }
@@ -467,7 +466,7 @@ public class ClassroomController<MyType> implements Initializable {
     void markAssignment(ActionEvent event){
 
         //when user clicks on Mark Assignment Button we get all of the data from the Hypatia document currently open
-        Login.server.getResultsEvents();
+        Login.getServer().getResultsEvents();
 
         try {
             Thread.sleep(1000);
