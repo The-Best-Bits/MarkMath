@@ -59,7 +59,12 @@ public class DashboardController<MyType> implements Initializable {
     private MyType temp;
     private Date lastClickTime;
     private Stage stage;
+    private JFXButton openClassroom;
 
+    /**
+     * Adds a classroom to this users account
+     * @param event AddClassroom button is clicked
+     */
     @FXML
     private void addClassroom(ActionEvent event) {
         //first check if the user has left the classroomid or classroomname text fields empty
@@ -96,6 +101,11 @@ public class DashboardController<MyType> implements Initializable {
 
     }
 
+    /**
+     * Updates the classrooms table to show all of the classrooms for this user
+     * @param event AddClassroom button is clicked
+     * @throws SQLException
+     */
     @FXML
     private void loadClassroom(ActionEvent event) throws SQLException {
         this.preExistingID.setText("");
@@ -122,7 +132,11 @@ public class DashboardController<MyType> implements Initializable {
 
     }
 
-    private JFXButton openClassroom;
+
+    /**
+     * When a user clicks on a specific row (corresponding to a classroom), this method will open up a page for that
+     * specific classroom that displays all of the assignmentbundles and students within the classroom
+     */
     @FXML
     private void handleRowSelect() {
         //Detect double click
@@ -163,7 +177,11 @@ public class DashboardController<MyType> implements Initializable {
         }
     }
 
-
+    /**
+     * Opens the main "Dashboard page" that displays a table with all of the classrooms of this user
+     * @param event Classroom button is clicked
+     * @throws IOException
+     */
     @FXML
     void openClassroom(ActionEvent event) throws IOException {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
@@ -174,6 +192,7 @@ public class DashboardController<MyType> implements Initializable {
         window.show();
     }
 
+    //will be changed to an instructions page
     @FXML
     void openPeople(ActionEvent event) throws IOException {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/People/People.fxml"));
@@ -184,6 +203,11 @@ public class DashboardController<MyType> implements Initializable {
         window.show();
     }
 
+    /**
+     * Opens a settings page...
+     * @param event Settings button is clicked
+     * @throws IOException
+     */
     @FXML
     void openSetting(ActionEvent event) throws IOException {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Settings/Settings.fxml"));
@@ -194,6 +218,11 @@ public class DashboardController<MyType> implements Initializable {
         window.show();
     }
 
+    /**
+     * Called when Dashboard.fxml is initially initialized after the user logs in
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {                                                                                                 //establish connection
