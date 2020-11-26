@@ -98,12 +98,12 @@
             <TableColumn fx:id="markColumn" prefWidth="413.0" text="Mark breakdown" />
             </columns>
         </TableView>
-      <Text fx:id="AssignmentOutline" layoutX="452.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="479.21630859375">
+      <Text fx:id="AssignmentOutline" layoutX="456.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="479.21630859375">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text layoutX="312.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Full Mark Outline:" wrappingWidth="132.9999829530716">
+      <Text layoutX="312.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Full Mark Outline:" wrappingWidth="174.9999829530716">
          <font>
             <Font size="18.0" />
          </font>
