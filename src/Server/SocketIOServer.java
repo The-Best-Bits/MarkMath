@@ -84,18 +84,6 @@ public class SocketIOServer {
             }
         });
 
-        server.start();
-    }
-
-
-    /**
-     * Emits check_all_math event and receives the results events emitted by Hypatia from the currently opened
-     * Hypatia document
-     */
-    public void getResultsEvents(){
-
-        client.sendEvent("check_all_math");
-
         // listen for the "results" event emitted by Hypatia
         // we only need the information from this event, not the "expressions" event
         server.addEventListener("result", String.class, new DataListener<String>() {
@@ -107,6 +95,30 @@ public class SocketIOServer {
             }
         });
 
+        server.start();
+    }
+
+
+    /**
+     * Emits check_all_math event and receives the results events emitted by Hypatia from the currently opened
+     * Hypatia document
+     *
+     */
+    public void getResultsEvents(){
+
+        if (client != null) {
+            client.sendEvent("check_all_math");
+        }
+//        // listen for the "results" event emitted by Hypatia
+//        // we only need the information from this event, not the "expressions" event
+//        server("result", String.class, new DataListener<String>() {
+//            @Override
+//            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+//                System.out.println("Client Results" + s);
+//                CheckMathParser temp = new CheckMathParser();
+//                temp.parseResult(s);
+//            }
+//        });
 
     }
 

@@ -469,7 +469,7 @@ public class ClassroomController<MyType> implements Initializable {
         Login.getServer().getResultsEvents();
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(10000);
             ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
             ArrayList<ParsedDataPerAssignment> parsedDataAssignmnents = manager.getParsedDataAssignments();
             for (ParsedDataPerAssignment assignment : parsedDataAssignmnents) {
@@ -493,7 +493,9 @@ public class ClassroomController<MyType> implements Initializable {
 
                 }
             }
-            manager.clearParsedDataAssignments();
+            System.out.println("Test"+ CheckMathParser.getParsedDataManager().getParsedDataAssignments().size());
+            CheckMathParser.getParsedDataManager().clearParsedDataAssignments();
+            System.out.println("Test"+ CheckMathParser.getParsedDataManager().getParsedDataAssignments().size());
         }catch(InterruptedException e){
             System.out.println("Error" + e);
         }
