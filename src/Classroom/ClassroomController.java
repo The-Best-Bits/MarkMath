@@ -466,10 +466,13 @@ public class ClassroomController<MyType> implements Initializable {
     void markAssignment(ActionEvent event){
 
         //when user clicks on Mark Assignment Button we get all of the data from the Hypatia document currently open
+        Login.getServer().openReceiveResultsEvents();
         Login.getServer().getResultsEvents();
 
         try {
             Thread.sleep(10000);
+            //in this gap of time, a user could edit the document
+            Login.getServer().closeReceiveResultsEvents();
             ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
             ArrayList<ParsedDataPerAssignment> parsedDataAssignmnents = manager.getParsedDataAssignments();
             for (ParsedDataPerAssignment assignment : parsedDataAssignmnents) {

@@ -25,6 +25,7 @@ public class Login extends Application {
         stage.show();
         //start the server
         server = new SocketIOServer();
+        server.start();
         //configure app to screen size of current device
         
 
