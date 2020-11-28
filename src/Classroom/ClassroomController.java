@@ -358,10 +358,7 @@ public class ClassroomController<MyType> implements Initializable {
             System.out.println("Success");
             addAssignmentBundleToClassroomDatabase(received_id, newAssignment);
             loadBundleData();
-            //createNewBundlePage(received_id, newAssignment);
         }
-
-        //System.out.println(assignment_outline.get("Question 1"));
     }
 
     /**
@@ -384,15 +381,15 @@ public class ClassroomController<MyType> implements Initializable {
                 if (!Character.isDigit(poss_number.charAt(j))){
                     isValidMark = false;}
                 j = j+1;
-                errorCreatingAssignment.setText("Please use only numbers");
             }
 
             if (isValidMark) {
                 assignment_outline.put("question"+ (i), Float.valueOf(textField[i].getText()));
+
             }
             else
             {
-                errorCreatingAssignment.setText("Please complete the Outline.");
+                errorCreatingAssignment.setText("Please complete the Outline with valid full numbers.");
             }
             i = i+1;
         }
