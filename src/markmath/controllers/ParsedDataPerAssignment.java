@@ -18,7 +18,7 @@ public class ParsedDataPerAssignment {
     private HashMap<String, Integer> finalParsedData;
 
     /**
-     *Creates a ParsedDataPerAssignment object for a document; it stores all the information parsed by Hypatia from
+     * Creates a ParsedDataPerAssignment object for a document; it stores all the information parsed by Hypatia from
      * the document, and this information is continuously updated. Stores assignment Name, assignment type, the student
      * Name that owns the document, and a map for questions and their errors.
      * @param parsedData The data parsed by CheckmathParser from Hypatia specific to this one document.

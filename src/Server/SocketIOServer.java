@@ -18,9 +18,9 @@ public class SocketIOServer {
     */
 
     private Configuration config;
-    private com.corundumstudio.socketio.SocketIOServer server;
+    final private com.corundumstudio.socketio.SocketIOServer server;
     private SocketIOClient client;
-    private boolean receiveResultsEvents;
+    private boolean parseResultsEvents;
 
     /**
      * When a new SocketIOServer is instantiated it is configured to listen on port 3333
@@ -30,7 +30,8 @@ public class SocketIOServer {
         config.setHostname("localhost");
         config.setPort(3333);
         server = new com.corundumstudio.socketio.SocketIOServer(config);
-        receiveResultsEvents = false;
+        parseResultsEvents = false;
+
     }
 
     /**
@@ -52,8 +53,7 @@ public class SocketIOServer {
         server.addEventListener("result", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
-                //add some code here so that we only pass on this results event if the mark button has been clicked
-                if (receiveResultsEvents) {
+                if (parseResultsEvents) {
                     System.out.println("Client Results" + s);
                     CheckMathParser temp = new CheckMathParser();
                     temp.parseResult(s);
@@ -64,35 +64,24 @@ public class SocketIOServer {
         server.start();
 
     }
+
     /**
-     * Emits check_all_math event. Server will receive the all of the results events emitted by Hypatia from
-     * the currently opened Hypatia document
-     *
+     * Set parseResultsEvents. If set to true, any results events that are received will be parsed. If set to false,
+     * all results events that are received will not be parsed
+     * @param parse boolean value
      */
-    public void getResultsEvents(){
+    public void setParseResultsEvents(boolean parse){this.parseResultsEvents = parse;}
+
+    /**
+     * Emits check_all_math event. Server will receive all of the results events emitted by Hypatia from
+     * the currently opened Hypatia document
+     */
+    public void getAllResultsEvents(){
 
         if (client != null) {
+            //is check math not receiving the event right away?
             client.sendEvent("check_all_math");
             System.out.println("Event sent");
-        }
     }
 
-    /**
-     * Set receiveResultsEvents to true. If a results event is received now it will be parsed
-     */
-    public void openReceiveResultsEvents(){
-
-        this.receiveResultsEvents = true;
-    }
-
-    /**
-     * Set receiveResultsEvents to false. If a results event is received it will now not be parsed
-     */
-    public void closeReceiveResultsEvents(){
-
-        this.receiveResultsEvents = false;
-    }
-
-
-
-}
+}}

@@ -465,14 +465,13 @@ public class ClassroomController<MyType> implements Initializable {
     @FXML
     void markAssignment(ActionEvent event){
 
-        //when user clicks on Mark Assignment Button we get all of the data from the Hypatia document currently open
-        Login.getServer().openReceiveResultsEvents();
-        Login.getServer().getResultsEvents();
+        Login.getServer().setParseResultsEvents(true);
+        Login.getServer().getAllResultsEvents();
 
         try {
-            Thread.sleep(10000);
-            //in this gap of time, a user could edit the document
-            Login.getServer().closeReceiveResultsEvents();
+            //freezes entire program
+            Thread.sleep(7000);
+            Login.getServer().setParseResultsEvents(false);
             ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
             ArrayList<ParsedDataPerAssignment> parsedDataAssignmnents = manager.getParsedDataAssignments();
             for (ParsedDataPerAssignment assignment : parsedDataAssignmnents) {
