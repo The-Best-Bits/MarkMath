@@ -13,15 +13,19 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import markmath.entities.Student;
 import markmath.entities.StudentAssignment;
@@ -34,7 +38,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class AssignmentPageController implements Initializable {
+public class AssignmentPageController<MyType> implements Initializable {
 
     @FXML
     private TableView<StudentAssignment> AssignmentTable;
@@ -67,6 +71,8 @@ public class AssignmentPageController implements Initializable {
     private String bundlename;
     private String classroomID;
     private String outline;
+    private MyType temp;
+    private Date lastClickTime;
 
     public void setClassroomID(String classroomID) {
         this.classroomID = classroomID;
@@ -183,5 +189,35 @@ public class AssignmentPageController implements Initializable {
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
         window.setScene(mainPage);
         window.show();
+    }
+
+    @FXML
+    public void editMark(MouseEvent event)
+    {
+        MyType mark = (MyType) this.AssignmentTable.getSelectionModel().getSelectedItem().getGradeMap();
+        if (mark==null) return;
+        if (mark!=temp) {
+            temp = mark;
+            lastClickTime = new Date();
+        }else{
+            Date now = new Date();
+            long diff = now.getTime() - lastClickTime.getTime();
+            if (diff < 300){
+                Stage popup = new Stage();
+                popup.initModality(Modality.APPLICATION_MODAL);
+
+                popup.setTitle("Mark Editing");
+                Label label1 = new Label("Pop up window now displayed");
+                Button button1 = new Button("Close this pop up window");
+                button1.setOnAction(e -> popup.close());
+
+                VBox layout= new VBox(10);
+                layout.getChildren().addAll(label1, button1);
+                layout.setAlignment(Pos.CENTER);
+                Scene scene1= new Scene(layout, 300, 250);
+                popup.setScene(scene1);
+                popup.showAndWait();
+            }
+        }
     }
 }
