@@ -95,9 +95,9 @@ public class AssignmentPageController implements Initializable {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
         Scene mainPage = new Scene(mainPageParent);
 
-        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-        window.setScene(mainPage);
-        window.show();
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(mainPage);
+        stage.show();
     }
 
     @FXML
@@ -105,9 +105,9 @@ public class AssignmentPageController implements Initializable {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/People/People.fxml"));
         Scene mainPage = new Scene(mainPageParent);
 
-        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-        window.setScene(mainPage);
-        window.show();
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(mainPage);
+        stage.show();
     }
 
     @FXML
@@ -115,9 +115,9 @@ public class AssignmentPageController implements Initializable {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Settings/Settings.fxml"));
         Scene mainPage = new Scene(mainPageParent);
 
-        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-        window.setScene(mainPage);
-        window.show();
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(mainPage);
+        stage.show();
     }
 
 
