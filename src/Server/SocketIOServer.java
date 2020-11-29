@@ -23,7 +23,7 @@ public class SocketIOServer {
     private boolean parseResultsEvents;
 
     /**
-     * When a new SocketIOServer is instantiated it is configured to listen on port 3333
+     * When a new SocketIOServer is instantiated it is configured to listen on port 3333.
      */
     public SocketIOServer(){
         config = new Configuration();
@@ -45,7 +45,8 @@ public class SocketIOServer {
     }
 
     /**
-     *
+     * Server will start listening for results events emmitted by Hypatia. These results events will only be parsed
+     * if parseResultsEvents is true
      */
     public void start(){
 
@@ -61,9 +62,6 @@ public class SocketIOServer {
                 }
             }
         });
-
-        server.start();
-
     }
 
     /**
