@@ -32,13 +32,6 @@ public class SocketIOServer {
         server = new com.corundumstudio.socketio.SocketIOServer(config);
         parseResultsEvents = false;
 
-    }
-
-    /**
-     *
-     */
-    public void start(){
-
         // once Hypatia is connected to the server this method will be run
         server.addConnectListener(new ConnectListener() {
             @Override
@@ -47,6 +40,14 @@ public class SocketIOServer {
                 client = socketIOClient;
             }
         });
+
+        server.start();
+    }
+
+    /**
+     *
+     */
+    public void start(){
 
         // listen for the "results" event emitted by Hypatia
         // we only need the information from this event, not the "expressions" event
@@ -82,6 +83,8 @@ public class SocketIOServer {
             //is check math not receiving the event right away?
             client.sendEvent("check_all_math");
             System.out.println("Event sent");
+        }
+
     }
 
-}}
+}

@@ -654,6 +654,7 @@ public class ClassroomController<MyType> implements Initializable {
      * @param assignment StudentAssignment that has been marked
      */
     private void addStudentAssignmentToDatabase(StudentAssignment assignment){
+        //make helper method
         String assignmentBundleID = getIDOfAssignmentBundle(assignment.getAssignmentType());
 
         int numQuestions = assignment.getQuestions().size();
