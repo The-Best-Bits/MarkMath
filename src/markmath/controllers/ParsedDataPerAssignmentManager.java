@@ -1,5 +1,6 @@
 package markmath.controllers;
 
+import javax.security.sasl.SaslServer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -25,10 +26,12 @@ public class ParsedDataPerAssignmentManager {
     public void manageParsedData(HashMap<String, Object> parsedData){
         ParsedDataPerAssignment preExistingAssignment = isParsedDataAssignment((String)parsedData.get("documentName"));
         if (preExistingAssignment == null ){
+            System.out.println("Create new Assignment");
             ParsedDataPerAssignment newAssignment = new ParsedDataPerAssignment(parsedData);
             parsedDataAssignments.add(newAssignment);
         }
         else{
+            System.out.println("Add Parsed Data");
             preExistingAssignment.addParsedData(parsedData);
         }
     }

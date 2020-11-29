@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 public class Login extends Application {
 
     LoginModel loginModel = new LoginModel();
+    private static SocketIOServer server;
 
     public static void main(String[] args) {
         launch(args);
@@ -23,7 +24,7 @@ public class Login extends Application {
         stage.setScene(scene);
         stage.show();
         //start the server
-        SocketIOServer server = new SocketIOServer();
+        server = new SocketIOServer();
         server.start();
         //configure app to screen size of current device
         
@@ -37,4 +38,6 @@ public class Login extends Application {
             return FXMLLoader.load(getClass().getResource("SetPassword.fxml"));
         }
     }
+
+    public static SocketIOServer getServer(){return server;}
 }
