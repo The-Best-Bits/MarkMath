@@ -49,7 +49,7 @@ public class StudentAssignment {
         this.finalMark = total;
         this.gradeMap = map.keySet().stream().map(
                 key -> key + ": " + map.get(key)).collect(
-                        Collectors.joining(", ", "{", "}"));
+                        Collectors.joining(", "));
     }
 
 

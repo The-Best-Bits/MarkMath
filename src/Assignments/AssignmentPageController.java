@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,10 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -138,15 +136,15 @@ public class AssignmentPageController<MyType> implements Initializable {
             Connection conn = dbConnection.getConnection();
             this.data = FXCollections.observableArrayList();
             assert conn != null;
-            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM " + this.bundleid);
+            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM '" + this.bundleid + "'");
             rs.next();
             int count = rs.getMetaData().getColumnCount();
             LinkedHashMap<String, Float> out = new LinkedHashMap<>();
-            for(int i=4; i<count; i++){
+            for(int i=4; i<=count; i++){
                 out.put(rs.getMetaData().getColumnName(i), rs.getFloat(i));
             }
             this.outline = out.keySet().stream().map(key -> key + ": " + out.get(key)).collect(
-                    Collectors.joining(", ", "{", "}"));
+                    Collectors.joining(", "));
             while(rs.next()){
                 LinkedHashMap<String, Float> map = new LinkedHashMap<>();
                 for(int i=4; i<count; i++){
@@ -192,12 +190,11 @@ public class AssignmentPageController<MyType> implements Initializable {
     }
 
     @FXML
-    public void editMark(MouseEvent event)
-    {
-        MyType mark = (MyType) this.AssignmentTable.getSelectionModel().getSelectedItem().getGradeMap();
-        if (mark==null) return;
-        if (mark!=temp) {
-            temp = mark;
+    public void editMark() {
+        MyType row = (MyType) this.AssignmentTable.getSelectionModel().getSelectedItem();
+        if (row==null) return;
+        if (row!=temp) {
+            temp = row;
             lastClickTime = new Date();
         }else{
             Date now = new Date();
@@ -207,17 +204,60 @@ public class AssignmentPageController<MyType> implements Initializable {
                 popup.initModality(Modality.APPLICATION_MODAL);
 
                 popup.setTitle("Mark Editing");
-                Label label1 = new Label("Pop up window now displayed");
-                Button button1 = new Button("Close this pop up window");
-                button1.setOnAction(e -> popup.close());
+                Label label1 = new Label(this.AssignmentTable.getSelectionModel().getSelectedItem().getGradeMap());
+                TextField field1 = new TextField();
+                field1.setPromptText("Enter Question ID as an integer (eg. 1)");
+                TextField field2 = new TextField();
+                field2.setPromptText("Enter Custom Mark as a decimal (eg. 7.5)");
+                Label label2 = new Label();
+                Button button1 = new Button("Submit change");
+
+                button1.setOnAction(e -> {
+                    if(isInteger(field1.getText()) && isFloat(field2.getText())){
+                    int qid = Integer.parseInt(field1.getText());
+                    float mark = Float.parseFloat(field2.getText());
+                    int stuid = Integer.parseInt(AssignmentTable.getSelectionModel().getSelectedItem().getStudentID());
+                    try{
+                        Connection conn = dbConnection.getConnection();
+                        assert conn != null;
+                        String query = "UPDATE '"+this.bundleid+"' SET question"+qid+" = '"+mark+"' WHERE student_id = '"+stuid+"'";
+                        conn.prepareStatement(query).executeUpdate();
+                        loadData();
+                        popup.close();
+                    }catch(SQLException exc){
+                        System.err.println("Error" + exc);}
+                    }else{
+                        label2.setText("Please enter an expected value.");
+                    }
+                });
 
                 VBox layout= new VBox(10);
-                layout.getChildren().addAll(label1, button1);
+                layout.getChildren().addAll(label1, field1, field2, button1);
                 layout.setAlignment(Pos.CENTER);
                 Scene scene1= new Scene(layout, 300, 250);
+
                 popup.setScene(scene1);
                 popup.showAndWait();
             }
+        }}
+
+
+    public static boolean isInteger(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
         }
     }
+
+    public static boolean isFloat(String str) {
+        try {
+            Float.parseFloat(str);
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+    }
+
 }
