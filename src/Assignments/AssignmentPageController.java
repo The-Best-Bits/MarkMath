@@ -2,15 +2,10 @@ package Assignments;
 
 import Classroom.ClassroomController;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
 import dbUtil.dbConnection;
-import javafx.beans.value.ObservableMapValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,12 +15,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import markmath.entities.Student;
 import markmath.entities.StudentAssignment;
 
 import java.io.IOException;
@@ -216,26 +209,26 @@ public class AssignmentPageController<MyType> implements Initializable {
                     if(isInteger(field1.getText()) && isFloat(field2.getText())){
                     int qid = Integer.parseInt(field1.getText());
                     float mark = Float.parseFloat(field2.getText());
+                    if(0 <= qid && qid <= getMaxID() && mark <= getFullMark(qid)){
                     int stuid = Integer.parseInt(AssignmentTable.getSelectionModel().getSelectedItem().getStudentID());
                     try{
                         Connection conn = dbConnection.getConnection();
                         assert conn != null;
-                        String query = "UPDATE '"+this.bundleid+"' SET question"+qid+" = '"+mark+"' WHERE student_id = '"+stuid+"'";
+                        String query = "UPDATE '"+this.bundleid+"' SET question"+qid+" = '"+mark+"', total = '"+mark+"' WHERE student_id = '"+stuid+"'";
                         conn.prepareStatement(query).executeUpdate();
                         loadData();
                         popup.close();
                     }catch(SQLException exc){
-                        System.err.println("Error" + exc);}
+                        System.err.println("Error" + exc);}}
                     }else{
-                        label2.setText("Please enter an expected value.");
+                        label2.setText("Please enter a valid value.");
                     }
                 });
 
                 VBox layout= new VBox(10);
                 layout.getChildren().addAll(label1, field1, field2, button1);
                 layout.setAlignment(Pos.CENTER);
-                Scene scene1= new Scene(layout, 300, 250);
-
+                Scene scene1= new Scene(layout, 400, 300);
                 popup.setScene(scene1);
                 popup.showAndWait();
             }
@@ -259,5 +252,15 @@ public class AssignmentPageController<MyType> implements Initializable {
             return false;
         }
     }
+
+   public int getMaxID(){
+        return 0;
+   }
+
+   public float getFullMark(int qid){
+        return (float) 0.0;
+   }
+
+
 
 }
