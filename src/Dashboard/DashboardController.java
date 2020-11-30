@@ -43,6 +43,8 @@ public class DashboardController<MyType> implements Initializable {
     @FXML
     private TableColumn<Classroom, String> namecolumn;
 
+    @FXML
+    private JFXButton openHelp;
 
     @FXML
     private JFXTextField classroomid;
@@ -63,16 +65,15 @@ public class DashboardController<MyType> implements Initializable {
 
     /**
      * Adds a classroom to this users account
+     *
      * @param event AddClassroom button is clicked
      */
     @FXML
     private void addClassroom(ActionEvent event) {
         //first check if the user has left the classroomid or classroomname text fields empty
-        if(this.classroomid.getText().equals("") || this.classroomname.getText().equals(""))
-        {
+        if (this.classroomid.getText().equals("") || this.classroomname.getText().equals("")) {
             this.preExistingID.setText("Error! Text field left blank");
-        }
-        else {
+        } else {
             String sqlInsert = "INSERT INTO classrooms(class_id, class_name) VALUES (?,?)";
             try {
                 Connection conn = dbConnection.getConnection();
@@ -103,6 +104,7 @@ public class DashboardController<MyType> implements Initializable {
 
     /**
      * Updates the classrooms table to show all of the classrooms for this user
+     *
      * @param event AddClassroom button is clicked
      * @throws SQLException
      */
@@ -114,19 +116,19 @@ public class DashboardController<MyType> implements Initializable {
             this.data = FXCollections.observableArrayList();
 
             ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM classrooms");
-            while (rs.next()){
+            while (rs.next()) {
                 this.data.add(new Classroom(rs.getString("class_name"), rs.getString("class_id")));      //add data to resultset
                 System.out.println(rs.getString("class_id"));
                 System.out.println(rs.getString("class_name"));
                 //if an empty classroom is added we should check for this and omit it
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.err.println("Error" + e);
         }
 
         //add data we got to the table
         this.idcolumn.setCellValueFactory(new PropertyValueFactory<Classroom, String>("id"));
-        this.namecolumn.setCellValueFactory(new PropertyValueFactory<Classroom,String>("classname"));
+        this.namecolumn.setCellValueFactory(new PropertyValueFactory<Classroom, String>("classname"));
 //        this.classroomtable.setItems(null);
         this.classroomtable.setItems(this.data);
 
@@ -142,13 +144,13 @@ public class DashboardController<MyType> implements Initializable {
         //Detect double click
         MyType row = (MyType) this.classroomtable.getSelectionModel().getSelectedItem();
         if (row == null) return;
-        if(row != temp){
+        if (row != temp) {
             temp = row;
             lastClickTime = new Date();
-        } else if(row == temp) {
+        } else if (row == temp) {
             Date now = new Date();
             long diff = now.getTime() - lastClickTime.getTime();
-            if (diff < 300){ //another click registered in 300 millis
+            if (diff < 300) { //another click registered in 300 millis
                 //Load the assignment bundle page with selected class's assignment bundles presented
                 FXMLLoader Loader = new FXMLLoader();
 
@@ -157,7 +159,7 @@ public class DashboardController<MyType> implements Initializable {
                 try {
                     Loader.load();
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -167,7 +169,7 @@ public class DashboardController<MyType> implements Initializable {
                 Parent p = Loader.getRoot();
                 Scene scene = new Scene(p);
 
-                Stage stage = (Stage)classroomtable.getScene().getWindow();
+                Stage stage = (Stage) classroomtable.getScene().getWindow();
                 stage.setScene(scene);
                 stage.show();
 
@@ -179,6 +181,7 @@ public class DashboardController<MyType> implements Initializable {
 
     /**
      * Opens the main "Dashboard page" that displays a table with all of the classrooms of this user
+     *
      * @param event Classroom button is clicked
      * @throws IOException
      */
@@ -187,7 +190,7 @@ public class DashboardController<MyType> implements Initializable {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
         Scene mainPage = new Scene(mainPageParent);
 
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(mainPage);
         stage.show();
     }
@@ -198,13 +201,14 @@ public class DashboardController<MyType> implements Initializable {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/People/People.fxml"));
         Scene mainPage = new Scene(mainPageParent);
 
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(mainPage);
         stage.show();
     }
 
     /**
      * Opens a settings page...
+     *
      * @param event Settings button is clicked
      * @throws IOException
      */
@@ -213,13 +217,14 @@ public class DashboardController<MyType> implements Initializable {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Settings/Settings.fxml"));
         Scene mainPage = new Scene(mainPageParent);
 
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(mainPage);
         stage.show();
     }
 
     /**
      * Called when Dashboard.fxml is initially initialized after the user logs in
+     *
      * @param location
      * @param resources
      */
@@ -230,18 +235,35 @@ public class DashboardController<MyType> implements Initializable {
             this.data = FXCollections.observableArrayList();
 
             ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM classrooms");
-            while (rs.next()){
+            while (rs.next()) {
                 this.data.add(new Classroom(rs.getString("class_name"), rs.getString("class_id")));       //add data to resultset
 
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.err.println("Error" + e);
         }
 
         //add data we got to the table
         this.idcolumn.setCellValueFactory(new PropertyValueFactory<Classroom, String>("id"));
-        this.namecolumn.setCellValueFactory(new PropertyValueFactory<Classroom,String>("classname"));
+        this.namecolumn.setCellValueFactory(new PropertyValueFactory<Classroom, String>("classname"));
 //        this.classroomtable.setItems(null);
         this.classroomtable.setItems(this.data);
     }
+
+    /**
+     * Opens a how-to-use page for Dashboard
+     * @param event user clicks on help button
+     * @throws IOException
+     */
+
+    @FXML
+    void openHelp(ActionEvent event) throws IOException {
+        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/ClassroomGuide.fxml"));
+        Scene mainPage = new Scene(mainPageParent);
+
+        Stage stage = new Stage();
+        stage.setScene(mainPage);
+        stage.show();
+    }
+
 }

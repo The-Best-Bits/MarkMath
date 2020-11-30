@@ -109,6 +109,8 @@ public class ClassroomController<MyType> implements Initializable {
     @FXML
     private JFXTextField assignment_name;
 
+    @FXML
+    private JFXButton openHelp;
 
     @FXML
     private Label errorCreatingAssignment;
@@ -288,6 +290,22 @@ public class ClassroomController<MyType> implements Initializable {
         Scene mainPage = new Scene(mainPageParent);
 
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(mainPage);
+        stage.show();
+    }
+
+    /**
+     * Opens a how-to-use page for assignments
+     * @param event user clicks on help button
+     * @throws IOException
+     */
+
+    @FXML
+    void openHelp(ActionEvent event) throws IOException {
+        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Classroom/howto.fxml"));
+        Scene mainPage = new Scene(mainPageParent);
+
+        Stage stage = new Stage();
         stage.setScene(mainPage);
         stage.show();
     }

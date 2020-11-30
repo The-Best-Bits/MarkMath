@@ -19,7 +19,7 @@
                     <children>
                         <ImageView fitHeight="115.0" fitWidth="287.0" layoutX="10.0" layoutY="65.0">
                             <image>
-                                <Image url="@../../MMlogo.png" />
+                                <Image url="@../art/MMlogo.png" />
                             </image>
                         </ImageView>
                     </children></Pane>
