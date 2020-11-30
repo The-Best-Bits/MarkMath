@@ -21,12 +21,12 @@
                     <children>
                         <ImageView fitHeight="115.0" fitWidth="287.0" layoutX="10.0" layoutY="65.0">
                             <image>
-                                <Image url="@../../MMlogo.png" />
+                                <Image url="@../art/MMlogo.png" />
                             </image>
                         </ImageView>
                     </children></Pane>
                 <Pane prefHeight="76.0" prefWidth="382.0" />
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="348.0" text="  Classroom" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="348.0" text="  Classrooms" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>

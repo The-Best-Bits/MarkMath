@@ -23,7 +23,7 @@
                     <children>
                         <ImageView fitHeight="115.0" fitWidth="287.0" layoutX="10.0" layoutY="65.0">
                             <image>
-                                <Image url="@../../MMlogo.png" />
+                                <Image url="@../art/MMlogo.png" />
                             </image>
                         </ImageView>
                     </children></Pane>
@@ -85,6 +85,14 @@
                         <Font name="Yu Gothic UI Regular" size="39.0" />
                     </font>
                 </Text>
+            <JFXButton fx:id="openHelp" layoutX="944.0" layoutY="19.0" onAction="#openHelp" prefHeight="50.0" prefWidth="94.0" text="Help">
+               <graphic>
+                  <FontAwesomeIconView fill="#4c6ab7" glyphName="QUESTION_CIRCLE" size="25" />
+               </graphic>
+               <font>
+                  <Font name="Yu Gothic UI Regular" size="15.0" />
+               </font>
+            </JFXButton>
             </children>
         </Pane>
         <TableView fx:id="classroomtable" layoutX="304.0" layoutY="120.0" onMouseClicked="#handleRowSelect" prefHeight="651.0" prefWidth="757.0">
