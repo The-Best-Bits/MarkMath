@@ -215,10 +215,10 @@ public class AssignmentPageController<MyType> implements Initializable {
                 Button button1 = new Button("Submit change");
 
                 button1.setOnAction(e -> {
-                    if(isInteger(field1.getText()) & isFloat(field2.getText())){
+                    if(isPositiveInteger(field1.getText()) & isPositiveFloat(field2.getText())){
                     int qid = Integer.parseInt(field1.getText());
                     float mark = Float.parseFloat(field2.getText());
-                    if(0 <= qid && qid <= curr.getOutline().getQuestionToMarks().size() && mark <= curr.getOutline(
+                    if(qid <= curr.getOutline().getQuestionToMarks().size() && mark <= curr.getOutline(
                     ).getQuestionToMarks().get("question"+qid)){
                         float NewTotal = curr.getFinalMark() - curr.getFinalMarkBreakdown().get("question"+qid) + mark;
                         int stuid = Integer.parseInt(curr.getStudentID());
@@ -248,19 +248,19 @@ public class AssignmentPageController<MyType> implements Initializable {
         }}
 
 
-    public static boolean isInteger(String str) {
+    public static boolean isPositiveInteger(String str) {
         try {
-            Integer.parseInt(str);
-            return true;
+            int num = Integer.parseInt(str);
+            return num > 0;
         } catch (NumberFormatException nfe) {
             return false;
         }
     }
 
-    public static boolean isFloat(String str) {
+    public static boolean isPositiveFloat(String str) {
         try {
-            Float.parseFloat(str);
-            return true;
+            float decimal = Float.parseFloat(str);
+            return decimal > 0;
         } catch (NumberFormatException nfe) {
             return false;
         }
