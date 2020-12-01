@@ -215,22 +215,24 @@ public class AssignmentPageController<MyType> implements Initializable {
                 Button button1 = new Button("Submit change");
 
                 button1.setOnAction(e -> {
-                    if(isInteger(field1.getText()) && isFloat(field2.getText())){
+                    if(isInteger(field1.getText()) & isFloat(field2.getText())){
                     int qid = Integer.parseInt(field1.getText());
                     float mark = Float.parseFloat(field2.getText());
-                    float NewTotal = curr.getFinalMark() - curr.getFinalMarkBreakdown().get("question"+qid) + mark;
                     if(0 <= qid && qid <= curr.getOutline().getQuestionToMarks().size() && mark <= curr.getOutline(
                     ).getQuestionToMarks().get("question"+qid)){
-                    int stuid = Integer.parseInt(curr.getStudentID());
-                    try{
+                        float NewTotal = curr.getFinalMark() - curr.getFinalMarkBreakdown().get("question"+qid) + mark;
+                        int stuid = Integer.parseInt(curr.getStudentID());
+                        try{
                         Connection conn = dbConnection.getConnection();
                         assert conn != null;
                         String query = "UPDATE '"+this.bundleid+"' SET question"+qid+" = '"+mark+"', total = '"+NewTotal+"' WHERE student_id = '"+stuid+"'";
                         conn.prepareStatement(query).executeUpdate();
                         loadData();
                         popup.close();
-                    }catch(SQLException exc){
-                        System.err.println("Error" + exc);}}
+                        }catch(SQLException exc){
+                        System.err.println("Error" + exc);}}else{
+                        label2.setText("Please enter valid values");
+                    }
                     }else{
                         label2.setText("Please enter valid values");
                     }
