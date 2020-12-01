@@ -487,32 +487,36 @@ public class ClassroomController<MyType> implements Initializable {
             //freezes entire program
             Thread.sleep(7000);
             Login.getServer().setParseResultsEvents(false);
-            ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
-            ArrayList<ParsedDataPerAssignment> parsedDataAssignmnents = manager.getParsedDataAssignments();
-            for (ParsedDataPerAssignment assignment : parsedDataAssignmnents) {
-                System.out.println(assignment.getFinalParsedData());
+//            ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
+//            ArrayList<ParsedDataPerAssignment> parsedDataAssignmnents = manager.getParsedDataAssignments();
+            CheckMathParser parser = Login.getServer().getparser();
+//            for (ParsedDataPerAssignment assignment : parsedDataAssignmnents) {
+//                System.out.println(assignment.getFinalParsedData());
+                System.out.println(parser.getFinalParsedData());
                 //check that the student exists in this classroom
                 //check that their is a corresponding assignment bundle in this classroom
-                if (!studentInClassroom(assignment.getStudentNum()) || !assignmentBundleNameInClassroom(assignment.getAssignmentType())) {
+                if (!studentInClassroom(parser.getStudentNum()) || !assignmentBundleNameInClassroom(parser.getAssignmentType())) {
                     this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with this student document is not in this classroom");
                 } else {
                     //get assignment outline
-                    AssignmentOutline outline = getAssignmentOutline(assignment.getAssignmentType());
+                    AssignmentOutline outline = getAssignmentOutline(parser.getAssignmentType());
                     //get student name
-                    String studentName = getStudentNameFromDatabase(assignment.getStudentNum());
-                    StudentAssignmentManager saManager = new StudentAssignmentManager(assignment.getStudentNum(),
-                            studentName, assignment.getAssignmentName(), assignment.getAssignmentType(),
-                            assignment.getFinalParsedData(), outline);
+                    String studentName = getStudentNameFromDatabase(parser.getStudentNum());
+                    StudentAssignmentManager saManager = new StudentAssignmentManager(parser.getStudentNum(),
+                            studentName, parser.getAssignmentName(), parser.getAssignmentType(),
+                            parser.getFinalParsedData(), outline);
                     saManager.markAllQuestions();
                     StudentAssignment studentAssignment = saManager.getCarbonCopy();
                     //add StudentAssignment to Database
                     addStudentAssignmentToDatabase(studentAssignment);
-
                 }
-            }
-            System.out.println("Test"+ CheckMathParser.getParsedDataManager().getParsedDataAssignments().size());
-            CheckMathParser.getParsedDataManager().clearParsedDataAssignments();
-            System.out.println("Test"+ CheckMathParser.getParsedDataManager().getParsedDataAssignments().size());
+            //}
+                System.out.println("test" + parser.getFinalParsedData().isEmpty());
+                parser.clearCheckMathParser();
+                System.out.println("test" + parser.getFinalParsedData().isEmpty());
+//            System.out.println("Test"+ CheckMathParser.getParsedDataManager().getParsedDataAssignments().size());
+//            CheckMathParser.getParsedDataManager().clearParsedDataAssignments();
+//            System.out.println("Test"+ CheckMathParser.getParsedDataManager().getParsedDataAssignments().size());
         }catch(InterruptedException e){
             System.out.println("Error" + e);
         }

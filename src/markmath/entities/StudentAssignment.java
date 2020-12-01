@@ -80,7 +80,6 @@ public class StudentAssignment {
 
 
     /**
-     *
      * @param questionNum the number of the Question
      * @return the Question in this StudentAssignment with the given question number
      */
