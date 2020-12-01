@@ -2,6 +2,7 @@ package Assignments;
 
 import Classroom.ClassroomController;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import dbUtil.dbConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import markmath.entities.AssignmentOutline;
 import markmath.entities.StudentAssignment;
 
 import java.io.IOException;
@@ -62,6 +64,7 @@ public class AssignmentPageController<MyType> implements Initializable {
     private String bundlename;
     private String classroomID;
     private String outline;
+    private float fullMark;
     private MyType temp;
     private Date lastClickTime;
 
@@ -133,20 +136,23 @@ public class AssignmentPageController<MyType> implements Initializable {
             rs.next();
             int count = rs.getMetaData().getColumnCount();
             LinkedHashMap<String, Float> out = new LinkedHashMap<>();
-            for(int i=4; i<=count; i++){
+            for(int i=4; i<count; i++){
                 out.put(rs.getMetaData().getColumnName(i), rs.getFloat(i));
             }
             this.outline = out.keySet().stream().map(key -> key + ": " + out.get(key)).collect(
                     Collectors.joining(", "));
+            this.fullMark = rs.getFloat(count);
             while(rs.next()){
                 LinkedHashMap<String, Float> map = new LinkedHashMap<>();
                 for(int i=4; i<count; i++){
                     map.put(rs.getMetaData().getColumnName(i), rs.getFloat(i));
                 }
-                this.data.add(new StudentAssignment(
+                StudentAssignment NewAssignment = new StudentAssignment(
                         rs.getString("student_id"),
                         rs.getString("student_name"),
-                        rs.getFloat("total"), map));
+                        rs.getFloat("total"), map);
+                NewAssignment.setOutline(new AssignmentOutline(this.bundlename, out));
+                this.data.add(NewAssignment);
             }
 
         }catch(SQLException e){
@@ -156,9 +162,9 @@ public class AssignmentPageController<MyType> implements Initializable {
         this.idColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentID"));
         this.nameColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentName"));
         this.gradeColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("finalMark"));
-        this.markColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("gradeMap"));
+        this.markColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("BreakdownString"));
         this.AssignmentName.setText(this.bundlename);
-        this.AssignmentOutline.setText(this.outline);
+        this.AssignmentOutline.setText(this.outline+ ", Total: " + this.fullMark);
         this.AssignmentTable.setItems(this.data);
     }
 
@@ -184,7 +190,8 @@ public class AssignmentPageController<MyType> implements Initializable {
 
     @FXML
     public void editMark() {
-        MyType row = (MyType) this.AssignmentTable.getSelectionModel().getSelectedItem();
+        StudentAssignment curr = this.AssignmentTable.getSelectionModel().getSelectedItem();
+        MyType row = (MyType) curr;
         if (row==null) return;
         if (row!=temp) {
             temp = row;
@@ -197,11 +204,13 @@ public class AssignmentPageController<MyType> implements Initializable {
                 popup.initModality(Modality.APPLICATION_MODAL);
 
                 popup.setTitle("Mark Editing");
-                Label label1 = new Label(this.AssignmentTable.getSelectionModel().getSelectedItem().getGradeMap());
+                Label label1 = new Label("CURRENT MARK: " +curr.getBreakdownString());
                 TextField field1 = new TextField();
                 field1.setPromptText("Enter Question ID as an integer (eg. 1)");
+                field1.setPrefColumnCount(40);
                 TextField field2 = new TextField();
                 field2.setPromptText("Enter Custom Mark as a decimal (eg. 7.5)");
+                field2.setPrefColumnCount(40);
                 Label label2 = new Label();
                 Button button1 = new Button("Submit change");
 
@@ -209,24 +218,26 @@ public class AssignmentPageController<MyType> implements Initializable {
                     if(isInteger(field1.getText()) && isFloat(field2.getText())){
                     int qid = Integer.parseInt(field1.getText());
                     float mark = Float.parseFloat(field2.getText());
-                    if(0 <= qid && qid <= getMaxID() && mark <= getFullMark(qid)){
-                    int stuid = Integer.parseInt(AssignmentTable.getSelectionModel().getSelectedItem().getStudentID());
+                    float NewTotal = curr.getFinalMark() - curr.getFinalMarkBreakdown().get("question"+qid) + mark;
+                    if(0 <= qid && qid <= curr.getOutline().getQuestionToMarks().size() && mark <= curr.getOutline(
+                    ).getQuestionToMarks().get("question"+qid)){
+                    int stuid = Integer.parseInt(curr.getStudentID());
                     try{
                         Connection conn = dbConnection.getConnection();
                         assert conn != null;
-                        String query = "UPDATE '"+this.bundleid+"' SET question"+qid+" = '"+mark+"', total = '"+mark+"' WHERE student_id = '"+stuid+"'";
+                        String query = "UPDATE '"+this.bundleid+"' SET question"+qid+" = '"+mark+"', total = '"+NewTotal+"' WHERE student_id = '"+stuid+"'";
                         conn.prepareStatement(query).executeUpdate();
                         loadData();
                         popup.close();
                     }catch(SQLException exc){
                         System.err.println("Error" + exc);}}
                     }else{
-                        label2.setText("Please enter a valid value.");
+                        label2.setText("Please enter valid values");
                     }
                 });
 
-                VBox layout= new VBox(10);
-                layout.getChildren().addAll(label1, field1, field2, button1);
+                VBox layout= new VBox(15);
+                layout.getChildren().addAll(label1, field1, field2, label2, button1);
                 layout.setAlignment(Pos.CENTER);
                 Scene scene1= new Scene(layout, 400, 300);
                 popup.setScene(scene1);
@@ -253,13 +264,6 @@ public class AssignmentPageController<MyType> implements Initializable {
         }
     }
 
-   public int getMaxID(){
-        return 0;
-   }
-
-   public float getFullMark(int qid){
-        return (float) 0.0;
-   }
 
 
 

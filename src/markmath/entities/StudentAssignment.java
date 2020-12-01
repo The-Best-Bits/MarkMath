@@ -17,7 +17,8 @@ public class StudentAssignment {
      * AssignmentName: name of the assignment name, consistent with the bundle it belongs to
      * studentID: ID of this student owner
      * questions: the list of all questions contained
-     * outline: the mapping of question to mark
+     * outline: the mapping of question to full mark
+     * finalMarkBreakdown: the mapping of question to final mark
      * fullMark: the total full mark
      * finalMark: the total final mark
      */
@@ -30,7 +31,7 @@ public class StudentAssignment {
     private ArrayList<Question> questions = new ArrayList<>();
     //do we need to store the assignment outline in a student assignment?
     private AssignmentOutline outline;
-    private String gradeMap;
+    private LinkedHashMap<String, Float> finalMarkBreakdown;
     private float fullMark = 0;
     private float finalMark = 0;
 
@@ -43,13 +44,12 @@ public class StudentAssignment {
 
     }
 
-    public StudentAssignment(String studentID, String studentName, float total, LinkedHashMap<String, Float> map){
+    public StudentAssignment(String studentID, String studentName, float total, LinkedHashMap<
+            String, Float> map1){
         this.studentID = studentID;
         this.studentName = studentName;
         this.finalMark = total;
-        this.gradeMap = map.keySet().stream().map(
-                key -> key + ": " + map.get(key)).collect(
-                        Collectors.joining(", "));
+        this.finalMarkBreakdown = map1;
     }
 
 
@@ -60,7 +60,16 @@ public class StudentAssignment {
         this.fullMark = outline.returnFullMark();
     }
 
-    public String getGradeMap() {return gradeMap;}
+    public LinkedHashMap<String, Float> getFinalMarkBreakdown() {
+        return finalMarkBreakdown;
+    }
+
+
+    public String getBreakdownString(){
+        return finalMarkBreakdown.keySet().stream().map(
+                key -> key + ": " + finalMarkBreakdown.get(key)).collect(
+                Collectors.joining(", "));
+    }
 
     public float getFinalMark(){return finalMark;}
 
