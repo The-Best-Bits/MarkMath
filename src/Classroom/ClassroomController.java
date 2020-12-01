@@ -484,39 +484,32 @@ public class ClassroomController<MyType> implements Initializable {
         Login.getServer().getAllResultsEvents();
 
         try {
-            //freezes entire program
+            //freezes entire program until we receive "result" events from Hypatia
             Thread.sleep(7000);
             Login.getServer().setParseResultsEvents(false);
-//            ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
-//            ArrayList<ParsedDataPerAssignment> parsedDataAssignmnents = manager.getParsedDataAssignments();
             CheckMathParser parser = Login.getServer().getparser();
-//            for (ParsedDataPerAssignment assignment : parsedDataAssignmnents) {
-//                System.out.println(assignment.getFinalParsedData());
-                System.out.println(parser.getFinalParsedData());
-                //check that the student exists in this classroom
-                //check that their is a corresponding assignment bundle in this classroom
-                if (!studentInClassroom(parser.getStudentNum()) || !assignmentBundleNameInClassroom(parser.getAssignmentType())) {
-                    this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with this student document is not in this classroom");
-                } else {
-                    //get assignment outline
-                    AssignmentOutline outline = getAssignmentOutline(parser.getAssignmentType());
-                    //get student name
-                    String studentName = getStudentNameFromDatabase(parser.getStudentNum());
-                    StudentAssignmentManager saManager = new StudentAssignmentManager(parser.getStudentNum(),
-                            studentName, parser.getAssignmentName(), parser.getAssignmentType(),
-                            parser.getFinalParsedData(), outline);
-                    saManager.markAllQuestions();
-                    StudentAssignment studentAssignment = saManager.getCarbonCopy();
-                    //add StudentAssignment to Database
-                    addStudentAssignmentToDatabase(studentAssignment);
-                }
-            //}
-                System.out.println("test" + parser.getFinalParsedData().isEmpty());
-                parser.clearCheckMathParser();
-                System.out.println("test" + parser.getFinalParsedData().isEmpty());
-//            System.out.println("Test"+ CheckMathParser.getParsedDataManager().getParsedDataAssignments().size());
-//            CheckMathParser.getParsedDataManager().clearParsedDataAssignments();
-//            System.out.println("Test"+ CheckMathParser.getParsedDataManager().getParsedDataAssignments().size());
+            System.out.println(parser.getFinalParsedData());
+            //check that the student exists in this classroom
+            //check that there is a corresponding assignment bundle in this classroom
+            if (!studentInClassroom(parser.getStudentNum()) || !assignmentBundleNameInClassroom(parser.getAssignmentType())) {
+                this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with this student document is not in this classroom");
+            } else {
+                //get assignment outline
+                AssignmentOutline outline = getAssignmentOutline(parser.getAssignmentType());
+                //get student name
+                String studentName = getStudentNameFromDatabase(parser.getStudentNum());
+                StudentAssignmentManager saManager = new StudentAssignmentManager(parser.getStudentNum(), studentName,
+                        parser.getAssignmentName(), parser.getAssignmentType(), parser.getFinalParsedData(), outline);
+                saManager.markAllQuestions();
+                StudentAssignment studentAssignment = saManager.getCarbonCopy();
+                //add StudentAssignment to Database
+                addStudentAssignmentToDatabase(studentAssignment);
+            }
+
+            System.out.println("test" + parser.getFinalParsedData().isEmpty());
+            parser.clearCheckMathParser();
+            System.out.println("test" + parser.getFinalParsedData().isEmpty());
+
         }catch(InterruptedException e){
             System.out.println("Error" + e);
         }
@@ -525,7 +518,9 @@ public class ClassroomController<MyType> implements Initializable {
 
     /**
      * Helper function to markStudentAssignment. Differs from assignmentBundleInClassroom as this method checks if
-     * there exists an assignmentbundle with the given name in this classroom.
+     * there exists an assignmentbundle with the given name in this classroom. Because assignmentbundle names are unique
+     * in a classroom this is a valid approach to search if an assignmentBundle is in a classroom. When marking a Hypatia
+     * document we do not have the assignment bundle ID, we only have the assignment bundle name.
      * @param assignmentType Name of the assignmentbundle
      * @return True iff this classroom contains an assignmentbundle with this name
      */
@@ -559,25 +554,13 @@ public class ClassroomController<MyType> implements Initializable {
 
         try{
             Connection conn = dbConnection.getConnection();
-//            ResultSet rs = conn.createStatement().executeQuery("SELECT student_id FROM students WHERE class_id LIKE concat('%', " + this.classroomID + ", '%'");
-            String sql = "SELECT * FROM students WHERE student_id = " + studentNum + " AND CHARINDEX(':" + this.classroomID + ":', class_id) > 0";
-//            ResultSet rs = conn.createStatement().executeQuery("SELECT class_id FROM students WHERE student_id =" + studentNum);
+            String sql = "SELECT * FROM students WHERE student_id = " + studentNum +
+                    " AND CHARINDEX(':" + this.classroomID + ":', class_id) > 0";
             ResultSet rs = conn.createStatement().executeQuery(sql);
             Boolean result = rs.next();
             rs.close();
             conn.close();
             return result;
-
-//            String class_ids = rs.getString("class_id");
-            //this wont work as if we have :11: as a students classroom_ids, when we check if they are in class with
-            //id 1 it will return true
-//            if (class_ids.contains(this.classroomID)){
-//                conn.close();
-//                return true;
-//            }
-//            System.out.println("test");
-//            conn.close();
-//            return false;
 
         }catch(SQLException e){
             System.out.println("Student in classroom");

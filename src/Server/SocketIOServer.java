@@ -48,7 +48,7 @@ public class SocketIOServer {
 
     /**
      * Server will start listening for "result" events emitted by Hypatia. These "result" events will only be parsed
-     * if parseResultsEvents is true
+ * if  is true
      */
     public void start(){
 
