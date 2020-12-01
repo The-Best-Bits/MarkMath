@@ -32,6 +32,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class AssignmentPageController<MyType> implements Initializable {
+    AssignmentPageModel PageModel = new AssignmentPageModel();
 
     @FXML
     private TableView<StudentAssignment> AssignmentTable;
@@ -72,23 +73,13 @@ public class AssignmentPageController<MyType> implements Initializable {
         this.classroomID = classroomID;
     }
 
-    public String getBundlename() {
-        return bundlename;
-    }
-
     public void setBundlename(String bundlename) {
         this.bundlename = bundlename;
-    }
-
-    public String getBundleid() {
-        return bundleid;
     }
 
     public void setBundleid(String bundleid) {
         this.bundleid = bundleid;
     }
-
-
 
     @FXML
     void openClassroom(ActionEvent event) throws IOException {
@@ -126,27 +117,41 @@ public class AssignmentPageController<MyType> implements Initializable {
         this.db = new dbConnection();}
 
 
-
+    /**
+     *
+     */
     public void loadData(){
+        UpdateFromDB();
+        this.idColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentID"));
+        this.nameColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentName"));
+        this.gradeColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("finalMark"));
+        this.markColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("BreakdownString"));
+        this.AssignmentName.setText(this.bundlename);
+        this.AssignmentOutline.setText(this.outline+ ", Total: " + this.fullMark);
+        this.AssignmentTable.setItems(null);
+        this.AssignmentTable.setItems(this.data);
+    }
+
+    public LinkedHashMap<String, Float> CreateMap(ResultSet rs, int count) throws SQLException{
+        LinkedHashMap<String, Float> map = new LinkedHashMap<>();
+        for(int i=4; i<count; i++){
+            map.put(rs.getMetaData().getColumnName(i), rs.getFloat(i));
+        }
+        return map;
+    }
+
+    public void UpdateFromDB(){
         try{
-            Connection conn = dbConnection.getConnection();
+            ResultSet rs = PageModel.getGradeData(this.bundleid);
             this.data = FXCollections.observableArrayList();
-            assert conn != null;
-            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM '" + this.bundleid + "'");
             rs.next();
             int count = rs.getMetaData().getColumnCount();
-            LinkedHashMap<String, Float> out = new LinkedHashMap<>();
-            for(int i=4; i<count; i++){
-                out.put(rs.getMetaData().getColumnName(i), rs.getFloat(i));
-            }
+            LinkedHashMap<String, Float> out = CreateMap(rs, count);
             this.outline = out.keySet().stream().map(key -> key + ": " + out.get(key)).collect(
                     Collectors.joining(", "));
             this.fullMark = rs.getFloat(count);
             while(rs.next()){
-                LinkedHashMap<String, Float> map = new LinkedHashMap<>();
-                for(int i=4; i<count; i++){
-                    map.put(rs.getMetaData().getColumnName(i), rs.getFloat(i));
-                }
+                LinkedHashMap<String, Float> map = CreateMap(rs, count);
                 StudentAssignment NewAssignment = new StudentAssignment(
                         rs.getString("student_id"),
                         rs.getString("student_name"),
@@ -154,18 +159,9 @@ public class AssignmentPageController<MyType> implements Initializable {
                 NewAssignment.setOutline(new AssignmentOutline(this.bundlename, out));
                 this.data.add(NewAssignment);
             }
-
         }catch(SQLException e){
-            System.err.println("Error" + e);
+            System.err.println("Error:" + e);
         }
-
-        this.idColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentID"));
-        this.nameColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentName"));
-        this.gradeColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("finalMark"));
-        this.markColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("BreakdownString"));
-        this.AssignmentName.setText(this.bundlename);
-        this.AssignmentOutline.setText(this.outline+ ", Total: " + this.fullMark);
-        this.AssignmentTable.setItems(this.data);
     }
 
 
@@ -202,50 +198,48 @@ public class AssignmentPageController<MyType> implements Initializable {
             if (diff < 300){
                 Stage popup = new Stage();
                 popup.initModality(Modality.APPLICATION_MODAL);
-
                 popup.setTitle("Mark Editing");
-                Label label1 = new Label("CURRENT MARK: " +curr.getBreakdownString());
+                Label label1 = new Label("CURRENT MARK:\n"+curr.getBreakdownString());
                 TextField field1 = new TextField();
                 field1.setPromptText("Enter Question ID as an integer (eg. 1)");
-                field1.setPrefColumnCount(40);
+                field1.setMaxWidth(250);
                 TextField field2 = new TextField();
-                field2.setPromptText("Enter Custom Mark as a decimal (eg. 7.5)");
-                field2.setPrefColumnCount(40);
+                field2.setPromptText("Enter Mark as a decimal (eg. 7.5)");
+                field2.setMaxWidth(250);
                 Label label2 = new Label();
                 Button button1 = new Button("Submit change");
 
                 button1.setOnAction(e -> {
                     if(isPositiveInteger(field1.getText()) & isPositiveFloat(field2.getText())){
-                    int qid = Integer.parseInt(field1.getText());
-                    float mark = Float.parseFloat(field2.getText());
-                    if(qid <= curr.getOutline().getQuestionToMarks().size() && mark <= curr.getOutline(
-                    ).getQuestionToMarks().get("question"+qid)){
-                        float NewTotal = curr.getFinalMark() - curr.getFinalMarkBreakdown().get("question"+qid) + mark;
-                        int stuid = Integer.parseInt(curr.getStudentID());
-                        try{
-                        Connection conn = dbConnection.getConnection();
-                        assert conn != null;
-                        String query = "UPDATE '"+this.bundleid+"' SET question"+qid+" = '"+mark+"', total = '"+NewTotal+"' WHERE student_id = '"+stuid+"'";
-                        conn.prepareStatement(query).executeUpdate();
-                        loadData();
-                        popup.close();
-                        }catch(SQLException exc){
-                        System.err.println("Error" + exc);}}else{
-                        label2.setText("Please enter valid values");
-                    }
+                        int qid = Integer.parseInt(field1.getText());
+                        float mark = Float.parseFloat(field2.getText());
+                        if(qid <= curr.getOutline().getQuestionToMarks().size() && mark <= curr.getOutline(
+                        ).getQuestionToMarks().get("question"+qid)){
+                            float NewTotal = curr.getFinalMark() - curr.getFinalMarkBreakdown().get("question"+qid) + mark;
+                            int stuid = Integer.parseInt(curr.getStudentID());
+                            try{
+                                PageModel.updateGradeData(qid, mark, NewTotal, stuid, this.bundleid);
+                                loadData();
+                                popup.close();
+                            }catch(SQLException exc){
+                                System.err.println("Error" + exc);}
+                        }else{
+                            label2.setText("Please enter valid values");}
                     }else{
-                        label2.setText("Please enter valid values");
-                    }
+                        label2.setText("Please enter valid values");}
                 });
 
                 VBox layout= new VBox(15);
                 layout.getChildren().addAll(label1, field1, field2, label2, button1);
                 layout.setAlignment(Pos.CENTER);
-                Scene scene1= new Scene(layout, 400, 300);
+                Scene scene1= new Scene(layout, 300, 250);
                 popup.setScene(scene1);
                 popup.showAndWait();
+            } else {
+                lastClickTime = new Date();
             }
-        }}
+        }
+    }
 
 
     public static boolean isPositiveInteger(String str) {
