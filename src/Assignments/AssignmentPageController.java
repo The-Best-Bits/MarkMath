@@ -128,6 +128,7 @@ public class AssignmentPageController<MyType> implements Initializable {
         this.markColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("BreakdownString"));
         this.AssignmentName.setText(this.bundlename);
         this.AssignmentOutline.setText(this.outline+ ", Total: " + this.fullMark);
+        this.AssignmentTable.setItems(null);
         this.AssignmentTable.setItems(this.data);
     }
 
@@ -157,8 +158,9 @@ public class AssignmentPageController<MyType> implements Initializable {
                         rs.getFloat("total"), map);
                 NewAssignment.setOutline(new AssignmentOutline(this.bundlename, out));
                 this.data.add(NewAssignment);
-            } }catch(SQLException e){
-            System.err.println("Error" + e);
+            }
+        }catch(SQLException e){
+            System.err.println("Error:" + e);
         }
     }
 
@@ -196,15 +198,14 @@ public class AssignmentPageController<MyType> implements Initializable {
             if (diff < 300){
                 Stage popup = new Stage();
                 popup.initModality(Modality.APPLICATION_MODAL);
-
                 popup.setTitle("Mark Editing");
-                Label label1 = new Label("CURRENT MARK: " +curr.getBreakdownString());
+                Label label1 = new Label("CURRENT MARK:\n"+curr.getBreakdownString());
                 TextField field1 = new TextField();
                 field1.setPromptText("Enter Question ID as an integer (eg. 1)");
-                field1.setPrefColumnCount(40);
+                field1.setMaxWidth(250);
                 TextField field2 = new TextField();
-                field2.setPromptText("Enter Custom Mark as a decimal (eg. 7.5)");
-                field2.setPrefColumnCount(40);
+                field2.setPromptText("Enter Mark as a decimal (eg. 7.5)");
+                field2.setMaxWidth(250);
                 Label label2 = new Label();
                 Button button1 = new Button("Submit change");
 
@@ -231,11 +232,14 @@ public class AssignmentPageController<MyType> implements Initializable {
                 VBox layout= new VBox(15);
                 layout.getChildren().addAll(label1, field1, field2, label2, button1);
                 layout.setAlignment(Pos.CENTER);
-                Scene scene1= new Scene(layout, 400, 300);
+                Scene scene1= new Scene(layout, 300, 250);
                 popup.setScene(scene1);
                 popup.showAndWait();
+            } else {
+                lastClickTime = new Date();
             }
-        }}
+        }
+    }
 
 
     public static boolean isPositiveInteger(String str) {
