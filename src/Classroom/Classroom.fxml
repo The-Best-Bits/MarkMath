@@ -28,12 +28,12 @@
                     <children>
                         <ImageView fitHeight="115.0" fitWidth="287.0" layoutX="10.0" layoutY="65.0">
                             <image>
-                                <Image url="@../../MMlogo.png" />
+                                <Image url="@../art/MMlogo.png" />
                             </image>
                         </ImageView>
                     </children></Pane>
                 <Pane prefHeight="76.0" prefWidth="382.0" />
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openDashboard" prefHeight="146.0" prefWidth="348.0" text="Classrooms" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openDashboard" prefHeight="146.0" prefWidth="348.0" text="  Classrooms" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -90,12 +90,20 @@
                         <Font name="Yu Gothic UI Regular" size="39.0" />
                     </font>
                 </Text>
-            <JFXButton fx:id="markButton" layoutX="819.0" layoutY="29.0" onAction="#markAssignment" prefHeight="39.0" prefWidth="188.0" style="-fx-background-color: #4C6AB7;" text="Mark Assignment " textFill="WHITE">
+            <JFXButton fx:id="markButton" layoutX="769.0" layoutY="30.0" onAction="#markAssignment" prefHeight="39.0" prefWidth="188.0" style="-fx-background-color: #4C6AB7;" text="Mark Assignment " textFill="WHITE">
                <font>
                   <Font size="17.0" />
                </font>
             </JFXButton>
-            <Label fx:id="errorMarkingStudentAssignment" layoutX="610.0" layoutY="24.0" prefHeight="50.0" prefWidth="198.0" textFill="#d40404" />
+            <Label fx:id="errorMarkingStudentAssignment" layoutX="560.0" layoutY="25.0" prefHeight="50.0" prefWidth="198.0" textFill="#d40404" />
+            <JFXButton fx:id="openHelp" layoutX="957.0" layoutY="24.0" onAction="#openHelp" prefHeight="50.0" prefWidth="94.0" text="Help">
+               <graphic>
+                  <FontAwesomeIconView fill="#4c6ab7" glyphName="QUESTION_CIRCLE" size="25" />
+               </graphic>
+               <font>
+                  <Font name="Yu Gothic UI Regular" size="15.0" />
+               </font>
+            </JFXButton>
             </children>
         </Pane>
       <TabPane layoutX="304.0" layoutY="93.0" prefHeight="678.0" prefWidth="1065.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="304.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="93.0">

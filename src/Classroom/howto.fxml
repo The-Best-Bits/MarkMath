@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="794.0" prefWidth="807.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Classroom.howtoController">
+    <children>
+        <Text fill="#4c6ab7" layoutX="43.0" layoutY="438.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mark Assignment" wrappingWidth="277.30029296875">
+            <font>
+                <Font name="Yu Gothic UI Regular" size="29.0" />
+            </font>
+        </Text>
+        <Text fill="#464646" layoutX="73.0" layoutY="473.0" lineSpacing="1.5" strokeType="OUTSIDE" strokeWidth="0.0" text="After creating an outline for the assignment, mark a new assignment by opening the student's homework in Hypatia's CheckMath-Desktop Edition. After receiving feedbacks on each question from CheckMath, click &quot;Mark Assignment&quot; to recieve a summary of this assignment and have the scores presented in the table on the left." wrappingWidth="493.30029296875">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Text>
+      <Text fill="#4c6ab7" layoutX="43.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Assignments" wrappingWidth="277.30029296875">
+         <font>
+            <Font name="Yu Gothic UI Regular" size="29.0" />
+         </font>
+      </Text>
+      <Text fill="#464646" layoutX="73.0" layoutY="163.0" lineSpacing="1.5" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the id and the name of the assignment you wish to add. Ensure that the id is unique. " wrappingWidth="493.30029296875">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Text fill="#4c6ab7" layoutX="73.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name and Id" wrappingWidth="277.30029296875">
+         <font>
+            <Font name="Yu Gothic UI Regular" size="24.0" />
+         </font>
+      </Text>
+      <Text fill="#4c6ab7" layoutX="73.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment Outline" wrappingWidth="277.30029296875">
+         <font>
+            <Font name="Yu Gothic UI Regular" size="24.0" />
+         </font>
+      </Text>
+      <Text fill="#464646" layoutX="73.0" layoutY="277.0" lineSpacing="1.5" strokeType="OUTSIDE" strokeWidth="0.0" text="Click &quot;Add Question&quot; to create a text field for a question in this assignment. Input the marks this question is worth. Add the outlines for each question in order and make sure that each question in this assignment has a mark created. Press &quot;Add Assignment&quot; at the bottom right to add this assignment to the classroom" wrappingWidth="493.30029296875">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Text fill="#4c6ab7" layoutX="43.0" layoutY="634.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Student" wrappingWidth="277.30029296875">
+         <font>
+            <Font name="Yu Gothic UI Regular" size="29.0" />
+         </font>
+      </Text>
+      <Text fill="#464646" layoutX="73.0" layoutY="662.0" lineSpacing="1.5" strokeType="OUTSIDE" strokeWidth="0.0" text="Switch to the &quot;Students&quot; tab to view all students in this classroom. Input a student's id and name to add a new student. Ensure that the id is unique." wrappingWidth="493.30029296875">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <ImageView fitHeight="157.0" fitWidth="179.0" layoutX="584.0" layoutY="247.0">
+         <image>
+            <Image url="@../art/outline.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="58.0" fitWidth="200.0" layoutX="584.0" layoutY="492.0">
+         <image>
+            <Image url="@../art/markAssignment.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="65.0" fitWidth="200.0" layoutX="584.0" layoutY="662.0">
+         <image>
+            <Image url="@../art/student.png" />
+         </image>
+      </ImageView>
+    </children>
+</AnchorPane>
