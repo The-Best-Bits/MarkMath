@@ -132,7 +132,7 @@ public class AssignmentPageController<MyType> implements Initializable {
             Connection conn = dbConnection.getConnection();
             this.data = FXCollections.observableArrayList();
             assert conn != null;
-            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM '" + this.bundleid + "'");
+            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM '" + this.bundlename + "'");
             rs.next();
             int count = rs.getMetaData().getColumnCount();
             LinkedHashMap<String, Float> out = new LinkedHashMap<>();
@@ -225,7 +225,7 @@ public class AssignmentPageController<MyType> implements Initializable {
                         try{
                         Connection conn = dbConnection.getConnection();
                         assert conn != null;
-                        String query = "UPDATE '"+this.bundleid+"' SET question"+qid+" = '"+mark+"', total = '"+NewTotal+"' WHERE student_id = '"+stuid+"'";
+                        String query = "UPDATE '"+this.bundlename+"' SET question"+qid+" = '"+mark+"', total = '"+NewTotal+"' WHERE student_id = '"+stuid+"'";
                         conn.prepareStatement(query).executeUpdate();
                         loadData();
                         popup.close();
