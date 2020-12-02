@@ -164,7 +164,7 @@ public class ClassroomModel {
         }
 
         String outlineInDatabase = outline.toString();
-        String sql = "CREATE TABLE IF NOT EXISTS "+assignment.getName()+"(student_id STRING, student_name STRING, " +
+        String sql = "CREATE TABLE IF NOT EXISTS " + "[" + received_id + "]" + " (student_id STRING, student_name STRING, " +
                 "document_name STRING, "+ outlineInDatabase + "total STRING);";
 
         /*String sql = "CREATE TABLE IF NOT EXISTS" + assignment.getName() +" (\n"
@@ -191,7 +191,7 @@ public class ClassroomModel {
 
     }
 
-    public void addOutlineToAssignmentTable(AssignmentOutline outline, String assignmentName){
+    public void addOutlineToAssignmentTable(AssignmentOutline outline, String assignmentID){
 
         StringBuilder outlineInDatabase = new StringBuilder();
         int numOfQuestions = outline.getNumberOfQuestions();
@@ -202,11 +202,11 @@ public class ClassroomModel {
             i = i+1;
         }
         outlineInDatabase.append("question").append(i+1);
-        System.out.println("you tried adding the outline");
-        System.out.println(outlineInDatabase);
+        //System.out.println("you tried adding the outline");
+        //System.out.println(outlineInDatabase);
         //System.out.println(String.join("", Collections.nCopies(numOfQuestions, "?")));
 
-        String sqlInsert = "INSERT INTO " + assignmentName +" (student_id, student_name, document_name, " + outlineInDatabase.toString() +
+        String sqlInsert = "INSERT INTO " + "[" + assignmentID + "]"+" (student_id, student_name, document_name, " + outlineInDatabase.toString() +
                 ", total) VALUES (?, ?, ?, " + String.join("", Collections.nCopies(numOfQuestions, "?, ")) + "?)";
         //System.out.println(sql);
         try {

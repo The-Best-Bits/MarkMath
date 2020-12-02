@@ -357,42 +357,33 @@ public class ClassroomController<MyType> implements Initializable {
             createOutline();
         }
 
-        String received_name;
-        String received_id;
 
-        //Checks if a valid name was inserted
-        if ( assignment_name != null  && !assignment_name.getText().equals("")){
-            received_name = assignment_name.getText().trim();
-        }
-        else{
-            errorCreatingAssignment.setText("Please insert an Assignment name");
-            received_name = "Test";
-        }
-        //Checks if a valid id was inserted
-        if (assignment_id != null  && !assignment_id.getText().equals("")){
-           received_id = assignment_id.getText().trim();
-        }
-        else{
-            errorCreatingAssignment.setText("Please insert an Assignment id");
-            received_id = "99";
-        }
+        //Checks if a valid name and id were inserted. If not, an error is displayed and this error
+        //will stop the program from creating the assignment
+        ArrayList<String> fieldData = checkFields();
+        String received_id = fieldData.get(0);
+        String received_name = fieldData.get(1);
+        System.out.println(received_id);
         //Add an assignment to the Class and creates its page only if the error label is empty, which means no
         //error was found anywhere in the process
         if (errorCreatingAssignment.getText().trim().equals("")){
-            AssignmentOutline newOutline = new AssignmentOutline(received_name,assignment_outline );
+            AssignmentOutline newOutline = new AssignmentOutline(received_name, assignment_outline);
             AssignmentBundle newAssignment = new AssignmentBundle(newOutline);
             //System.out.println("Success");
             addAssignmentBundleToClassroomDatabase(received_id, newAssignment);
             ClassroomModel model = new ClassroomModel();
-            try {
-                model.createAssignmentTable(received_id, newAssignment);
-                model.addOutlineToAssignmentTable(newOutline, newAssignment.getName());
-                //model.closeConnection();
+            if (errorCreatingAssignment.getText().trim().equals("")){
+                try {
+                    model.createAssignmentTable(received_id, newAssignment);
+                    model.addOutlineToAssignmentTable(newOutline, received_id);
+
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    errorCreatingAssignment.setText("There was a connection problem");
+                }
             }
-            catch (Exception e){
-                e.printStackTrace();
-                errorCreatingAssignment.setText("There was a connection problem");
-            }
+
             loadBundleData();
         }
     }
@@ -462,6 +453,38 @@ public class ClassroomController<MyType> implements Initializable {
             }
         }
         }
+
+    private ArrayList<String> checkFields(){
+        String received_name;
+        String received_id;
+        ArrayList<String> fieldData = new ArrayList<>();
+
+        if (assignment_id != null  && !assignment_id.getText().equals("")){
+            received_id = assignment_id.getText().trim();
+            fieldData.add(received_id);
+        }
+        else{
+            errorCreatingAssignment.setText("Please insert an Assignment id");
+            received_id = "99";
+            fieldData.add(received_id);
+        }
+
+        if ( assignment_name != null  && !assignment_name.getText().equals("")){
+            received_name = assignment_name.getText().trim();
+            fieldData.add(received_name);
+        }
+        else{
+            errorCreatingAssignment.setText("Please insert an Assignment name");
+            received_name = "Test";
+            fieldData.add(received_name);
+        }
+
+        return fieldData;
+
+    }
+
+
+
 
 
 
