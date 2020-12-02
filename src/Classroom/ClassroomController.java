@@ -4,6 +4,7 @@ import java.lang.Character;
 
 import Assignments.AssignmentPageController;
 import Server.CheckMathParser;
+import Server.SocketIOServer;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import dbUtil.dbConnection;
@@ -23,6 +24,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import login.Login;
 import markmath.controllers.ParsedDataPerAssignment;
 import markmath.controllers.ParsedDataPerAssignmentManager;
 import markmath.entities.AssignmentBundle;
@@ -124,6 +126,7 @@ public class ClassroomController<MyType> implements Initializable {
     private MyType temp;
     private Date lastClickTime;
 
+
     public String getClassroomID() {
         return classroomID;
     }
@@ -135,6 +138,7 @@ public class ClassroomController<MyType> implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.db = new dbConnection();
+
     }
 
     @FXML
@@ -372,10 +376,7 @@ public class ClassroomController<MyType> implements Initializable {
             System.out.println("Success");
             addAssignmentBundleToClassroomDatabase(received_id, newAssignment);
             loadBundleData();
-            //createNewBundlePage(received_id, newAssignment);
         }
-
-        //System.out.println(assignment_outline.get("Question 1"));
     }
 
     /**
@@ -398,15 +399,15 @@ public class ClassroomController<MyType> implements Initializable {
                 if (!Character.isDigit(poss_number.charAt(j))){
                     isValidMark = false;}
                 j = j+1;
-                errorCreatingAssignment.setText("Please use only numbers");
             }
 
             if (isValidMark) {
                 assignment_outline.put("question"+ (i), Float.valueOf(textField[i].getText()));
+
             }
             else
             {
-                errorCreatingAssignment.setText("Please complete the Outline.");
+                errorCreatingAssignment.setText("Please complete the Outline with valid full numbers.");
             }
             i = i+1;
         }
@@ -439,7 +440,6 @@ public class ClassroomController<MyType> implements Initializable {
                 int q = 1;
                 stmt.execute();
                 conn.close();
-
             }catch(SQLException e){
                 System.out.println("Error" + e);
             }
@@ -479,30 +479,42 @@ public class ClassroomController<MyType> implements Initializable {
      */
     @FXML
     void markAssignment(ActionEvent event){
-        ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
-        ArrayList<ParsedDataPerAssignment> parsedDataAssignmnents = manager.getParsedDataAssignments();
-        for (ParsedDataPerAssignment assignment: parsedDataAssignmnents){
-            System.out.println(assignment.getFinalParsedData());
-            //check that the student exists in this classroom
-            //check that their is a corresponding assignment bundle in this classroom
-            if(!studentInClassroom(assignment.getStudentNum()) || !assignmentBundleNameInClassroom(assignment.getAssignmentType())){
-                this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with this student document is not in this classroom");
-            }
-            else{
-                //get assignment outline
-                AssignmentOutline outline = getAssignmentOutline(assignment.getAssignmentType());
-                //get student name
-                String studentName = getStudentNameFromDatabase(assignment.getStudentNum());
-                StudentAssignmentManager saManager = new StudentAssignmentManager(assignment.getStudentNum(),
-                        studentName, assignment.getAssignmentName(), assignment.getAssignmentType(),
-                        assignment.getFinalParsedData(), outline);
-                saManager.markAllQuestions();
-                StudentAssignment studentAssignment = saManager.getCarbonCopy();
-                //add StudentAssignment to Database
-                addStudentAssignmentToDatabase(studentAssignment);
 
-            }
+        Login.getServer().setParseResultsEvents(true);
+        Login.getServer().getAllResultsEvents();
 
+        try {
+            //freezes entire program
+            Thread.sleep(7000);
+            Login.getServer().setParseResultsEvents(false);
+            ParsedDataPerAssignmentManager manager = CheckMathParser.getParsedDataManager();
+            ArrayList<ParsedDataPerAssignment> parsedDataAssignmnents = manager.getParsedDataAssignments();
+            for (ParsedDataPerAssignment assignment : parsedDataAssignmnents) {
+                System.out.println(assignment.getFinalParsedData());
+                //check that the student exists in this classroom
+                //check that their is a corresponding assignment bundle in this classroom
+                if (!studentInClassroom(assignment.getStudentNum()) || !assignmentBundleNameInClassroom(assignment.getAssignmentType())) {
+                    this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with this student document is not in this classroom");
+                } else {
+                    //get assignment outline
+                    AssignmentOutline outline = getAssignmentOutline(assignment.getAssignmentType());
+                    //get student name
+                    String studentName = getStudentNameFromDatabase(assignment.getStudentNum());
+                    StudentAssignmentManager saManager = new StudentAssignmentManager(assignment.getStudentNum(),
+                            studentName, assignment.getAssignmentName(), assignment.getAssignmentType(),
+                            assignment.getFinalParsedData(), outline);
+                    saManager.markAllQuestions();
+                    StudentAssignment studentAssignment = saManager.getCarbonCopy();
+                    //add StudentAssignment to Database
+                    addStudentAssignmentToDatabase(studentAssignment);
+
+                }
+            }
+            System.out.println("Test"+ CheckMathParser.getParsedDataManager().getParsedDataAssignments().size());
+            CheckMathParser.getParsedDataManager().clearParsedDataAssignments();
+            System.out.println("Test"+ CheckMathParser.getParsedDataManager().getParsedDataAssignments().size());
+        }catch(InterruptedException e){
+            System.out.println("Error" + e);
         }
 
     }
@@ -660,6 +672,7 @@ public class ClassroomController<MyType> implements Initializable {
      * @param assignment StudentAssignment that has been marked
      */
     private void addStudentAssignmentToDatabase(StudentAssignment assignment){
+        //make helper method
         String assignmentBundleID = getIDOfAssignmentBundle(assignment.getAssignmentType());
 
         int numQuestions = assignment.getQuestions().size();
