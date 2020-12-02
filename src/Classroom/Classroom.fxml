@@ -22,17 +22,16 @@
 
 <AnchorPane prefHeight="771.0" prefWidth="1369.0" style="-fx-background-color: #E4E4E4;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Classroom.ClassroomController">
     <children>
-        <VBox layoutX="-4.0" layoutY="-4.0" prefHeight="775.0" prefWidth="308.0" style="-fx-background-color: #4C6AB7;">
+        <VBox layoutX="-4.0" layoutY="-4.0" prefHeight="775.0" prefWidth="246.0" style="-fx-background-color: #4C6AB7;">
             <children>
                 <Pane prefHeight="220.0" prefWidth="410.0">
                     <children>
-                        <ImageView fitHeight="115.0" fitWidth="287.0" layoutX="10.0" layoutY="65.0">
+                        <ImageView fitHeight="93.0" fitWidth="240.0" layoutX="3.0" layoutY="64.0">
                             <image>
                                 <Image url="@../art/MMlogo.png" />
                             </image>
                         </ImageView>
                     </children></Pane>
-                <Pane prefHeight="76.0" prefWidth="382.0" />
                 <JFXButton alignment="BASELINE_LEFT" onAction="#openDashboard" prefHeight="146.0" prefWidth="348.0" text="  Classrooms" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
@@ -47,17 +46,6 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="FOLDER" size="30" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openPeople" prefHeight="146.0" prefWidth="415.0" text="  People" textFill="WHITE">
-                    <font>
-                        <Font size="20.0" />
-                    </font>
-                    <padding>
-                        <Insets left="50.0" />
-                    </padding>
-                    <graphic>
-                        <FontAwesomeIconView fill="WHITE" glyphName="USERS" size="30" />
-                    </graphic>
-                </JFXButton>
                 <JFXButton alignment="BASELINE_LEFT" onAction="#openSetting" prefHeight="146.0" prefWidth="410.0" text="  Settings" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
@@ -69,21 +57,20 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="GEAR" size="30" />
                     </graphic>
                 </JFXButton>
-                <Pane prefHeight="197.0" prefWidth="349.0">
-                    <children>
-                        <JFXButton layoutX="109.0" layoutY="79.0" prefHeight="63.0" prefWidth="198.0" text=" Log Out" textFill="WHITE">
-                            <font>
-                                <Font size="20.0" />
-                            </font>
-                            <graphic>
-                                <FontAwesomeIconView fill="WHITE" glyphName="POWER_OFF" size="30" text="" />
-                            </graphic>
-                        </JFXButton>
-                    </children>
-                </Pane>
+            <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openSetting" prefHeight="123.0" prefWidth="308.0" text="  Log Out" textFill="WHITE">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <padding>
+                  <Insets left="50.0" />
+               </padding>
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="POWER_OFF" size="30" />
+               </graphic>
+            </JFXButton>
             </children>
         </VBox>
-        <Pane layoutX="304.0" prefHeight="93.0" prefWidth="1065.0" style="-fx-background-color: #FFFFFF;">
+        <Pane layoutX="242.0" prefHeight="93.0" prefWidth="1127.0" style="-fx-background-color: #FFFFFF;">
             <children>
                 <Text fx:id="classroom_name" fill="#726d6d" layoutX="14.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="506.30029296875">
                     <font>
@@ -106,7 +93,7 @@
             </JFXButton>
             </children>
         </Pane>
-      <TabPane layoutX="304.0" layoutY="93.0" prefHeight="678.0" prefWidth="1065.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="304.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="93.0">
+      <TabPane layoutX="242.0" layoutY="93.0" prefHeight="678.0" prefWidth="1127.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="242.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="93.0">
         <tabs>
           <Tab text="Assignments">
                <content>
@@ -130,7 +117,7 @@
                                     <RowConstraints maxHeight="153.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                               </GridPane>
-                              <JFXButton fx:id="addAssignment" layoutX="49.0" layoutY="590.0" onAction="#createAssignment" prefHeight="41.0" prefWidth="182.0" style="-fx-background-color: #4C6AB7;" text="Add Assignment" textFill="WHITE">
+                              <JFXButton fx:id="addAssignment" layoutX="49.0" layoutY="590.0" onAction="#createAssignment" prefHeight="41.0" prefWidth="198.0" style="-fx-background-color: #4C6AB7;" text="Add Assignment" textFill="WHITE">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -174,7 +161,7 @@
                               <Label fx:id="errorCreatingAssignment" layoutX="49.0" layoutY="566.0" prefHeight="20.0" prefWidth="180.0" />
                            </children>
                         </Pane>
-                        <TableView fx:id="assignment_table" layoutX="151.0" layoutY="136.0" onMouseClicked="#RowSelect" onSort="#loadStudentData" prefHeight="649.0" prefWidth="763.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="302.0" AnchorPane.topAnchor="0.0">
+                        <TableView fx:id="assignment_table" layoutX="-63.0" layoutY="-5.0" onMouseClicked="#RowSelect" onSort="#loadStudentData" prefHeight="644.0" prefWidth="766.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="361.0" AnchorPane.topAnchor="-5.0">
                            <columns>
                               <TableColumn fx:id="assignment_id_column" prefWidth="228.93954467773438" text="Assignment ID" />
                               <TableColumn fx:id="assignment_name_column" prefWidth="533.0604248046875" text="Assignment Name" />

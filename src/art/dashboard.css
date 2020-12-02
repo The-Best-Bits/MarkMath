@@ -1,0 +1,61 @@
+/*For the menus on the left*/
+.VBox{
+    -fx-background-color: linear-gradient(from 0% 50% to 80% 100%,  #4C6AB7, #5cc6e4);
+}
+/*The tableview*/
+.table-view .column-header-background{
+    -fx-background-color: linear-gradient(to right, #4C6AB7, #5cc6e4);
+    -fx-border-color: rgba(0,0,0,0);
+    -fx-background-insets: 0 11px 0 0;
+    -fx-padding: 0 0 8px 0;
+}
+
+.table-view{
+    -fx-border-color: rgba(0,0,0,0);
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-text-background-color: white;
+}
+
+.table-view .table-cell{
+     -fx-border-color: transparent;
+     -fx-padding: 2 0 2 10px;
+}
+
+.table-row-cell: hover {
+     -fx-background-color: #93f9b911;
+     -fx-text-background-color: #4C6AB7;
+ }
+
+.table-row-cell: odd{
+     -fx-background-color: #93f9b911;
+     -fx-background-insets: 0, 0 0 1 0;
+     -fx-padding: 0.0em;
+}
+
+.table-row-cell: even{
+     -fx-background-color: #1dbbdd11;
+     -fx-background-insets: 0, 0 0 1 0;
+     -fx-padding: 0.0em;
+}
+.table-row-cell: selected{
+    -fx-background-color: #68aee0;
+    -fx-text-background-color: white;
+}
+
+/*Top-center pane*/
+.Pane{
+    -fx-background-color: linear-gradient(from 0% 50% to 80% 100%,  #4C6AB7, #5cc6e4);
+}
+/*Add classrooms/assignments/students pane*/
+.addPane{
+    -fx-background-color: #1dbbdd11
+}
+
+.addButton{
+    -fx-background-color: #5cc6e4;
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+}
