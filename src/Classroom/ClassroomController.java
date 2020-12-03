@@ -1,7 +1,5 @@
 package Classroom;
 
-import java.lang.Character;
-
 import Assignments.AssignmentPageController;
 import Server.CheckMathParser;
 import Server.SocketIOServer;
@@ -31,6 +29,7 @@ import markmath.entities.AssignmentBundle;
 import markmath.entities.AssignmentOutline;
 import markmath.entities.StudentAssignment;
 import markmath.usecases.StudentAssignmentManager;
+import Classroom.ClassroomModel;
 
 import java.io.IOException;
 import java.net.URL;
@@ -345,36 +344,46 @@ public class ClassroomController<MyType> implements Initializable {
     @FXML
     void createAssignment(ActionEvent event)
     {
-
         int i = 1;
-
-        //This clears the previous attempt of creating an assignment so that we are not making the outline larger
+        //This clears the previous attempt of creating an assignment so that we are not making the outline larger or
+        // communicating an error from a previous attempt
+        errorCreatingAssignment.setText("");
         assignment_outline.clear();
-        createOutline();
-
-        String received_name;
-        String received_id;
-
-        if ( assignment_name != null  && !assignment_name.getText().equals("")){
-            received_name = assignment_name.getText().trim();
+        //Checks if the outline has at least one question
+        if (textField.length == 0) {
+            errorCreatingAssignment.setText("Please add a Question");
         }
-        else{
-            errorCreatingAssignment.setText("Please insert an Assignment name");
-            received_name = "Test";
+        else {
+            createOutline();
         }
 
-        if (assignment_id != null  && !assignment_id.getText().equals("")){
-           received_id = assignment_id.getText().trim();
-        }
-        else{
-            errorCreatingAssignment.setText("Please insert an Assignment id");
-            received_id = "99";
-        }
+
+        //Checks if a valid name and id were inserted. If not, an error is displayed and this error
+        //will stop the program from creating the assignment
+        ArrayList<String> fieldData = checkFields();
+        String received_id = fieldData.get(0);
+        String received_name = fieldData.get(1);
+        System.out.println(received_id);
+        //Add an assignment to the Class and creates its page only if the error label is empty, which means no
+        //error was found anywhere in the process
         if (errorCreatingAssignment.getText().trim().equals("")){
-            AssignmentOutline newOutline = new AssignmentOutline(received_name,assignment_outline );
+            AssignmentOutline newOutline = new AssignmentOutline(received_name, assignment_outline);
             AssignmentBundle newAssignment = new AssignmentBundle(newOutline);
-            System.out.println("Success");
+            //System.out.println("Success");
             addAssignmentBundleToClassroomDatabase(received_id, newAssignment);
+            ClassroomModel model = new ClassroomModel();
+            if (errorCreatingAssignment.getText().trim().equals("")){
+                try {
+                    model.createAssignmentTable(received_id, newAssignment);
+                    model.addOutlineToAssignmentTable(newOutline, received_id);
+
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    errorCreatingAssignment.setText("There was a connection problem");
+                }
+            }
+
             loadBundleData();
         }
     }
@@ -382,33 +391,30 @@ public class ClassroomController<MyType> implements Initializable {
     /**
      * Creates the Outline as the user inserted it in the interface through the various AddQuestion buttons and prepares
      * it to be used to create an assignment.
-     * It checks if the input is a valid number and if no one of the fields is empty, and if any of these two conditions
-     * fail, the user gets a prompt to input the outline correctly.
+     * It checks if the input is a valid number (Positive float) and if no one of the fields is empty,
+     * and if any of these two conditions fail, the user gets a prompt to input the outline correctly.
      */
     private void createOutline(){
         int i = 1;
+        // Gets the numbers for the outline from each field
         while (i != numOfQuestions) {
             String poss_number = textField[i].getText().trim();
             int j = 0;
-            boolean isValidMark;
-            isValidMark = poss_number.length() != 0;
-            //System.out.println(poss_number);
-            //System.out.println(j);
-            //System.out.println(poss_number.length());
-            while (j != poss_number.length()){
-                if (!Character.isDigit(poss_number.charAt(j))){
-                    isValidMark = false;}
-                j = j+1;
-            }
-
-            if (isValidMark) {
-                assignment_outline.put("question"+ (i), Float.valueOf(textField[i].getText()));
+            //checks if the number is valid for the outline
+            try {
+              float poss_number_float = Float.parseFloat(poss_number);
+              if (poss_number_float > 0) {
+                  assignment_outline.put("question"+ (i), poss_number_float);
+              } else {
+                  errorCreatingAssignment.setText("Please complete the Outline with valid full numbers.");
+              }
 
             }
-            else
-            {
+            catch (Exception NumberFormatException){
+
                 errorCreatingAssignment.setText("Please complete the Outline with valid full numbers.");
             }
+
             i = i+1;
         }
     }
@@ -424,8 +430,11 @@ public class ClassroomController<MyType> implements Initializable {
 
         String curr_class = this.classroomID;
         String sqlInsert = "INSERT INTO AssignmentBundles(assignmentbundle_id, assignment_name, classroom_id) VALUES (?,?,?)";
-        if (assignmentBundleInClassroom(assignment.getName())){
-            errorCreatingAssignment.setText("The Assignment already exists.");
+        if (assignmentBundleInClassroom(received_id)){
+            errorCreatingAssignment.setText("This Assignment's id already exists.");
+        }
+        else if  (assignmentBundleNameInClassroom(assignment.getName())){
+            errorCreatingAssignment.setText("This Assignment's name already exists.");
         }
         else{
             try{
@@ -437,7 +446,6 @@ public class ClassroomController<MyType> implements Initializable {
                 stmt.setInt(1, received_id_int);
                 stmt.setString(2, assignment.getName());
                 stmt.setString(3, curr_class);
-                int q = 1;
                 stmt.execute();
                 conn.close();
             }catch(SQLException e){
@@ -446,9 +454,39 @@ public class ClassroomController<MyType> implements Initializable {
         }
         }
 
-    private void createNewBundlePage(String received_id, AssignmentBundle assignment) {
+    private ArrayList<String> checkFields(){
+        String received_name;
+        String received_id;
+        ArrayList<String> fieldData = new ArrayList<>();
+
+        if (assignment_id != null  && !assignment_id.getText().equals("")){
+            received_id = assignment_id.getText().trim();
+            fieldData.add(received_id);
+        }
+        else{
+            errorCreatingAssignment.setText("Please insert an Assignment id");
+            received_id = "99";
+            fieldData.add(received_id);
+        }
+
+        if ( assignment_name != null  && !assignment_name.getText().equals("")){
+            received_name = assignment_name.getText().trim();
+            fieldData.add(received_name);
+        }
+        else{
+            errorCreatingAssignment.setText("Please insert an Assignment name");
+            received_name = "Test";
+            fieldData.add(received_name);
+        }
+
+        return fieldData;
 
     }
+
+
+
+
+
 
     //Luca's
     private Boolean assignmentBundleInClassroom(String assignmentID){
