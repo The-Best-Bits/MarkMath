@@ -195,17 +195,6 @@ public class DashboardController<MyType> implements Initializable {
         stage.show();
     }
 
-    //will be changed to an instructions page
-    @FXML
-    void openPeople(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/People/People.fxml"));
-        Scene mainPage = new Scene(mainPageParent);
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(mainPage);
-        stage.show();
-    }
-
     /**
      * Opens a settings page...
      *
