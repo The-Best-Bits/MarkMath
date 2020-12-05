@@ -59,17 +59,6 @@ public class StudentMarksController<MyType> {
         window.show();
     }
 
-    //will be changed to an instructions page
-    @FXML
-    void openPeople(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/People/People.fxml"));
-        Scene mainPage = new Scene(mainPageParent);
-
-        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-        window.setScene(mainPage);
-        window.show();
-    }
-
     /**
      * Opens a settings page...
      * @param event Settings button is clicked
