@@ -91,15 +91,6 @@ public class AssignmentPageController<MyType> implements Initializable {
         stage.show();
     }
 
-    @FXML
-    void openPeople(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/People/People.fxml"));
-        Scene mainPage = new Scene(mainPageParent);
-
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(mainPage);
-        stage.show();
-    }
 
     @FXML
     void openSetting(ActionEvent event) throws IOException {
