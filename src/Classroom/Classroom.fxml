@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -59,7 +60,7 @@
                 </JFXButton>
             </children>
         </VBox>
-        <Pane layoutX="242.0" prefHeight="93.0" prefWidth="1127.0" style="-fx-background-color: #FFFFFF;">
+        <Pane layoutX="242.0" prefHeight="93.0" prefWidth="1189.0" style="-fx-background-color: #FFFFFF;">
             <children>
                 <Text fx:id="classroom_name" fill="#726d6d" layoutX="14.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="506.30029296875">
                     <font>
@@ -82,7 +83,7 @@
             </JFXButton>
             </children>
         </Pane>
-      <TabPane layoutX="242.0" layoutY="93.0" prefHeight="678.0" prefWidth="1127.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="242.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="93.0">
+      <TabPane fx:id="tab_pane" layoutX="242.0" layoutY="93.0" prefHeight="678.0" prefWidth="1127.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="242.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="93.0">
         <tabs>
           <Tab text="Assignments">
                <content>
@@ -160,64 +161,82 @@
                   </AnchorPane>
                </content>
           </Tab>
-          <Tab text="Students">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <Pane layoutX="763.0" layoutY="-23.0" prefHeight="649.0" prefWidth="302.0" style="-fx-background-color: #ffffff; -fx-border-color: #e4e4e4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="763.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <JFXButton layoutX="33.0" layoutY="266.0" onAction="#addStudent" prefHeight="44.0" prefWidth="233.0" style="-fx-background-color: #4C6AB7;" text="Add Student" textFill="WHITE">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </JFXButton>
-                              <JFXTextField fx:id="student_name" layoutX="34.0" layoutY="179.0" prefHeight="50.0" prefWidth="230.0" promptText="Enter name" style="-fx-background-color: #ffffff;">
-                                 <font>
-                                    <Font size="19.0" />
-                                 </font>
-                              </JFXTextField>
-                              <Text fill="#404040" layoutX="35.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student Name" wrappingWidth="178.50001215934753">
-                                 <font>
-                                    <Font name="Yu Gothic UI Regular" size="21.0" />
-                                 </font>
-                              </Text>
-                              <JFXTextField fx:id="student_id" layoutX="35.0" layoutY="54.0" prefHeight="50.0" prefWidth="227.0" promptText="Enter id" style="-fx-background-color: #ffffff;">
-                                 <font>
-                                    <Font size="19.0" />
-                                 </font>
-                              </JFXTextField>
-                              <Text fill="#404040" layoutX="35.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student ID" wrappingWidth="156.9669189453125">
-                                 <font>
-                                    <Font name="Yu Gothic UI Regular" size="21.0" />
-                                 </font>
-                              </Text>
-                              <Label fx:id="addStudentError" layoutX="47.0" layoutY="316.0" prefHeight="17.0" prefWidth="203.0" textFill="RED">
-                                 <font>
-                                    <Font name="Yu Gothic UI Regular" size="12.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="studentNameError" layoutX="47.0" layoutY="238.0" prefHeight="17.0" prefWidth="203.0" textFill="RED">
-                                 <font>
-                                    <Font name="Yu Gothic UI Regular" size="12.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="studentIDError" layoutX="47.0" layoutY="117.0" prefHeight="17.0" prefWidth="203.0" textFill="RED">
-                                 <font>
-                                    <Font name="Yu Gothic UI Regular" size="12.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </Pane>
-                        <TableView fx:id="student_table" layoutX="151.0" layoutY="136.0" onSort="#loadStudentData" prefHeight="649.0" prefWidth="763.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="302.0" AnchorPane.topAnchor="0.0">
-                          <columns>
-                            <TableColumn fx:id="student_id_column" prefWidth="228.93954467773438" text="Student ID" />
-                            <TableColumn fx:id="student_name_column" prefWidth="533.0604248046875" text="Name" />
-                          </columns>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
+            <Tab fx:id="students_tab" text="Students">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <StackPane layoutX="887.0" prefHeight="649.0" prefWidth="302.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="887.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <children>
+                                    <Pane fx:id="student_name_pane" layoutX="10.0" layoutY="10.0" prefHeight="649.0" prefWidth="302.0" style="-fx-background-color: #ffffff; -fx-border-color: #e4e4e4;">
+                                        <children>
+                                            <JFXButton layoutX="32.0" layoutY="144.0" onAction="#addStudentWithName" prefHeight="44.0" prefWidth="233.0" style="-fx-background-color: #4C6AB7;" text="Add Student" textFill="WHITE">
+                                                <font>
+                                                    <Font size="20.0" />
+                                                </font>
+                                            </JFXButton>
+                                            <JFXButton layoutX="32.0" layoutY="203.0" onAction="#addStudentBack" prefHeight="44.0" prefWidth="233.0" style="-fx-background-color: #4C6AB7;" text="Back" textFill="WHITE">
+                                                <font>
+                                                    <Font size="20.0" />
+                                                </font>
+                                            </JFXButton>
+                                            <JFXTextField fx:id="student_name" layoutX="35.0" layoutY="54.0" prefHeight="50.0" prefWidth="227.0" promptText="Enter name" style="-fx-background-color: #ffffff;">
+                                                <font>
+                                                    <Font size="19.0" />
+                                                </font>
+                                            </JFXTextField>
+                                            <Text fill="#404040" layoutX="35.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student Name" wrappingWidth="156.9669189453125">
+                                                <font>
+                                                    <Font name="Yu Gothic UI Regular" size="21.0" />
+                                                </font>
+                                            </Text>
+                                            <Label fx:id="studentNameError" layoutX="47.0" layoutY="114.0" prefHeight="17.0" prefWidth="203.0" textFill="RED">
+                                                <font>
+                                                    <Font name="Yu Gothic UI Regular" size="12.0" />
+                                                </font>
+                                            </Label>
+                                        </children>
+                                    </Pane>
+                                    <Pane fx:id="student_id_pane" prefHeight="649.0" prefWidth="302.0" style="-fx-background-color: #ffffff; -fx-border-color: #e4e4e4;">
+                                        <children>
+                                            <JFXButton layoutX="32.0" layoutY="144.0" onAction="#addStudentWithID" prefHeight="44.0" prefWidth="233.0" style="-fx-background-color: #4C6AB7;" text="Add Student" textFill="WHITE">
+                                                <font>
+                                                    <Font size="20.0" />
+                                                </font>
+                                            </JFXButton>
+                                            <JFXButton layoutX="32.0" layoutY="203.0" onAction="#removeStudent" prefHeight="44.0" prefWidth="233.0" style="-fx-background-color: #4C6AB7;" text="Remove Student" textFill="WHITE">
+                                                <font>
+                                                    <Font size="20.0" />
+                                                </font>
+                                            </JFXButton>
+                                            <JFXTextField fx:id="student_id" layoutX="35.0" layoutY="54.0" prefHeight="50.0" prefWidth="227.0" promptText="Enter ID" style="-fx-background-color: #ffffff;">
+                                                <font>
+                                                    <Font size="19.0" />
+                                                </font>
+                                            </JFXTextField>
+                                            <Text fill="#404040" layoutX="35.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Student ID" wrappingWidth="156.9669189453125">
+                                                <font>
+                                                    <Font name="Yu Gothic UI Regular" size="21.0" />
+                                                </font>
+                                            </Text>
+                                            <Label fx:id="studentIDError" layoutX="47.0" layoutY="114.0" prefHeight="17.0" prefWidth="203.0" textFill="RED">
+                                                <font>
+                                                    <Font name="Yu Gothic UI Regular" size="12.0" />
+                                                </font>
+                                            </Label>
+                                        </children>
+                                    </Pane>
+                                </children>
+                            </StackPane>
+                            <TableView fx:id="student_table" layoutX="-1.0" onMouseClicked="#studentRowSelect" onSort="#loadStudentData" prefHeight="649.0" prefWidth="887.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="302.0" AnchorPane.topAnchor="0.0">
+                                <columns>
+                                    <TableColumn fx:id="student_id_column" prefWidth="228.93954467773438" text="Student ID" />
+                                    <TableColumn fx:id="student_name_column" prefWidth="657.0" text="Name" />
+                                </columns>
+                            </TableView>
+                        </children>
+                    </AnchorPane>
+                </content>
+            </Tab>
         </tabs>
       </TabPane>
     </children>

@@ -107,33 +107,47 @@ public class ClassroomModel {
         }
     }
 
-    public boolean addStudentToClass(String studentID, String studentName, String classID) throws Exception {
-        /*Adds a student to the database, including the classID. If the student is already in the database and
-        the class, the method returns false and does nothing else. Otherwise, the method returns True, adds the
-        student to the database if they are not in it already, and adds the classID to the student in the
-        database.
-         */
+    public boolean addStudentToClass(String studentID, String classID) throws Exception {
         Statement stmt = null;
         ResultSet rs = null;
+        try {
+            if (studentIsInDatabase(studentID)) {
+                String sql1 = "SELECT class_id FROM students where student_id = '" + studentID + "'";
+                stmt = this.connection.createStatement();
+                rs = stmt.executeQuery(sql1);
+                String originalClasses = rs.getString(1);
+                String newClasses = originalClasses + classID + ":";
+
+                String sql2 = "UPDATE students SET class_id = '" + newClasses + "' WHERE student_id = " + studentID;
+                stmt = this.connection.createStatement();
+                stmt.executeUpdate(sql2);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+
+        finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (rs != null){
+                rs.close();
+            }
+        }
+    }
+
+    public boolean addStudentToDatabase(String studentID, String studentName) throws Exception {
+        Statement stmt = null;
 
         try {
             if (this.studentIsInDatabase(studentID)) {
-                if (this.studentIsInClass(studentID, classID)) {
-                    return false;
-                } else {
-                    String sql1 = "SELECT class_id FROM students where student_id = " + studentID;
-                    stmt = this.connection.createStatement();
-                    rs = stmt.executeQuery(sql1);
-                    String originalClasses = rs.getString(1);
-                    String newClasses = originalClasses + classID + ":";
-
-                    String sql2 = "UPDATE students SET class_id = '" + newClasses + "' WHERE student_id = " + studentID;
-                    stmt = this.connection.createStatement();
-                    stmt.executeUpdate(sql2);
-                    return true;
-                }
+                return false;
             } else {
-                String sql = "INSERT INTO students (student_id, student_name, class_id) VALUES ('" + studentID + "', '" + studentName + "', ':" + classID + ":')";
+                String sql = "INSERT INTO students (student_id, student_name, class_id) VALUES ('" + studentID + "', '" + studentName + "', ':')";
                 stmt = this.connection.createStatement();
                 stmt.executeUpdate(sql);
                 return true;
@@ -141,6 +155,63 @@ public class ClassroomModel {
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
+        }
+
+        finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+    }
+
+    public void removeStudent(String studentID, String classID) throws Exception {
+        /* removes the class ID associated with the class under the student in the student table in the database.
+        If the student is enrolled in no classes after this, the student is removed from the Database.
+        Also removes students from all assignment bundle tables.
+         */
+        if (!studentIsInClass(studentID, classID)) {
+            return;
+        }
+
+        Statement stmt = null;
+        ResultSet rs = null;
+        ResultSet rs2 = null;
+        ResultSet rs3 = null;
+
+        try {
+            String sql1 = "SELECT class_id FROM students where student_id = '" + studentID + "'";
+            stmt = this.connection.createStatement();
+            rs = stmt.executeQuery(sql1);
+            String originalClasses = rs.getString(1);
+            String newClasses = originalClasses.replace(classID + ":", "");
+
+            String sql2;
+            if (newClasses.trim().equals(":")) {
+                sql2 = "DELETE FROM students WHERE student_id = '" + studentID + "'";
+            } else {
+                sql2 = "UPDATE students SET class_id = '" + newClasses + "' WHERE student_id = '" + studentID + "'";
+            }
+            stmt = this.connection.createStatement();
+            stmt.executeUpdate(sql2);
+
+            String sql3 = "SELECT assignmentbundle_id FROM AssignmentBundles WHERE classroom_id = '" + classID + "'";
+            stmt = this.connection.createStatement();
+            rs2 = stmt.executeQuery(sql3);
+            String assignmentID;
+            String sql5;
+
+            while (rs2.next()) {
+                assignmentID = rs2.getString(1);
+                DatabaseMetaData dbm = connection.getMetaData();
+                rs3 = dbm.getTables(null, null, assignmentID, null);
+                if (rs3.next()) {
+                    sql5 = "DELETE FROM '" + assignmentID + "' WHERE student_id = '" + studentID + "'";
+                    stmt = this.connection.createStatement();
+                    stmt.executeUpdate(sql5);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
 
         finally {
