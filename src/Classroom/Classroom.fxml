@@ -57,17 +57,6 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="GEAR" size="30" />
                     </graphic>
                 </JFXButton>
-            <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openSetting" prefHeight="123.0" prefWidth="308.0" text="  Log Out" textFill="WHITE">
-               <font>
-                  <Font size="20.0" />
-               </font>
-               <padding>
-                  <Insets left="50.0" />
-               </padding>
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="POWER_OFF" size="30" />
-               </graphic>
-            </JFXButton>
             </children>
         </VBox>
         <Pane layoutX="242.0" prefHeight="93.0" prefWidth="1127.0" style="-fx-background-color: #FFFFFF;">

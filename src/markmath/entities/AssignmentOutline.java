@@ -8,6 +8,7 @@ import java.util.HashMap;
 * assignment.
 */
 public class AssignmentOutline {
+
     private String name;
     private HashMap<String, Float> questionToMarks;
 
@@ -68,6 +69,12 @@ public class AssignmentOutline {
      * Returns the name of the AssignmentOutline.
      * @return The name of the AssignmentOutline.
      */
+
+    public int getNumberOfQuestions(){
+       return questionToMarks.size();
+
+    }
+
     public String getName(){return name;}
 
     /**

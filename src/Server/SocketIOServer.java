@@ -7,7 +7,7 @@ import com.corundumstudio.socketio.listener.DataListener;
 
 public class SocketIOServer {
     /** The SocketIOServer controller class
-     * This is the Socket IO Server that will sqlite.Connect.java to the Hypatia app and receive
+     * This is the Socket IO Server that will connect to the Hypatia app and receive
     the emitted events
 
     SocketIO is a library that allows for bi-directional communication between clients and
@@ -17,45 +17,29 @@ public class SocketIOServer {
 
     */
 
+    private Configuration config;
+    final private com.corundumstudio.socketio.SocketIOServer server;
+    private SocketIOClient client;
+    private boolean parseResultsEvents;
+    private CheckMathParser parser;
+
     /**
-     * Configures the server, starts the server, connects to Hypatia's CheckMath, and receives the results events
-     * emtited by Hypatia
-     * @param args
+     * When a new SocketIOServer is instantiated it is configured to listen on port 3333.
      */
-    public static void main(String[] args) {
-        // configure this server to listen as localhost on port 3333
-        Configuration config = new Configuration();
+    public SocketIOServer(){
+        config = new Configuration();
         config.setHostname("localhost");
         config.setPort(3333);
-        com.corundumstudio.socketio.SocketIOServer server = new com.corundumstudio.socketio.SocketIOServer(config);
-
+        server = new com.corundumstudio.socketio.SocketIOServer(config);
+        parseResultsEvents = false;
+        parser = new CheckMathParser();
 
         // once Hypatia is connected to the server this method will be run
         server.addConnectListener(new ConnectListener() {
             @Override
             public void onConnect(SocketIOClient socketIOClient) {
                 System.out.println("Connected to Hypatia's CheckMath");
-            }
-        });
-
-//        // listen for the "expressions" event emitted by Hypatia
-//        server.addEventListener("expressions", String.class, new DataListener<String>() {
-//            @Override
-//            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
-//                String expressionData = s;
-//                final String[] resultsData = new String[1];
-//                System.out.println("Client Expression" + s);
-//            }
-//        });
-
-        // listen for the "results" event emitted by Hypatia
-        // we only need the information from this event, not the "expressions" event
-        server.addEventListener("result", String.class, new DataListener<String>() {
-            @Override
-            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
-                System.out.println("Client Results" + s);
-                CheckMathParser temp = new CheckMathParser();
-                temp.parseResult(s);
+                client = socketIOClient;
             }
         });
 
@@ -63,39 +47,59 @@ public class SocketIOServer {
     }
 
     /**
-     * Configures the server, starts the server, connects to Hypatia's CheckMath, and receives the results events
-     * emitted by Hypatia
+     * Server will start listening for "result" events emitted by Hypatia. These "result" events will only be parsed
+ * if  is true
      */
     public void start(){
-        Configuration config = new Configuration();
-        config.setHostname("localhost");
-        config.setPort(3333);
-        com.corundumstudio.socketio.SocketIOServer server = new com.corundumstudio.socketio.SocketIOServer(config);
-
-
-        // once Hypatia is connected to the server this method will be run
-        server.addConnectListener(new ConnectListener() {
-            @Override
-            public void onConnect(SocketIOClient socketIOClient) {
-                System.out.println("Connected to Hypatia's CheckMath");
-            }
-        });
 
         // listen for the "results" event emitted by Hypatia
         // we only need the information from this event, not the "expressions" event
         server.addEventListener("result", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
-                System.out.println("Client Results" + s);
-                CheckMathParser temp = new CheckMathParser();
-                temp.parseResult(s);
+                if (parseResultsEvents) {
+                    System.out.println("Client Results" + s);
+
+                    if (parser.getFinalParsedData().isEmpty()){
+                        System.out.println("Test");
+                        parser.parseFirstResultEvent(s);
+                        System.out.println("test 2");
+                    }
+                    else{
+                        parser.addParsedData(s);
+                    }
+                }
             }
         });
+    }
 
-        server.start();
+    /**
+     * Set parseResultsEvents. If set to true, any results events that are received will be parsed. If set to false,
+     * all results events that are received will not be parsed
+     * @param parse boolean value
+     */
+    public void setParseResultsEvents(boolean parse){this.parseResultsEvents = parse;}
+
+    /**
+     * Emits check_all_math event. Server will receive all of the results events emitted by Hypatia from
+     * the currently opened Hypatia document
+     */
+    public void getAllResultsEvents(){
+
+        if (client != null) {
+            //is check math not receiving the event right away?
+            client.sendEvent("check_all_math");
+            System.out.println("Event sent");
+        }
 
     }
 
-
+    /**
+     * Returns this SocketIOServer's CheckMathParser
+     * @return parser
+     */
+    public CheckMathParser getparser() {
+        return this.parser;
+    }
 
 }

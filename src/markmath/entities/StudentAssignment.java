@@ -14,27 +14,28 @@ public class StudentAssignment {
 
     /* Attributes
      * studentName: name of this student owner
-     * AssignmentName: name of the assignment name, consistent with the bundle it belongs to
      * studentID: ID of this student owner
+     * assignmentType: name of the AssignmentBundle it belongs to
+     * assignmentName: name of this assignment, concatenated by studentID and assignmentType
      * questions: the list of all questions contained
-     * outline: the mapping of question to mark
+     * outline: the mapping of question to full mark
+     * finalMarkBreakdown: the mapping of question to final mark
      * fullMark: the total full mark
      * finalMark: the total final mark
      */
 
     private String studentName;
-    //added assignmentName, changed AssignmentName to assignmentType
     private String assignmentType;
     private String assignmentName;
     private String studentID;
     private ArrayList<Question> questions = new ArrayList<>();
-    //do we need to store the assignment outline in a student assignment?
     private AssignmentOutline outline;
-    private String gradeMap;
+    private LinkedHashMap<String, Float> finalMarkBreakdown;
     private float fullMark = 0;
     private float finalMark = 0;
 
-    /* create a StudentAssignment with given student ID and name */
+    /**
+     * Create a StudentAssignment with given student ID and name */
     public StudentAssignment(String studentID, String studentName, String assignmentType, String assignmentName){
         this.studentID = studentID;
         this.studentName = studentName;
@@ -43,24 +44,20 @@ public class StudentAssignment {
 
     }
 
-    public StudentAssignment(String studentID, String studentName, float total, LinkedHashMap<String, Float> map){
+    /**
+     * Another way to create StudentAssignment with student ID, name, and grade data from database */
+    public StudentAssignment(String studentID, String studentName, float total, LinkedHashMap<
+            String, Float> map1){
         this.studentID = studentID;
         this.studentName = studentName;
         this.finalMark = total;
-        this.gradeMap = map.keySet().stream().map(
-                key -> key + ": " + map.get(key)).collect(
-                        Collectors.joining(", ", "{", "}"));
+        this.finalMarkBreakdown = map1;
     }
 
 
     public AssignmentOutline getOutline() {return outline;}
 
-    public void setOutline(AssignmentOutline outline) {
-        this.outline = outline;
-        this.fullMark = outline.returnFullMark();
-    }
-
-    public String getGradeMap() {return gradeMap;}
+    public LinkedHashMap<String, Float> getFinalMarkBreakdown(){return finalMarkBreakdown;}
 
     public float getFinalMark(){return finalMark;}
 
@@ -68,19 +65,24 @@ public class StudentAssignment {
 
     public String getStudentID(){return studentID;}
 
-    //changed
     public String getAssignmentName(){return this.assignmentName;}
 
-    //added
     public String getAssignmentType(){return this.assignmentType;}
 
     public ArrayList<Question> getQuestions(){return questions;}
 
     public String getStudentName(){return this.studentName;}
 
+    /**
+     * Get the string of the mapping of question to final mark */
+    public String getBreakdownString(){
+        return finalMarkBreakdown.keySet().stream().map(
+                key -> key + ": " + finalMarkBreakdown.get(key)).collect(
+                Collectors.joining(", "));
+    }
 
     /**
-     *
+     * Get the Question object with given question ID
      * @param questionNum the number of the Question
      * @return the Question in this StudentAssignment with the given question number
      */
@@ -93,10 +95,16 @@ public class StudentAssignment {
         return null;
     }
 
-    //removed setAssignmentType method
     public void setAssignmentName(String assignmentName){this.assignmentName = assignmentName;}
 
     public void addQuestion(Question ques){questions.add(ques);}
+
+    /**
+     * Set the outline and full mark calculated from the outline */
+    public void setOutline(AssignmentOutline outline) {
+        this.outline = outline;
+        this.fullMark = outline.returnFullMark();
+    }
 
     /**
      * Modifies the specified question (by question number) to have a different amount of errors
@@ -112,6 +120,11 @@ public class StudentAssignment {
         }
     }
 
+    /**
+     * Set the final mark for a single question in this assignment
+     * @param No question ID
+     * @param mark the final mark for this question
+     */
     public void setFinalMarkSingleQuestion(int No, float mark){
         for(Question q: questions) {
             if (q.getQuestionNumber() == No) {
@@ -125,7 +138,6 @@ public class StudentAssignment {
      * Note: Should only be called once every Question in questions has been marked. If this is not the
      * case, then the final mark will be lower than expected, as the default mark for each question is 0
      */
-    //added November 10
     public void setFinalMark(){
         float temp = 0;
         for(Question q: questions){

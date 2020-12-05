@@ -41,7 +41,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="FOLDER" size="30" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openSetting" prefHeight="121.0" prefWidth="246.0" text="  Settings" textFill="WHITE">
+               <JFXButton alignment="BASELINE_LEFT" onAction="#openSetting" prefHeight="146.0" prefWidth="410.0" text="  Settings" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -52,17 +52,6 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="GEAR" size="30" />
                     </graphic>
                 </JFXButton>
-            <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openSetting" prefHeight="120.0" prefWidth="246.0" text="  Log Out" textFill="WHITE">
-               <font>
-                  <Font size="20.0" />
-               </font>
-               <padding>
-                  <Insets left="50.0" />
-               </padding>
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="POWER_OFF" size="30" />
-               </graphic>
-            </JFXButton>
             </children>
         </VBox>
         <Pane layoutX="242.0" prefHeight="93.0" prefWidth="1127.0" stylesheets="@../art/dashboard.css">
