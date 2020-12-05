@@ -20,13 +20,13 @@
         <VBox layoutX="-4.0" layoutY="-4.0" prefHeight="775.0" prefWidth="246.0" styleClass="VBox" stylesheets="@../art/dashboard.css">
             <children>
                 <Pane prefHeight="220.0" prefWidth="410.0">
-               <children>
+                    <children>
                         <ImageView fitHeight="93.0" fitWidth="227.0" layoutX="9.0" layoutY="40.0">
                             <image>
                                 <Image url="@../art/MMlogo.png" />
                             </image>
                         </ImageView>
-               </children></Pane>
+                    </children></Pane>
                 <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openClassroom" prefHeight="121.0" prefWidth="246.0" text="  Classrooms" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
@@ -52,17 +52,17 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="GEAR" size="30" />
                     </graphic>
                 </JFXButton>
-            <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openSetting" prefHeight="120.0" prefWidth="246.0" text="  Log Out" textFill="WHITE">
-               <font>
-                  <Font size="20.0" />
-               </font>
-               <padding>
-                  <Insets left="50.0" />
-               </padding>
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="POWER_OFF" size="30" />
-               </graphic>
-            </JFXButton>
+                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openSetting" prefHeight="120.0" prefWidth="246.0" text="  Log Out" textFill="WHITE">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets left="50.0" />
+                    </padding>
+                    <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="POWER_OFF" size="30" />
+                    </graphic>
+                </JFXButton>
             </children>
         </VBox>
         <Pane layoutX="242.0" prefHeight="93.0" prefWidth="1127.0" stylesheets="@../art/dashboard.css">
@@ -72,14 +72,14 @@
                         <Font name="Yu Gothic UI Regular" size="39.0" />
                     </font>
                 </Text>
-            <JFXButton fx:id="openHelp" buttonType="RAISED" layoutX="982.0" layoutY="27.0" onAction="#openHelp" prefHeight="50.0" prefWidth="115.0" text="Help" textFill="WHITE">
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="QUESTION_CIRCLE" size="25" />
-               </graphic>
-               <font>
-                  <Font name="Yu Gothic UI Semibold" size="18.0" />
-               </font>
-            </JFXButton>
+                <JFXButton fx:id="openHelp" buttonType="RAISED" layoutX="982.0" layoutY="27.0" onAction="#openHelp" prefHeight="50.0" prefWidth="115.0" text="Help" textFill="WHITE">
+                    <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="QUESTION_CIRCLE" size="25" />
+                    </graphic>
+                    <font>
+                        <Font name="Yu Gothic UI Semibold" size="18.0" />
+                    </font>
+                </JFXButton>
             </children>
         </Pane>
         <TableView fx:id="classroomtable" layoutX="242.0" layoutY="120.0" onMouseClicked="#handleRowSelect" prefHeight="651.0" prefWidth="833.0" stylesheets="@../art/dashboard.css">
@@ -88,41 +88,41 @@
                 <TableColumn fx:id="namecolumn" minWidth="0.0" prefWidth="606.0" text="Classroom name" />
             </columns>
         </TableView>
-      <Pane layoutX="1060.0" layoutY="120.0" prefHeight="651.0" prefWidth="309.0" style="-fx-background-color: #ffffff; -fx-border-color: #e4e4e4;">
-         <children>
-            <JFXButton layoutX="58.0" layoutY="266.0" onAction="#addClassroom" prefHeight="41.0" prefWidth="182.0" styleClass="addButton" text="Add Classroom" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="20.0" />
-               </font>
-            </JFXButton>
-            <JFXTextField fx:id="classroomname" layoutX="34.0" layoutY="179.0" prefHeight="50.0" prefWidth="230.0" promptText="Enter name" style="-fx-background-color: #ffffff;">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </JFXTextField>
-            <Text fill="#404040" layoutX="35.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Classroom name:" wrappingWidth="178.50001215934753">
-               <font>
-                  <Font name="Yu Gothic UI Regular" size="21.0" />
-               </font>
-            </Text>
-            <JFXTextField fx:id="classroomid" layoutX="35.0" layoutY="54.0" prefHeight="50.0" prefWidth="227.0" promptText="Enter id" style="-fx-background-color: #ffffff;">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </JFXTextField>
-            <Text fill="#404040" layoutX="35.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Classroom id:" wrappingWidth="156.9669189453125">
-               <font>
-                  <Font name="Yu Gothic UI Regular" size="21.0" />
-               </font>
-            </Text>
-            <Label fx:id="preExistingID" layoutX="47.0" layoutY="317.0" prefHeight="17.0" prefWidth="203.0" textFill="RED">
-               <font>
-                  <Font name="Yu Gothic UI Regular" size="12.0" />
-               </font>
-            </Label>
-         </children>
-      </Pane>
-      <Text layoutX="397.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1.0" />
-      <Text fill="WHITE" layoutX="265.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double click to view classroom details." wrappingWidth="689.30029296875" />
+        <Pane layoutX="1060.0" layoutY="120.0" prefHeight="651.0" prefWidth="309.0" style="-fx-background-color: #ffffff; -fx-border-color: #e4e4e4;">
+            <children>
+                <JFXButton layoutX="58.0" layoutY="266.0" onAction="#addClassroom" prefHeight="41.0" prefWidth="182.0" styleClass="addButton" text="Add Classroom" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="20.0" />
+                    </font>
+                </JFXButton>
+                <JFXTextField fx:id="classroomname" layoutX="34.0" layoutY="179.0" prefHeight="50.0" prefWidth="230.0" promptText="Enter name" style="-fx-background-color: #ffffff;">
+                    <font>
+                        <Font size="19.0" />
+                    </font>
+                </JFXTextField>
+                <Text fill="#404040" layoutX="35.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Classroom name:" wrappingWidth="178.50001215934753">
+                    <font>
+                        <Font name="Yu Gothic UI Regular" size="21.0" />
+                    </font>
+                </Text>
+                <JFXTextField fx:id="classroomid" layoutX="35.0" layoutY="54.0" prefHeight="50.0" prefWidth="227.0" promptText="Enter id" style="-fx-background-color: #ffffff;">
+                    <font>
+                        <Font size="19.0" />
+                    </font>
+                </JFXTextField>
+                <Text fill="#404040" layoutX="35.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Classroom id:" wrappingWidth="156.9669189453125">
+                    <font>
+                        <Font name="Yu Gothic UI Regular" size="21.0" />
+                    </font>
+                </Text>
+                <Label fx:id="preExistingID" layoutX="47.0" layoutY="317.0" prefHeight="17.0" prefWidth="203.0" textFill="RED">
+                    <font>
+                        <Font name="Yu Gothic UI Regular" size="12.0" />
+                    </font>
+                </Label>
+            </children>
+        </Pane>
+        <Text layoutX="397.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1.0" />
+        <Text fill="WHITE" layoutX="265.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double click to view classroom details." wrappingWidth="689.30029296875" />
     </children>
 </AnchorPane>
