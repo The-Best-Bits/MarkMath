@@ -1,6 +1,7 @@
 package Server;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import markmath.controllers.ParsedDataPerAssignment;
 import markmath.controllers.ParsedDataPerAssignmentManager;
 
 import java.util.*;
@@ -8,56 +9,80 @@ import java.util.*;
 
 public class CheckMathParser {
     /**The CheckMathParser Controller Class
-     * Responsible for parsing the data received by SocketIOServer. For each results event received by SocketIOServer,
-     * CheckMathParser will parse the event for the student name, assignment type, document name, problem number, and
-     * number of errors
+     * Responsible for parsing and combining all of the "result" event data received by SocketIOServer from a single
+     * Hypatia document.
      * Attributes:
-     * docnameParser: the docname parsing algorithm used for this CheckMathParser
-     * parsedDataManager: manages the parsed data of a CheckMathParser object
+     * docnameParser: the docname parsing algorithm used for this CheckMathParser (docname is the name of the Hypatia
+     * document sent through all "result" events for this Hypatia document)
+     * assignmentname: name of this document (equivalent to docname)
+     * assignmentType: the type of assignment the document belongs to (contained in docname)
+     * studentNum: the student number of the student who this Hypatia document belongs to (contained in docname)
      */
 
-    private static ParsedDataPerAssignmentManager parsedDataManager = new ParsedDataPerAssignmentManager();
     private DocumentNameParsingAlgorithm docNameParser;
+    private String assignmentName;
+    private String assignmentType;
+    private String studentNum;
+    private HashMap<String, Integer> finalParsedData;
 
 
-    /*set the docname parsing algorithm to ParseByDash by default. This means that the student documents
-    must be of the form StudentName-AssignmentType (spaces are allowed)*/
+    /**
+     * When a CheckMathParser object is instantiated, the docname parsing algorithm is set to ParseByDash by default.
+     * This means that the student document being marked must be of the form StudentNumber-AssignmentType
+     * (spaces are allowed)
+     */
     public CheckMathParser(){
         docNameParser = new ParseByDash();
+        finalParsedData = new HashMap<>();
     }
+
+
     /**
-     * Takes in the JSON String data from the results event caught by the SocketIOServer and
-     * parses it for the students name, assignment type, document name, problem number, and number of errors.
-     * These 'attributes' of the results event are formatted in an ArrayList with keys studentName, assignmentType,
-     * documentName, problemNumber, and numErrors
-     * Note: value associated with key numErrors will only ever be 0 or 1, as each results event is associated to one
-     * error, not all of the errors from that expression event
+     * Sets the String attributes of this CheckMathParser object (Assignment Name, Assignment Type, Student Number)
+     * using data (the first received "result" event from an opened Hypatia document). The question number and amount of
+     * errors for this question as given data is also recorded in finalParsedData
      * @param data JSON String data from SocketIOServer
      * @throws JsonProcessingException Library Jackson is used to covert the JSON String to a HashMap. When there is an
      * error in processing the JSON String in ObjectMapper().readValue() method this exception is thrown.
      *
      */
-    public void parseResult(String data) throws JsonProcessingException {
-
+    public void parseFirstResultEvent(String data) throws JsonProcessingException {
         //instantiate new HashMap from JSON String using jackson library
         Map<String, Object> tempResultsMap = new ObjectMapper().readValue(data, HashMap.class);
 
-        //instantiate and add key-value pairs to a new HashMap
-        HashMap<String, Object> resultsData = new HashMap<>();
         try{
             ArrayList<String> docInfo = docNameParser.getDocNameInfo((String)tempResultsMap.get("docname"));
-            resultsData.put("studentNum", docInfo.get(0));
-            resultsData.put("assignmentType", docInfo.get(1));
-            resultsData.put("documentName", docInfo.get(2));
-            resultsData.put("problemNumber", tempResultsMap.get("problem"));
-            resultsData.put("numErrors", checkForErrors((LinkedHashMap)tempResultsMap.get("value")));
+            this.studentNum = docInfo.get(0);
+            this.assignmentType = docInfo.get(1);
+            this.assignmentName = docInfo.get(2);
+            String question = ("question" + (int)tempResultsMap.get("problem"));
+            this.finalParsedData.put(question, checkForErrors((LinkedHashMap)tempResultsMap.get("value")));
 
-            //temporarily prints the resultsData HashMap
-            System.out.println(resultsData);
-            parsedDataManager.manageParsedData(resultsData);
+            System.out.println( assignmentName + assignmentType + studentNum + finalParsedData);
 
         }catch(InvalidDocumentNameException e){
             System.out.println("Invalid Document Name");
+        }
+
+    }
+
+
+    /**
+     * Adds new "result" event data received from the SocketIOServer to finalParsedData. If the new results data corresponds
+     * to a question already in finalParsedData we update the amount of errors for this question. If the opposite is true
+     * we add a new question with the corresponding amount of errors from the received results data to finalParsedData
+     * @param data new "result" event data received from SocketIOServer
+     */
+    public void addParsedData(String data) throws JsonProcessingException{
+        //instantiate new HashMap from JSON String using jackson library
+        Map<String, Object> tempResultsMap = new ObjectMapper().readValue(data, HashMap.class);
+        String receivedQuestion = "question" + (int)tempResultsMap.get("problem");
+        if (finalParsedData.containsKey(receivedQuestion)) {
+            int old_errors = finalParsedData.get(receivedQuestion);
+            finalParsedData.replace(receivedQuestion, old_errors + checkForErrors((LinkedHashMap)tempResultsMap.get("value")));
+        }
+        else{
+            finalParsedData.put(receivedQuestion,checkForErrors((LinkedHashMap)tempResultsMap.get("value")));
         }
 
     }
@@ -76,8 +101,38 @@ public class CheckMathParser {
         }
     }
 
-    //added November 15
-    public static ParsedDataPerAssignmentManager getParsedDataManager(){
-        return parsedDataManager;
+    /**
+     * Clears finalParsedData. After a student document has been marked this method is called.
+     */
+    public void clearCheckMathParser(){
+        this.finalParsedData.clear();
+    }
+
+    /**
+     * @return assignmentName
+     */
+    public String getAssignmentName(){
+        return this.assignmentName;
+    }
+
+    /**
+     * @return assignmentType
+     */
+    public String getAssignmentType(){
+        return this.assignmentType;
+    }
+
+    /**
+     * @return studentNum
+     */
+    public String getStudentNum(){
+        return this.studentNum;
+    }
+
+    /**
+     * @return finalParsedData
+     */
+    public HashMap<String, Integer> getFinalParsedData(){
+        return this.finalParsedData;
     }
 }

@@ -21,6 +21,7 @@ public class SocketIOServer {
     final private com.corundumstudio.socketio.SocketIOServer server;
     private SocketIOClient client;
     private boolean parseResultsEvents;
+    private CheckMathParser parser;
 
     /**
      * When a new SocketIOServer is instantiated it is configured to listen on port 3333.
@@ -31,6 +32,7 @@ public class SocketIOServer {
         config.setPort(3333);
         server = new com.corundumstudio.socketio.SocketIOServer(config);
         parseResultsEvents = false;
+        parser = new CheckMathParser();
 
         // once Hypatia is connected to the server this method will be run
         server.addConnectListener(new ConnectListener() {
@@ -45,8 +47,8 @@ public class SocketIOServer {
     }
 
     /**
-     * Server will start listening for results events emmitted by Hypatia. These results events will only be parsed
-     * if parseResultsEvents is true
+     * Server will start listening for "result" events emitted by Hypatia. These "result" events will only be parsed
+ * if  is true
      */
     public void start(){
 
@@ -57,8 +59,15 @@ public class SocketIOServer {
             public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
                 if (parseResultsEvents) {
                     System.out.println("Client Results" + s);
-                    CheckMathParser temp = new CheckMathParser();
-                    temp.parseResult(s);
+
+                    if (parser.getFinalParsedData().isEmpty()){
+                        System.out.println("Test");
+                        parser.parseFirstResultEvent(s);
+                        System.out.println("test 2");
+                    }
+                    else{
+                        parser.addParsedData(s);
+                    }
                 }
             }
         });
@@ -83,6 +92,14 @@ public class SocketIOServer {
             System.out.println("Event sent");
         }
 
+    }
+
+    /**
+     * Returns this SocketIOServer's CheckMathParser
+     * @return parser
+     */
+    public CheckMathParser getparser() {
+        return this.parser;
     }
 
 }
