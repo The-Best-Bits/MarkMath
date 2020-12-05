@@ -58,7 +58,6 @@ public class UseCaseTests {
         Assert.assertEquals((int)carbonCopy.getFullMark(), 22);
     }
 
-    //need to test matchBundle
 
     //MarkingCalculator Tests
     @Test

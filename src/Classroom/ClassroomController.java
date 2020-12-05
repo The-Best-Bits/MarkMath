@@ -274,16 +274,6 @@ public class ClassroomController<MyType> implements Initializable {
     }
 
     @FXML
-    void openPeople(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/People/People.fxml"));
-        Scene mainPage = new Scene(mainPageParent);
-
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(mainPage);
-        stage.show();
-    }
-
-    @FXML
     void openSetting(ActionEvent event) throws IOException {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Settings/Settings.fxml"));
         Scene mainPage = new Scene(mainPageParent);
@@ -430,27 +420,24 @@ public class ClassroomController<MyType> implements Initializable {
 
         String curr_class = this.classroomID;
         String sqlInsert = "INSERT INTO AssignmentBundles(assignmentbundle_id, assignment_name, classroom_id) VALUES (?,?,?)";
-        if (assignmentBundleInClassroom(received_id)){
-            errorCreatingAssignment.setText("This Assignment's id already exists.");
-        }
-        else if  (assignmentBundleNameInClassroom(assignment.getName())){
-            errorCreatingAssignment.setText("This Assignment's name already exists.");
-        }
-        else{
-            try{
-
+        try {
+            if (assignmentBundleInClassroom(received_id)) {
+                errorCreatingAssignment.setText("This Assignment's id already exists.");
+            } else if (classroomModel.assignmentBundleNameInClassroom(assignment.getName(), this.classroomID)) {
+                errorCreatingAssignment.setText("This Assignment's name already exists.");
+            } else {
                 Connection conn = dbConnection.getConnection();
                 int received_id_int = Integer.parseInt(received_id);
-               // ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM assignmentBundles");
+                // ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM assignmentBundles");
                 PreparedStatement stmt = conn.prepareStatement(sqlInsert);
                 stmt.setInt(1, received_id_int);
                 stmt.setString(2, assignment.getName());
                 stmt.setString(3, curr_class);
                 stmt.execute();
                 conn.close();
-            }catch(SQLException e){
-                System.out.println("Error" + e);
             }
+        }catch (SQLException e){
+            System.out.println("Error" + e);
         }
         }
 
@@ -482,10 +469,6 @@ public class ClassroomController<MyType> implements Initializable {
         return fieldData;
 
     }
-
-
-
-
 
 
     //Luca's
@@ -529,13 +512,15 @@ public class ClassroomController<MyType> implements Initializable {
             System.out.println(parser.getFinalParsedData());
             //check that the student exists in this classroom
             //check that there is a corresponding assignment bundle in this classroom
-            if (!studentInClassroom(parser.getStudentNum()) || !assignmentBundleNameInClassroom(parser.getAssignmentType())) {
+            if (!classroomModel.studentIsInClass(parser.getStudentNum(), this.classroomID)
+                    || !classroomModel.assignmentBundleNameInClassroom(parser.getAssignmentType(), this.classroomID)) {
                 this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with this student document is not in this classroom");
             } else {
                 //get assignment outline
-                AssignmentOutline outline = getAssignmentOutline(parser.getAssignmentType());
+                AssignmentOutline outline = classroomModel.getAssignmentOutline(parser.getAssignmentType(),
+                        this.classroomID);
                 //get student name
-                String studentName = getStudentNameFromDatabase(parser.getStudentNum());
+                String studentName = classroomModel.getStudentNameFromDatabase(parser.getStudentNum());
                 StudentAssignmentManager saManager = new StudentAssignmentManager(parser.getStudentNum(), studentName,
                         parser.getAssignmentName(), parser.getAssignmentType(), parser.getFinalParsedData(), outline);
                 saManager.markAllQuestions();
@@ -548,232 +533,77 @@ public class ClassroomController<MyType> implements Initializable {
             parser.clearCheckMathParser();
             System.out.println("test" + parser.getFinalParsedData().isEmpty());
 
-        }catch(InterruptedException e){
+        }catch(Exception e){
             System.out.println("Error" + e);
         }
 
     }
 
-    /**
-     * Helper function to markStudentAssignment. Differs from assignmentBundleInClassroom as this method checks if
-     * there exists an assignmentbundle with the given name in this classroom. Because assignmentbundle names are unique
-     * in a classroom this is a valid approach to search if an assignmentBundle is in a classroom. When marking a Hypatia
-     * document we do not have the assignment bundle ID, we only have the assignment bundle name.
-     * @param assignmentType Name of the assignmentbundle
-     * @return True iff this classroom contains an assignmentbundle with this name
-     */
-    private Boolean assignmentBundleNameInClassroom(String assignmentType){
-        try{
-            Connection conn = dbConnection.getConnection();
-            ResultSet rs = conn.createStatement().executeQuery("SELECT assignment_name FROM AssignmentBundles WHERE classroom_id =" + this.classroomID);
-            while (rs.next()){
-                if(rs.getString("assignment_name").equals(assignmentType)){
-                    conn.close();
-                    return true;
-                }
-            }
-            conn.close();
-            return false;
-
-        }catch(SQLException e){
-                System.out.println("Assignment bundle name in classroom");
-            System.out.println("Error" + e);
-        }
-
-        return false;
-    }
 
     /**
-     * Helper function to markStudentAssignment
-     * @param studentNum StudentID of a student
-     * @return True iff there exists a student in this classroom with the given studentID
-     */
-    private Boolean studentInClassroom(String studentNum){
-
-        try{
-            Connection conn = dbConnection.getConnection();
-            String sql = "SELECT * FROM students WHERE student_id = " + studentNum +
-                    " AND CHARINDEX(':" + this.classroomID + ":', class_id) > 0";
-            ResultSet rs = conn.createStatement().executeQuery(sql);
-            Boolean result = rs.next();
-            rs.close();
-            conn.close();
-            return result;
-
-        }catch(SQLException e){
-            System.out.println("Student in classroom");
-            System.out.println("Error" + e);
-            return false;
-        }
-    }
-
-
-    /**
-     * Helper function to markStudentAssignment
-     * @param assignmentType Name of the assignmentbundle
-     * @return the assignmentoutline of the assignmentbundle with the give name
-     */
-    private AssignmentOutline getAssignmentOutline(String assignmentType){
-
-        String assignmentBundleID = getIDOfAssignmentBundle(assignmentType);
-
-        try{
-            Connection conn = dbConnection.getConnection();
-            String sqlQuery = "SELECT * FROM '" + assignmentBundleID + "' ORDER BY ROWID ASC LIMIT 1";
-            System.out.println(sqlQuery);
-            ResultSet rs = conn.createStatement().executeQuery(sqlQuery);
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int numColumns = rsmd.getColumnCount();
-            HashMap<String, Float> questionToMarks = new HashMap<>();
-            System.out.println(numColumns);
-            for (int i =1; i <= numColumns-4; i++){
-                String question = "question" + i;
-                questionToMarks.put(question, rs.getFloat(question));
-            }
-            conn.close();
-            AssignmentOutline outline = new AssignmentOutline(assignmentType, questionToMarks);
-            return outline;
-        }catch(SQLException e){
-            System.out.println("Get Assignment Outline");
-            System.out.println("Error" + e);
-        }
-
-        return null;
-    }
-
-    /**
-     * Helper function to markStudentAssignment
-     * @param assignmentBundleName
-     * @return ID of the assignmentbundle with the given name in this classroom
-     * Note: There is only ever one assignmentbundle with a given name in a classroom, so there can only be one ID
-     * returned
-     */
-    private String getIDOfAssignmentBundle(String assignmentBundleName){
-        try{
-            Connection conn = dbConnection.getConnection();
-            String sql = "SELECT assignmentbundle_id FROM AssignmentBundles WHERE assignment_name = '"
-                    + assignmentBundleName + "'"+ " AND classroom_id ='" + this.classroomID + "'";
-            System.out.println(sql);
-            ResultSet rs = conn.createStatement().executeQuery(sql);
-            System.out.println(rs.next());
-            System.out.println(this.classroomID);
-            String result = rs.getString("assignmentbundle_id");
-            System.out.println(result);
-            rs.close();
-            conn.close();
-            return result;
-
-        }catch(SQLException e){
-            System.out.println("Get Assignment bundle ID");
-            System.out.println("Error" + e);
-        }
-        return null;
-    }
-
-
-    /**
-     * Helper function to markStudentAssignment
-     * @param studentNum StudentID of a student in this classroom
-     * @return Name of the student with this StudentID
-     */
-    private String getStudentNameFromDatabase(String studentNum){
-        try{
-            Connection conn = dbConnection.getConnection();
-            String sqlQuery = "SELECT student_name FROM students WHERE student_id = " + studentNum;
-            ResultSet rs = conn.createStatement().executeQuery(sqlQuery);
-            String studentName = rs.getString("student_name");
-            conn.close();
-            return studentName;
-        }
-        catch(SQLException e){
-            System.out.println("Error" + e);
-        }
-        return null;
-    }
-
-    /**
-     * Helper function to markStudentAssignment
-     * Adds a student's assignment to the database in the corresponding assignmentbundle table
+     * Adds a student's assignment to the database in the corresponding assignmentbundle table. This method does not
+     * connect with the database but rather calls the addStudentAssignmentToDatabaseModel method in ClassroomModel
      * @param assignment StudentAssignment that has been marked
      */
     private void addStudentAssignmentToDatabase(StudentAssignment assignment){
-        //make helper method
-        String assignmentBundleID = getIDOfAssignmentBundle(assignment.getAssignmentType());
-
-        int numQuestions = assignment.getQuestions().size();
-        StringBuilder questions = new StringBuilder();
-        StringBuilder questionMarks = new StringBuilder("(?,?,?,?");
-        for (int i =1; i<=numQuestions; i++){
-            questions.append(", question").append(i);
-            questionMarks.append(",?");
-        }
-        questions.append(", total)");
-        questionMarks.append(")");
-        String sqlInsert = "";
-        boolean studentAssignmentInDatabase = false;
-        //check if student assignment is already in database
-        if (studentAssignmentInDatabase(assignment.getStudentID(), assignment.getAssignmentType())){
-            studentAssignmentInDatabase = true;
-            StringBuilder sqlUpdate = new StringBuilder("UPDATE '" + assignmentBundleID + "' SET ");
-            int q =1;
-            while(q<= numQuestions){
-                sqlUpdate.append("question" + q + "=" + assignment.getQuestion(q).getFinalMark() + ", ");
-                q+=1;
-            }
-            sqlUpdate.append("total =").append(assignment.getFinalMark());
-            sqlUpdate.append(" WHERE student_id=" + assignment.getStudentID());
-            sqlInsert = sqlUpdate.toString();
-        }
-        else {
-             sqlInsert = "INSERT INTO '" + assignmentBundleID + "'(student_id, student_name, document_name"
-                    + questions + " VALUES " + questionMarks;
-        }
-        System.out.println(sqlInsert);
         try{
-            Connection conn = dbConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sqlInsert);
-            if(!studentAssignmentInDatabase) {
-                stmt.setString(1, assignment.getStudentID());
-                stmt.setString(2, assignment.getStudentName());
-                stmt.setString(3, assignment.getAssignmentName());
-                int q = 1;
-                while (q <= numQuestions) {
-                    stmt.setFloat(q + 3, assignment.getQuestion(q).getFinalMark());
-                    q += 1;
-                }
-                stmt.setFloat(q + 3, assignment.getFinalMark());
-            }
-            stmt.execute();
-            conn.close();
-
-        }catch(SQLException e){
-            System.out.println("Add Student assignment to database");
+        String sqlInsert = createQuery(assignment);
+        boolean inDatabase = classroomModel.studentAssignmentInDatabase(assignment.getStudentID(),
+                assignment.getAssignmentType(), this.classroomID);
+        System.out.println(sqlInsert);
+        this.classroomModel.addStudentAssignmentToDatabaseModel(sqlInsert, assignment, inDatabase);
+        }catch (SQLException e){
             System.out.println("Error" + e);
         }
+
     }
 
     /**
-     * Helper function to markStudentAssignment
-     * @param studentNum StudentID of a student
-     * @param assignmentType Name of an assignmentbundle in this classroom
-     * @return True iff there already exists an assignment in the given assignment bundle in this classroom for a
-     * student with the given studentID
+     * Helper function to addStudentAssignmentToDatabase. Creates the SQL Query to be executed to add the assignment to the database.
+     * If the assignment is already in the table of the assignment bundle it belongs to (i.e it has already been marked)
+     * , then we will update the information in the database. Otherwise we will insert the data in a new row
+     * (as this assignment has not been marked yet)
+     * @param assignment StudentAssignment
+     * @return SQL Query to be executed
      */
-    private Boolean studentAssignmentInDatabase(String studentNum, String assignmentType){
-        String assignmentbundleID = getIDOfAssignmentBundle(assignmentType);
-        try{
-            Connection conn = dbConnection.getConnection();
-            String sqlQuery = "SELECT student_name FROM '" + assignmentbundleID + "' WHERE student_id =" + studentNum;
-            ResultSet rs = conn.createStatement().executeQuery(sqlQuery);
-            if (rs.next()){
-                conn.close();
-                return true;
+    private String createQuery(StudentAssignment assignment){
+
+        String sqlInsert = "";
+        try {
+            String assignmentBundleID = classroomModel.getIDOfAssignmentBundle(assignment.getAssignmentType(),
+                    this.classroomID);
+            int numQuestions = assignment.getQuestions().size();
+            StringBuilder questions = new StringBuilder();
+            StringBuilder questionMarks = new StringBuilder("(?,?,?,?");
+            for (int i = 1; i <= numQuestions; i++) {
+                questions.append(", question").append(i);
+                questionMarks.append(",?");
             }
-            conn.close();
-            return false;
+            questions.append(", total)");
+            questionMarks.append(")");
+            //check if student assignment is already in database
+            if (classroomModel.studentAssignmentInDatabase(assignment.getStudentID(), assignment.getAssignmentType(),
+                    this.classroomID)) {
+                StringBuilder sqlUpdate = new StringBuilder("UPDATE '" + assignmentBundleID + "' SET ");
+                int q = 1;
+                while (q <= numQuestions) {
+                    sqlUpdate.append("question" + q + "=" + assignment.getQuestion(q).getFinalMark() + ", ");
+                    q += 1;
+                }
+                sqlUpdate.append("total =").append(assignment.getFinalMark());
+                sqlUpdate.append(" WHERE student_id=" + assignment.getStudentID());
+                sqlInsert = sqlUpdate.toString();
+            } else {
+                sqlInsert = "INSERT INTO '" + assignmentBundleID + "'(student_id, student_name, document_name"
+                        + questions + " VALUES " + questionMarks;
+            }
+
         }catch(SQLException e){
             System.out.println("Error" + e);
         }
-        return false;
+
+        return sqlInsert;
     }
+
+
 }
