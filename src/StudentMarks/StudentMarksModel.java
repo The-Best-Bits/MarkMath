@@ -140,6 +140,30 @@ public class StudentMarksModel {
         }
     }
 
+    public boolean studentDidAssignment(String studentID, String assignmentID) throws Exception {
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT * FROM '" + assignmentID + "' WHERE student_id = '" + studentID + "'";
+
+        try {
+            stmt = this.connection.createStatement();
+            rs = stmt.executeQuery(sql);
+            return (rs.next());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (rs != null) {
+                rs.close();
+            }
+        }
+    }
+
     public String getTotalMark(String studentID, String assignmentID) throws Exception {
         Statement stmt = null;
         ResultSet rs = null;

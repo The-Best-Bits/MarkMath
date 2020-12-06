@@ -94,12 +94,11 @@ public class StudentMarksController<MyType> {
 
             ArrayList<String> assignmentsInClass = studentMarksModel.getAssignmentsInClass(this.classroomID);
 
-            for (String assignment: assignmentsInClass) {
-                String assignment_id = assignment;
-                String assignment_name = studentMarksModel.getAssignmentName(assignment);
-                if (studentMarksModel.tableExists(assignment_id)) {
-                    String totalMark = studentMarksModel.getTotalMark(studentID, assignment_id);
-                    this.marksData.add(new MarksData(assignment_id, assignment_name, totalMark));
+            for (String assignmentID: assignmentsInClass) {
+                String assignment_name = studentMarksModel.getAssignmentName(assignmentID);
+                if (studentMarksModel.tableExists(assignmentID) && studentMarksModel.studentDidAssignment(studentID, assignmentID)) {
+                    String totalMark = studentMarksModel.getTotalMark(studentID, assignmentID);
+                    this.marksData.add(new MarksData(assignmentID, assignment_name, totalMark));
                 }
             }
         } catch (Exception e) {
