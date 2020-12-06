@@ -72,11 +72,7 @@
                   <Font size="17.0" />
                </font>
             </JFXButton>
-            <Label fx:id="errorMarkingStudentAssignment" layoutX="560.0" layoutY="25.0" prefHeight="50.0" prefWidth="198.0" textFill="#ff5454">
-               <font>
-                  <Font size="26.0" />
-               </font>
-            </Label>
+            <Label fx:id="errorMarkingStudentAssignment" layoutX="435.0" layoutY="27.0" prefHeight="50.0" prefWidth="436.0" textFill="#ff5454" />
             <JFXButton fx:id="openHelp" buttonType="RAISED" layoutX="1066.0" layoutY="25.0" onAction="#openHelp" prefHeight="50.0" prefWidth="94.0" text="Help" textFill="WHITE">
                <graphic>
                   <FontAwesomeIconView fill="WHITE" glyphName="QUESTION_CIRCLE" size="25" />
