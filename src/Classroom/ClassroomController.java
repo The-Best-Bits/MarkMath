@@ -30,6 +30,8 @@ import markmath.entities.AssignmentOutline;
 import markmath.entities.StudentAssignment;
 import markmath.usecases.StudentAssignmentManager;
 import Classroom.ClassroomModel;
+import StudentMarks.StudentMarksController;
+
 
 import java.io.IOException;
 import java.net.URL;
@@ -46,13 +48,19 @@ public class ClassroomController<MyType> implements Initializable {
     private Text classroom_name;
 
     @FXML
+    public TabPane tab_pane;
+
+    @FXML
+    private Pane student_id_pane;
+
+    @FXML
+    private Pane student_name_pane;
+
+    @FXML
     private JFXTextField student_id;
 
     @FXML
     private JFXTextField student_name;
-
-    @FXML
-    private Label addStudentError;
 
     @FXML
     private Label studentNameError;
@@ -213,7 +221,7 @@ public class ClassroomController<MyType> implements Initializable {
 
 
     @FXML
-    private void loadStudentData() throws SQLException {
+    private void loadStudentData() throws Exception {
         try {
             Connection conn = dbConnection.getConnection();
             this.student_data = FXCollections.observableArrayList();
@@ -232,15 +240,19 @@ public class ClassroomController<MyType> implements Initializable {
 
         this.student_table.setItems(null);
         this.student_table.setItems(this.student_data);
+        this.student_id_pane.toFront();
     }
 
+    /**
+     * Adds student to classroom, and clears fields.
+     * @param event user clicks add student button on the addStudentIDPane.
+     * @throws Exception
+     */
     @FXML
-    void addStudent(ActionEvent event) throws Exception {
+    void addStudentWithID(ActionEvent event) throws Exception {
         this.studentIDError.setText("");
         this.studentNameError.setText("");
-        this.addStudentError.setText("");
         String studentID = this.student_id.getText().trim();
-        String studentName = this.student_name.getText().trim();
         String classID = this.classroomID.trim();
 
         if (studentID.isEmpty()) {
@@ -249,18 +261,129 @@ public class ClassroomController<MyType> implements Initializable {
             return;
         }
 
+        if (classroomModel.studentIsInDatabase(studentID)) {
+            if (classroomModel.studentIsInClass(studentID, classID)) {
+                this.studentNameError.setText("This student is already in the class.");
+            } else {
+                this.classroomModel.addStudentToClass(studentID, classID);
+                this.student_id.setText("");
+                this.loadData();
+            }
+        } else {
+            this.student_name_pane.toFront();
+        }
+    }
+
+    /**
+     * Adds student to classroom and to database, and clears fields and goes to the addStudentIDPane.
+     * @param event user clicks add student button on the addStudentNamePane.
+     * @throws Exception
+     */
+    @FXML
+    void addStudentWithName(ActionEvent event) throws Exception{
+        this.studentIDError.setText("");
+        this.studentNameError.setText("");
+        String studentID = this.student_id.getText().trim();
+        String studentName = this.student_name.getText().trim();
+        String classID = this.classroomID.trim();
+
         if (studentName.isEmpty()) {
+            System.out.println("hi");
             this.studentNameError.setText("This field cannot be empty.");
             return;
         }
 
-        boolean a = classroomModel.addStudentToClass(studentID, studentName, classID);
+        this.classroomModel.addStudentToDatabase(studentID, studentName);
+        this.classroomModel.addStudentToClass(studentID, classID);
+        this.loadData();
+        this.studentIDError.setText("");
+        this.studentNameError.setText("");
+        this.student_id.setText("");
+        this.student_name.setText("");
+        this.student_id_pane.toFront();
+    }
 
-        if (!a) {
-            this.addStudentError.setText("The student is already in the classroom.");
+    /**
+     * Goes back to the studentIDPane and clears fields
+     * @param event user clicks on back button
+     * @throws Exception
+     */
+    @FXML
+    void addStudentBack(ActionEvent event) throws Exception {
+        this.studentIDError.setText("");
+        this.studentNameError.setText("");
+        this.student_id.setText("");
+        this.student_name.setText("");
+        this.student_id_pane.toFront();
+    }
+
+    /**
+     * Removes student from classroom
+     * @param event user clicks on remove Student event
+     * @throws Exception
+     */
+    @FXML
+    void removeStudent(ActionEvent event) throws Exception {
+        this.studentIDError.setText("");
+        this.studentNameError.setText("");
+        String studentID = this.student_id.getText().trim();
+        String classID = this.classroomID.trim();
+
+        if (studentID.isEmpty()) {
+            this.studentIDError.setText("This field cannot be empty.");
+            return;
         }
 
-        this.loadData();
+        if (this.classroomModel.studentIsInClass(studentID, classID)) {
+            this.classroomModel.removeStudent(studentID, classID);
+            this.student_id.setText("");
+            this.loadData();
+        }
+    }
+
+    /**
+     * When a user clicks on a specific row (corresponding to a student), this method will open up a page for that
+     * specific student in that classroom that displays the grade breakdown for each assignment that the student completed.
+     */
+    @FXML
+    private void studentRowSelect() throws Exception {
+        //Detect double click
+        MyType row = (MyType) this.student_table.getSelectionModel().getSelectedItem();
+        if (row == null) return;
+        if (row != temp) {
+            temp = row;
+            lastClickTime = new Date();
+        } else if (row == temp) {
+            Date now = new Date();
+            long diff = now.getTime() - lastClickTime.getTime();
+            if (diff < 300) { //another click registered in 300 millis
+                //Load a page for the student
+                FXMLLoader Loader = new FXMLLoader();
+
+                Loader.setLocation(getClass().getResource("/StudentMarks/StudentMarks.fxml"));
+
+                try {
+                    Loader.load();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                StudentMarksController studentMarksController= Loader.getController();
+                studentMarksController.setStudentID(this.student_table.getSelectionModel().getSelectedItem().getID());
+                studentMarksController.setClassID(this.classroomID);
+                studentMarksController.loadPage();
+                Parent p = Loader.getRoot();
+                Scene scene = new Scene(p);
+
+                Stage stage = (Stage) student_table.getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
+
+            } else {
+                lastClickTime = new Date();
+            }
+        }
     }
 
     @FXML
@@ -514,8 +637,9 @@ public class ClassroomController<MyType> implements Initializable {
             //check that there is a corresponding assignment bundle in this classroom
             if (!classroomModel.studentIsInClass(parser.getStudentNum(), this.classroomID)
                     || !classroomModel.assignmentBundleNameInClassroom(parser.getAssignmentType(), this.classroomID)) {
-                this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with this student document is not in this classroom");
+                this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with\nthis student document is not in this classroom");
             } else {
+                this.errorMarkingStudentAssignment.setText("");
                 //get assignment outline
                 AssignmentOutline outline = classroomModel.getAssignmentOutline(parser.getAssignmentType(),
                         this.classroomID);
