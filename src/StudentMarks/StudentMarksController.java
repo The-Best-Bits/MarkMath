@@ -1,6 +1,7 @@
 package StudentMarks;
 
 import Classroom.ClassroomController;
+import MarkBreakdown.MarkBreakdownController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -54,7 +55,7 @@ public class StudentMarksController<MyType> {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
         Scene mainPage = new Scene(mainPageParent);
 
-        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(mainPage);
         window.show();
     }
@@ -97,11 +98,8 @@ public class StudentMarksController<MyType> {
                 String assignment_id = assignment;
                 String assignment_name = studentMarksModel.getAssignmentName(assignment);
                 if (studentMarksModel.tableExists(assignment_id)) {
-                    ArrayList<String> grades = studentMarksModel.getGradeBreakdown(studentID, assignment_id);
-                    if (!grades.isEmpty()) {
-                        String total_mark = grades.get(grades.size() - 1);
-                        this.marksData.add(new MarksData(assignment_id, assignment_name, total_mark));
-                    }
+                    String totalMark = studentMarksModel.getTotalMark(studentID, assignment_id);
+                    this.marksData.add(new MarksData(assignment_id, assignment_name, totalMark));
                 }
             }
         } catch (Exception e) {
@@ -136,7 +134,7 @@ public class StudentMarksController<MyType> {
                 //Load a page for the student
                 FXMLLoader Loader = new FXMLLoader();
 
-                Loader.setLocation(getClass().getResource("/StudentMarks/StudentMarkBreakdown.fxml"));
+                Loader.setLocation(getClass().getResource("/MarkBreakdown/MarkBreakdown.fxml"));
 
                 try {
                     Loader.load();
@@ -146,13 +144,11 @@ public class StudentMarksController<MyType> {
                 }
 
                 String assignment_id = this.marks_table.getSelectionModel().getSelectedItem().getAssignmentID();
-                ArrayList<String> grades = studentMarksModel.getGradeBreakdown(studentID, assignment_id);
-                StudentMarkBreakdownController studentMarkBreakdownController= Loader.getController();
-                studentMarkBreakdownController.setAssignmentID(assignment_id);
-                studentMarkBreakdownController.setStudentID(this.studentID);
-                studentMarkBreakdownController.setClassID(this.classroomID);
-                studentMarkBreakdownController.setGradeBreakdown(grades);
-                studentMarkBreakdownController.loadPage();
+                MarkBreakdownController markBreakdownController = Loader.getController();
+                markBreakdownController.setAssignmentID(assignment_id);
+                markBreakdownController.setStudentID(this.studentID);
+                markBreakdownController.setClassID(this.classroomID);
+                markBreakdownController.loadPage();
 
                 Parent p = Loader.getRoot();
                 Scene scene = new Scene(p);

@@ -1,6 +1,7 @@
 package Assignments;
 
 import Classroom.ClassroomController;
+import MarkBreakdown.MarkBreakdownController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import dbUtil.dbConnection;
@@ -45,9 +46,6 @@ public class AssignmentPageController<MyType> implements Initializable {
 
     @FXML
     private TableColumn<StudentAssignment, String> gradeColumn;
-
-    @FXML
-    private TableColumn<StudentAssignment, String> markColumn;
 
     @FXML
     private Text AssignmentName;
@@ -116,7 +114,6 @@ public class AssignmentPageController<MyType> implements Initializable {
         this.idColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentID"));
         this.nameColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentName"));
         this.gradeColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("finalMark"));
-        this.markColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("BreakdownString"));
         this.AssignmentName.setText(this.bundlename);
         this.AssignmentOutline.setText(this.outline+ ", Total: " + this.fullMark);
         this.AssignmentTable.setItems(null);
@@ -176,56 +173,43 @@ public class AssignmentPageController<MyType> implements Initializable {
     }
 
     @FXML
-    public void editMark() {
-        StudentAssignment curr = this.AssignmentTable.getSelectionModel().getSelectedItem();
-        MyType row = (MyType) curr;
-        if (row==null) return;
-        if (row!=temp) {
+    public void handleRowSelect() throws Exception {
+        MyType row = (MyType) this.AssignmentTable.getSelectionModel().getSelectedItem();
+        if (row == null) return;
+        if (row != temp) {
             temp = row;
-            lastClickTime = new Date();
-        }else{
-            Date now = new Date();
+            lastClickTime = new java.util.Date();
+        } else if (row == temp) {
+            java.util.Date now = new java.util.Date();
             long diff = now.getTime() - lastClickTime.getTime();
-            if (diff < 300){
-                Stage popup = new Stage();
-                popup.initModality(Modality.APPLICATION_MODAL);
-                popup.setTitle("Mark Editing");
-                Label label1 = new Label("CURRENT MARK:\n"+curr.getBreakdownString());
-                TextField field1 = new TextField();
-                field1.setPromptText("Enter Question ID as an integer (eg. 1)");
-                field1.setMaxWidth(250);
-                TextField field2 = new TextField();
-                field2.setPromptText("Enter Mark as a decimal (eg. 7.5)");
-                field2.setMaxWidth(250);
-                Label label2 = new Label();
-                Button button1 = new Button("Submit change");
+            if (diff < 300) { //another click registered in 300 millis
+                //Load a page for the student
+                FXMLLoader Loader = new FXMLLoader();
 
-                button1.setOnAction(e -> {
-                    if(isPositiveInteger(field1.getText()) & isPositiveFloat(field2.getText())){
-                        int qid = Integer.parseInt(field1.getText());
-                        float mark = Float.parseFloat(field2.getText());
-                        if(qid <= curr.getOutline().getQuestionToMarks().size() && mark <= curr.getOutline(
-                        ).getQuestionToMarks().get("question"+qid)){
-                            float NewTotal = curr.getFinalMark() - curr.getFinalMarkBreakdown().get("question"+qid) + mark;
-                            int stuid = Integer.parseInt(curr.getStudentID());
-                            try{
-                                PageModel.updateGradeData(qid, mark, NewTotal, stuid, this.bundleid);
-                                loadData();
-                                popup.close();
-                            }catch(SQLException exc){
-                                System.err.println("Error" + exc);}
-                        }else{
-                            label2.setText("Please enter valid values");}
-                    }else{
-                        label2.setText("Please enter valid values");}
-                });
+                Loader.setLocation(getClass().getResource("/MarkBreakdown/MarkBreakdown.fxml"));
 
-                VBox layout= new VBox(15);
-                layout.getChildren().addAll(label1, field1, field2, label2, button1);
-                layout.setAlignment(Pos.CENTER);
-                Scene scene1= new Scene(layout, 300, 250);
-                popup.setScene(scene1);
-                popup.showAndWait();
+                try {
+                    Loader.load();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                String studentID = this.AssignmentTable.getSelectionModel().getSelectedItem().getStudentID();
+
+                MarkBreakdownController markBreakdownController = Loader.getController();
+                markBreakdownController.setAssignmentID(this.bundleid);
+                markBreakdownController.setStudentID(studentID);
+                markBreakdownController.setClassID(this.classroomID);
+                markBreakdownController.loadPage();
+
+                Parent p = Loader.getRoot();
+                Scene scene = new Scene(p);
+
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.show();
+
             } else {
                 lastClickTime = new Date();
             }
@@ -250,8 +234,4 @@ public class AssignmentPageController<MyType> implements Initializable {
             return false;
         }
     }
-
-
-
-
 }
