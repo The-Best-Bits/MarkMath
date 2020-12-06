@@ -263,7 +263,7 @@ public class ClassroomController<MyType> implements Initializable {
 
         if (classroomModel.studentIsInDatabase(studentID)) {
             if (classroomModel.studentIsInClass(studentID, classID)) {
-                this.studentNameError.setText("This student is already in the class.");
+                this.studentIDError.setText("This student is already in the class.");
             } else {
                 this.classroomModel.addStudentToClass(studentID, classID);
                 this.student_id.setText("");

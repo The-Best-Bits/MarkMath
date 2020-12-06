@@ -23,7 +23,7 @@ public class StudentMarksModel {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT class_name FROM classrooms WHERE class_id = " + classID;
+        String sql = "SELECT class_name FROM classrooms WHERE class_id = '" + classID + "'";
 
         try {
             stmt = this.connection.createStatement();
@@ -48,7 +48,7 @@ public class StudentMarksModel {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT assignment_name FROM AssignmentBundles WHERE assignmentbundle_id = " + assignmentID;
+        String sql = "SELECT assignment_name FROM AssignmentBundles WHERE assignmentbundle_id = '" + assignmentID + "'";
 
         try {
             stmt = this.connection.createStatement();
@@ -73,7 +73,7 @@ public class StudentMarksModel {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT student_name FROM students WHERE student_id = " + studentID;
+        String sql = "SELECT student_name FROM students WHERE student_id = '" + studentID + "'";
 
         try {
             stmt = this.connection.createStatement();
