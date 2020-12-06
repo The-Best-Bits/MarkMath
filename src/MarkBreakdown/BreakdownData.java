@@ -1,11 +1,24 @@
-package StudentMarks;
+package MarkBreakdown;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class BreakdownData {
+    private final StringProperty possibleMark;
     private final StringProperty mark;
     private final StringProperty questionNumber;
+
+    public String getPossibleMark() {
+        return possibleMark.get();
+    }
+
+    public StringProperty possibleMarkProperty() {
+        return possibleMark;
+    }
+
+    public void setPossibleMark(String possibleMark) {
+        this.possibleMark.set(possibleMark);
+    }
 
     public String getQuestionNumber() {
         return questionNumber.get();
@@ -31,8 +44,9 @@ public class BreakdownData {
         this.mark.set(mark);
     }
 
-    public BreakdownData(String questionNumber, String mark) {
+    public BreakdownData(String questionNumber, String mark, String possibleMark) {
         this.questionNumber = new SimpleStringProperty(questionNumber);
         this.mark = new SimpleStringProperty(mark);
+        this.possibleMark = new SimpleStringProperty(possibleMark);
     }
 }
