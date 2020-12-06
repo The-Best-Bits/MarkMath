@@ -125,7 +125,7 @@ public class MarkBreakdownController {
             if (isPositiveInteger(field1.getText()) & isPositiveFloat(field2.getText())) {
                 int questionNumber = Integer.parseInt(field1.getText());
                 float newMark = Float.parseFloat(field2.getText());
-                if (questionNumber <= possibleGradeBreakdown.size() - 1 && newMark <= Float.parseFloat(possibleGradeBreakdown.get(questionNumber))) {
+                if (questionNumber <= possibleGradeBreakdown.size() - 1 && newMark <= Float.parseFloat(possibleGradeBreakdown.get(questionNumber - 1))) {
                     float oldMark = Float.parseFloat(gradeBreakdown.get(questionNumber - 1));
                     float oldTotal = Float.parseFloat(gradeBreakdown.get(gradeBreakdown.size() -1));
                     float NewTotal = oldTotal - oldMark + newMark;
