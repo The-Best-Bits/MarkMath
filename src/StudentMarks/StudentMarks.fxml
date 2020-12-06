@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="771.0" prefWidth="1369.0" style="-fx-background-color: #E4E4E4;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudentMarks.StudentMarksController">
+<AnchorPane prefHeight="771.0" prefWidth="1369.0" styleClass="Pane" stylesheets="@../art/classroom.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudentMarks.StudentMarksController">
     <children>
         <VBox layoutX="-4.0" layoutY="-4.0" prefHeight="775.0" prefWidth="246.0" styleClass="VBox" stylesheets="@../art/dashboard.css">
             <children>
@@ -25,7 +25,7 @@
                             </image>
                         </ImageView>
                     </children></Pane>
-                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openClassroom" prefHeight="121.0" prefWidth="246.0" text="  Classrooms" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openClassroom" prefHeight="113.0" prefWidth="246.0" text="  Classrooms" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -39,7 +39,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="FOLDER" size="30" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openSetting" prefHeight="146.0" prefWidth="410.0" text="  Settings" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openSetting" prefHeight="114.0" prefWidth="246.0" text="  Settings" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -52,30 +52,30 @@
                 </JFXButton>
             </children>
         </VBox>
-        <Pane layoutX="242.0" prefHeight="93.0" prefWidth="1128.0" style="-fx-background-color: #FFFFFF;">
+        <Pane layoutX="242.0" prefHeight="93.0" prefWidth="1128.0">
             <children>
-                <Text fx:id="student_name_display" fill="#726d6d" layoutX="26.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="506.30029296875">
+                <Text fx:id="student_name_display" fill="WHITE" layoutX="26.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="506.30029296875">
                     <font>
                         <Font name="Yu Gothic UI Regular" size="36.0" />
                     </font>
                 </Text>
-                <Text fx:id="class_name_display" fill="#c0bdbd" layoutX="26.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="347.6336669921875">
+                <Text fx:id="class_name_display" fill="WHITE" layoutX="26.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="347.6336669921875">
                     <font>
                         <Font name="Yu Gothic UI Regular" size="18.0" />
                     </font>
                 </Text>
-                <JFXButton fx:id="backButton" layoutX="967.0" layoutY="27.0" onAction="#back" prefHeight="39.0" prefWidth="113.0" style="-fx-background-color: #4C6AB7;" text="Back" textFill="WHITE">
+                <JFXButton fx:id="backButton" layoutX="967.0" layoutY="27.0" onAction="#back" prefHeight="39.0" prefWidth="113.0" styleClass="markAssignment" stylesheets="@../art/classroom.css" text="Back" textFill="WHITE">
                     <font>
                         <Font size="17.0" />
                     </font>
                 </JFXButton>
             </children>
         </Pane>
-        <TableView fx:id="marks_table" layoutX="242.0" layoutY="92.0" onMouseClicked="#handleRowSelect" prefHeight="679.0" prefWidth="1128.0">
+        <TableView fx:id="marks_table" layoutX="242.0" layoutY="90.0" onMouseClicked="#handleRowSelect" prefHeight="681.0" prefWidth="1128.0" stylesheets="@../art/classroom.css">
             <columns>
                 <TableColumn fx:id="id_column" prefWidth="176.33331298828125" text="Assignment ID" />
                 <TableColumn fx:id="name_column" minWidth="0.0" prefWidth="261.00006103515625" text="Assignment Name" />
-                <TableColumn fx:id="total_column" prefWidth="628.9999389648438" text="Grade" />
+                <TableColumn fx:id="total_column" prefWidth="687.0" text="Grade" />
             </columns>
         </TableView>
         <Text layoutX="397.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1.0" />

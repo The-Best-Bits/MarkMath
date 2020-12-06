@@ -13,20 +13,19 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="771.0" prefWidth="1369.0" style="-fx-background-color: #E4E4E4;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Assignments.AssignmentPageController">
+<AnchorPane prefHeight="771.0" prefWidth="1369.0" styleClass="Pane" stylesheets="@../art/classroom.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Assignments.AssignmentPageController">
     <children>
-        <VBox layoutX="-4.0" layoutY="-4.0" prefHeight="775.0" prefWidth="308.0" style="-fx-background-color: #4C6AB7;">
+        <VBox layoutX="-4.0" layoutY="-4.0" prefHeight="775.0" prefWidth="246.0" styleClass="Pane" stylesheets="@../art/classroom.css">
             <children>
                 <Pane prefHeight="220.0" prefWidth="410.0">
                     <children>
-                        <ImageView fitHeight="115.0" fitWidth="287.0" layoutX="10.0" layoutY="65.0">
+                        <ImageView fitHeight="93.0" fitWidth="225.0" layoutX="10.0" layoutY="64.0">
                             <image>
                                 <Image url="@../art/MMlogo.png" />
                             </image>
                         </ImageView>
                     </children></Pane>
-                <Pane prefHeight="76.0" prefWidth="382.0" />
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="348.0" text="  Classrooms" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="117.0" prefWidth="246.0" text="  Classrooms" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -40,7 +39,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="FOLDER" size="30" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openSetting" prefHeight="146.0" prefWidth="410.0" text="  Settings" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" onAction="#openSetting" prefHeight="106.0" prefWidth="246.0" text="  Settings" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -53,14 +52,14 @@
                 </JFXButton>
             </children>
         </VBox>
-        <Pane layoutX="304.0" prefHeight="93.0" prefWidth="1065.0" style="-fx-background-color: #FFFFFF;">
+        <Pane layoutX="242.0" prefHeight="93.0" prefWidth="1129.0">
             <children>
-                <Text fx:id="AssignmentName" fill="#726d6d" layoutX="14.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment" wrappingWidth="506.30029296875">
+                <Text fx:id="AssignmentName" fill="WHITE" layoutX="14.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment" wrappingWidth="506.30029296875">
                     <font>
                         <Font name="Yu Gothic UI Regular" size="39.0" />
                     </font>
                 </Text>
-            <JFXButton fx:id="backButton" defaultButton="true" layoutX="949.0" layoutY="28.0" onAction="#backToBundle" prefHeight="38.0" prefWidth="81.0" style="-fx-background-color: #4C6AB7;" text="Back" textFill="WHITE" wrapText="true">
+            <JFXButton fx:id="backButton" defaultButton="true" layoutX="1016.0" layoutY="28.0" onAction="#backToBundle" prefHeight="38.0" prefWidth="81.0" styleClass="markAssignment" stylesheets="@../art/classroom.css" text="Back" textFill="WHITE" wrapText="true">
                <font>
                   <Font name="System Bold" size="17.0" />
                </font>
@@ -74,12 +73,12 @@
             <TableColumn fx:id="gradeColumn" prefWidth="600.0" text="Grade" />
             </columns>
         </TableView>
-      <Text fx:id="AssignmentOutline" layoutX="456.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="479.21630859375">
+      <Text fx:id="AssignmentOutline" fill="WHITE" layoutX="423.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="479.21630859375">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text layoutX="312.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Full Mark Outline:" wrappingWidth="174.9999829530716">
+      <Text fill="WHITE" layoutX="248.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Full Mark Outline:" wrappingWidth="174.9999829530716">
          <font>
             <Font size="18.0" />
          </font>

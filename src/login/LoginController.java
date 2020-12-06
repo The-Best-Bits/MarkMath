@@ -40,12 +40,6 @@ public class LoginController {
                 Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
                 window.setScene(mainPage);
                 window.show();
-                /*Stage newStage = new Stage();
-                FXMLLoader loader = new FXMLLoader();
-                Pane root = loader.load(getClass().getResource("/MarkmathApp/MarkMath.fxml").openStream());
-                Scene scene = new Scene(root);
-                newStage.setScene(scene);
-                newStage.show();*/
             }
             else {
                 this.wrongPassword.setText("Wrong password! Please try again.");

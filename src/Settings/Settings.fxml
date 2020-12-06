@@ -13,20 +13,19 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="771.0" prefWidth="1369.0" style="-fx-background-color: #E4E4E4;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Settings.SettingsController">
+<AnchorPane prefHeight="771.0" prefWidth="1369.0" style="-fx-background-color: #E4E4E4;" stylesheets="@../art/classroom.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Settings.SettingsController">
     <children>
-        <VBox layoutX="-4.0" layoutY="-4.0" prefHeight="775.0" prefWidth="308.0" style="-fx-background-color: #4C6AB7;">
+        <VBox layoutX="-4.0" layoutY="-4.0" prefHeight="775.0" prefWidth="246.0" styleClass="Pane" stylesheets="@../art/classroom.css">
             <children>
                 <Pane prefHeight="220.0" prefWidth="410.0">
                     <children>
-                        <ImageView fitHeight="115.0" fitWidth="287.0" layoutX="10.0" layoutY="65.0">
+                        <ImageView fitHeight="90.0" fitWidth="219.0" layoutX="13.0" layoutY="65.0">
                             <image>
                                 <Image url="@../art/MMlogo.png" />
                             </image>
                         </ImageView>
                     </children></Pane>
-                <Pane prefHeight="76.0" prefWidth="382.0" />
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="146.0" prefWidth="348.0" ripplerFill="WHITE" text="  Classroom" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openClassroom" prefHeight="114.0" prefWidth="246.0" ripplerFill="WHITE" text="  Classroom" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -40,7 +39,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="FOLDER" size="30" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openSetting" prefHeight="146.0" prefWidth="348.0" text="  Settings" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openSetting" prefHeight="111.0" prefWidth="246.0" text="  Settings" textFill="WHITE">
                     <font>
                         <Font size="20" />
                     </font>
@@ -53,38 +52,38 @@
                 </JFXButton>
             </children>
         </VBox>
-        <Pane layoutX="304.0" prefHeight="101.0" prefWidth="1065.0" style="-fx-background-color: #FFFFFF;">
+        <Pane layoutX="242.0" prefHeight="101.0" prefWidth="1127.0" styleClass="Pane" stylesheets="@../art/classroom.css">
             <children>
-                <Text fill="#726d6d" layoutX="21.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" wrappingWidth="506.30029296875">
+                <Text fill="WHITE" layoutX="21.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings" wrappingWidth="506.30029296875">
                     <font>
                         <Font name="Yu Gothic UI Regular" size="39.0" />
                     </font>
                 </Text>
             </children>
         </Pane>
-      <Text fill="#616161" layoutX="342.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Change Password" wrappingWidth="366.30029296875">
+      <Text fill="#616161" layoutX="270.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Change Password" wrappingWidth="366.30029296875">
          <font>
             <Font name="Yu Gothic UI Regular" size="25.0" />
          </font>
       </Text>
-      <JFXTextField fx:id="newPass" layoutX="525.0" layoutY="188.0" prefHeight="42.0" prefWidth="232.0" style="-fx-background-color: #FFFFFF;" />
-      <Text fill="#616161" layoutX="373.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Password:" wrappingWidth="144.99997651576996">
+      <JFXTextField fx:id="newPass" layoutX="453.0" layoutY="188.0" prefHeight="42.0" prefWidth="232.0" style="-fx-background-color: #FFFFFF;" />
+      <Text fill="#616161" layoutX="301.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Password:" wrappingWidth="144.99997651576996">
          <font>
             <Font size="19.0" />
          </font>
       </Text>
-      <JFXButton fx:id="savePassword" layoutX="628.0" layoutY="343.0" onAction="#savePassword" prefHeight="52.0" prefWidth="129.0" style="-fx-background-color: #4C6AB7;" text="Save" textFill="WHITE">
+      <JFXButton fx:id="savePassword" layoutX="556.0" layoutY="343.0" onAction="#savePassword" prefHeight="52.0" prefWidth="129.0" styleClass="addButton" stylesheets="@../art/classroom.css" text="Save" textFill="WHITE">
          <font>
             <Font name="Yu Gothic UI Regular" size="22.0" />
          </font>
       </JFXButton>
-      <JFXTextField fx:id="cfrmPass" layoutX="525.0" layoutY="257.0" prefHeight="42.0" prefWidth="232.0" style="-fx-background-color: #FFFFFF;" />
-      <Text fill="#616161" layoutX="342.0" layoutY="285.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password:" wrappingWidth="172.99997651576996">
+      <JFXTextField fx:id="cfrmPass" layoutX="453.0" layoutY="257.0" prefHeight="42.0" prefWidth="232.0" style="-fx-background-color: #FFFFFF;" />
+      <Text fill="#616161" layoutX="270.0" layoutY="285.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password:" wrappingWidth="172.99997651576996">
          <font>
             <Font size="19.0" />
          </font>
       </Text>
-      <Label fx:id="passRemind" layoutX="342.0" layoutY="311.0" prefHeight="24.0" prefWidth="464.0" textFill="#bc0c0c">
+      <Label fx:id="passRemind" layoutX="270.0" layoutY="319.0" prefHeight="24.0" prefWidth="464.0" textFill="#bc0c0c">
          <font>
             <Font size="18.0" />
          </font>
