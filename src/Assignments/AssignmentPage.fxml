@@ -60,19 +60,18 @@
                         <Font name="Yu Gothic UI Regular" size="39.0" />
                     </font>
                 </Text>
-            <JFXButton fx:id="backButton" defaultButton="true" layoutX="943.0" layoutY="56.0" onAction="#backToBundle" prefHeight="38.0" prefWidth="81.0" style="-fx-background-color: #4C6AB7;" text="Back" textFill="WHITE" wrapText="true">
+            <JFXButton fx:id="backButton" defaultButton="true" layoutX="949.0" layoutY="28.0" onAction="#backToBundle" prefHeight="38.0" prefWidth="81.0" style="-fx-background-color: #4C6AB7;" text="Back" textFill="WHITE" wrapText="true">
                <font>
                   <Font name="System Bold" size="17.0" />
                </font>
             </JFXButton>
             </children>
         </Pane>
-        <TableView fx:id="AssignmentTable" layoutX="304.0" layoutY="130.0" onMouseClicked="#editMark" prefHeight="641.0" prefWidth="1065.0">
+        <TableView fx:id="AssignmentTable" layoutX="304.0" layoutY="130.0" onMouseClicked="#handleRowSelect" prefHeight="641.0" prefWidth="1065.0">
             <columns>
                 <TableColumn fx:id="idColumn" prefWidth="198.0" text="Student ID" />
                 <TableColumn fx:id="nameColumn" minWidth="0.0" prefWidth="266.0" text="Student Name" />
-            <TableColumn fx:id="gradeColumn" prefWidth="187.0" text="Grade" />
-            <TableColumn fx:id="markColumn" prefWidth="413.0" text="Mark breakdown" />
+            <TableColumn fx:id="gradeColumn" prefWidth="600.0" text="Grade" />
             </columns>
         </TableView>
       <Text fx:id="AssignmentOutline" layoutX="456.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="479.21630859375">

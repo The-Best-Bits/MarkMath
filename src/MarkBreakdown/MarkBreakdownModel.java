@@ -1,14 +1,14 @@
-package StudentMarks;
-
+package MarkBreakdown;
 import dbUtil.dbConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class StudentMarksModel {
+
+public class MarkBreakdownModel {
     Connection connection;
 
-    public StudentMarksModel() {
+    public MarkBreakdownModel() {
         try {
             this.connection = dbConnection.getConnection();
         } catch (SQLException ex) {
@@ -91,72 +91,28 @@ public class StudentMarksModel {
         }
     }
 
-    public ArrayList<String> getAssignmentsInClass(String classID) throws Exception {
+    public ArrayList<String> getGradeBreakdown(String studentID, String assignmentID) throws Exception {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT assignmentbundle_id FROM 'AssignmentBundles' WHERE classroom_id = '" + classID + "'";
+        String sql = "SELECT * FROM '" + assignmentID + "' WHERE student_id = '" + studentID + "'";
 
         try {
             stmt = this.connection.createStatement();
             rs = stmt.executeQuery(sql);
-            ArrayList<String> assignments = new ArrayList<String>();
-
-            while (rs.next()) {
-                assignments.add(rs.getString(1));
-            }
-
-            return assignments;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (rs != null){
-                rs.close();
-            }
-        }
-    }
-
-    public boolean tableExists(String assignment_id) throws Exception {
-        ResultSet rs = null;
-
-        try {
-            DatabaseMetaData dbm = this.connection.getMetaData();
-            rs = dbm.getTables(null, null, assignment_id, null);
-            return rs.next();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        finally {
-            if (rs != null){
-                rs.close();
-            }
-        }
-    }
-
-    public String getTotalMark(String studentID, String assignmentID) throws Exception {
-        Statement stmt = null;
-        ResultSet rs = null;
-
-        String sql = "SELECT (total) FROM '" + assignmentID + "' WHERE student_id = '" + studentID + "'";
-
-        try {
-            stmt = this.connection.createStatement();
-            rs = stmt.executeQuery(sql);
-            String a = "";
+            ArrayList<String> grades = new ArrayList<String>();
             if (rs.next()) {
-                a = rs.getString(1);
+                ResultSetMetaData rsmd = rs.getMetaData();
+                int columnCount = rsmd.getColumnCount();
+                for (int i = 4; i <= columnCount; i++) {
+                    grades.add(rs.getString(i));
+                }
             }
-            return a;
+            return grades;
+
         } catch (SQLException ex) {
             ex.printStackTrace();
-            return "";
+            return null;
         }
         finally {
             if (stmt != null) {
@@ -166,5 +122,43 @@ public class StudentMarksModel {
                 rs.close();
             }
         }
+    }
+
+    public ArrayList<String> getTotalPossibleMarks(String assignmentID) throws Exception {
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT * FROM '" + assignmentID + "' WHERE student_id = '0'";
+
+        try {
+            stmt = this.connection.createStatement();
+            rs = stmt.executeQuery(sql);
+            ArrayList<String> grades = new ArrayList<String>();
+            if (rs.next()) {
+                ResultSetMetaData rsmd = rs.getMetaData();
+                int columnCount = rsmd.getColumnCount();
+                for (int i = 4; i <= columnCount; i++) {
+                    grades.add(rs.getString(i));
+                }
+            }
+            return grades;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (rs != null){
+                rs.close();
+            }
+        }
+    }
+
+    public void updateGradeData(int qid, float mark, float NewTotal, String stuid, String bundleid) throws SQLException{
+        String query = "UPDATE '"+bundleid+"' SET question"+qid+" = '"+mark+"', total = '"+NewTotal+"' WHERE student_id = '"+stuid+"'";
+        this.connection.prepareStatement(query).executeUpdate();
     }
 }
