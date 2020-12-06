@@ -637,8 +637,9 @@ public class ClassroomController<MyType> implements Initializable {
             //check that there is a corresponding assignment bundle in this classroom
             if (!classroomModel.studentIsInClass(parser.getStudentNum(), this.classroomID)
                     || !classroomModel.assignmentBundleNameInClassroom(parser.getAssignmentType(), this.classroomID)) {
-                this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with this student document is not in this classroom");
+                this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with\nthis student document is not in this classroom");
             } else {
+                this.errorMarkingStudentAssignment.setText("");
                 //get assignment outline
                 AssignmentOutline outline = classroomModel.getAssignmentOutline(parser.getAssignmentType(),
                         this.classroomID);
