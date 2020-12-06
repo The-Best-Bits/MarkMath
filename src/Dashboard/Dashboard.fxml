@@ -21,7 +21,7 @@
             <children>
                 <Pane prefHeight="220.0" prefWidth="410.0">
                <children>
-                        <ImageView fitHeight="93.0" fitWidth="227.0" layoutX="9.0" layoutY="40.0">
+                        <ImageView fitHeight="93.0" fitWidth="227.0" layoutX="10.0" layoutY="64.0">
                             <image>
                                 <Image url="@../art/MMlogo.png" />
                             </image>

@@ -2,6 +2,16 @@
 .VBox{
     -fx-background-color: linear-gradient(from 0% 50% to 80% 100%,  #4C6AB7, #5cc6e4);
 }
+
+/*Mark Assignment Button*/
+.markAssignment {
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: white;
+    -fx-text-fill: white;
+    -fx-border-width: 3;
+
+}
 /*The tableview*/
 .table-view .column-header-background{
     -fx-background-color: linear-gradient(to right, #4C6AB7, #5cc6e4);
@@ -56,3 +66,43 @@
     -fx-text-fill: white;
 }
 
+/*Tab pane for assignments/students */
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab-pane
+{
+    -fx-tab-min-width:90px;
+}
+
+.tab{
+    -fx-background-insets: 0 1 0 1,0,0;
+}
+.tab-pane .tab
+{
+    -fx-background-color: #e6e6e6;
+
+}
+
+.tab-pane .tab:selected
+{
+    -fx-background-color: #196597;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #828282;
+    -fx-font-size: 18px;
+}
+
+.tab:selected .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #ffffff;
+}
+
+.addButton{
+    -fx-background-color: #5cc6e4;
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+}

@@ -7,22 +7,21 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudentMarks.StudentMarkBreakdownController">
     <children>
-        <Pane prefHeight="100.0" prefWidth="300.0">
+        <Pane prefHeight="100.0" prefWidth="300.0" styleClass="Pane" stylesheets="@../art/classroom.css">
             <children>
-                <Text fx:id="assignment_name_display" fill="#726d6d" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment" textAlignment="CENTER" wrappingWidth="300.0000022966815">
+                <Text fx:id="assignment_name_display" fill="WHITE" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment" textAlignment="CENTER" wrappingWidth="300.0000022966815">
                     <font>
                         <Font name="Yu Gothic UI Regular" size="24.0" />
                     </font>
                 </Text>
-                <Text fx:id="student_name_display" fill="#c0bdbd" layoutX="66.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jasmina Brar" textAlignment="CENTER" wrappingWidth="168.967041015625">
+                <Text fx:id="student_name_display" fill="WHITE" layoutX="66.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jasmina Brar" textAlignment="CENTER" wrappingWidth="168.967041015625">
                     <font>
                         <Font name="Yu Gothic UI Regular" size="14.0" />
                     </font>
                 </Text>
-                <Text fx:id="class_name_display" fill="#c0bdbd" layoutX="66.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Calculus" textAlignment="CENTER" wrappingWidth="168.967041015625">
+                <Text fx:id="class_name_display" fill="WHITE" layoutX="66.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Calculus" textAlignment="CENTER" wrappingWidth="168.967041015625">
                     <font>
                         <Font name="Yu Gothic UI Regular" size="14.0" />
                     </font>
