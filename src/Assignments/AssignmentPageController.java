@@ -245,7 +245,7 @@ public class AssignmentPageController<MyType> implements Initializable {
     public static boolean isPositiveInteger(String str) {
         try {
             int num = Integer.parseInt(str);
-            return num > 0;
+            return num >= 0;
         } catch (NumberFormatException nfe) {
             return false;
         }
