@@ -54,7 +54,7 @@
         </VBox>
         <Pane layoutX="242.0" prefHeight="93.0" prefWidth="1129.0">
             <children>
-                <Text fx:id="AssignmentName" fill="WHITE" layoutX="14.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment" wrappingWidth="506.30029296875">
+                <Text fx:id="AssignmentName" fill="WHITE" layoutX="14.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment" wrappingWidth="506.30029296875">
                     <font>
                         <Font name="Yu Gothic UI Regular" size="39.0" />
                     </font>
@@ -66,21 +66,26 @@
             </JFXButton>
             </children>
         </Pane>
-        <TableView fx:id="AssignmentTable" layoutX="304.0" layoutY="130.0" onMouseClicked="#handleRowSelect" prefHeight="641.0" prefWidth="1065.0">
+        <TableView fx:id="AssignmentTable" layoutX="240.0" layoutY="141.0" onMouseClicked="#handleRowSelect" prefHeight="630.0" prefWidth="1129.0">
             <columns>
                 <TableColumn fx:id="idColumn" prefWidth="198.0" text="Student ID" />
                 <TableColumn fx:id="nameColumn" minWidth="0.0" prefWidth="266.0" text="Student Name" />
-            <TableColumn fx:id="gradeColumn" prefWidth="600.0" text="Grade" />
+            <TableColumn fx:id="gradeColumn" prefWidth="663.0" text="Grade" />
             </columns>
         </TableView>
-      <Text fx:id="AssignmentOutline" fill="WHITE" layoutX="423.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="479.21630859375">
+      <Text fx:id="AssignmentOutline" fill="WHITE" layoutX="426.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="479.21630859375">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text fill="WHITE" layoutX="248.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Full Mark Outline:" wrappingWidth="174.9999829530716">
+      <Text fill="WHITE" layoutX="251.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Full Mark Outline:" wrappingWidth="174.9999829530716">
          <font>
             <Font size="18.0" />
+         </font>
+      </Text>
+      <Text fill="WHITE" layoutX="251.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double-click on selected rows to view details and edit marks manually." wrappingWidth="635.78515625">
+         <font>
+            <Font size="16.0" />
          </font>
       </Text>
     </children>
