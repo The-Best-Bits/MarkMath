@@ -71,7 +71,7 @@
                 </JFXButton>
             </children>
         </Pane>
-        <TableView fx:id="marks_table" layoutX="242.0" layoutY="90.0" onMouseClicked="#handleRowSelect" prefHeight="681.0" prefWidth="1128.0" stylesheets="@../art/classroom.css">
+        <TableView fx:id="marks_table" layoutX="242.0" layoutY="126.0" onMouseClicked="#handleRowSelect" prefHeight="645.0" prefWidth="1128.0" stylesheets="@../art/classroom.css">
             <columns>
                 <TableColumn fx:id="id_column" prefWidth="176.33331298828125" text="Assignment ID" />
                 <TableColumn fx:id="name_column" minWidth="0.0" prefWidth="261.00006103515625" text="Assignment Name" />
@@ -79,5 +79,10 @@
             </columns>
         </TableView>
         <Text layoutX="397.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1.0" />
+      <Text fill="WHITE" layoutX="250.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double-click on selected rows to view details." wrappingWidth="635.78515625">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
     </children>
 </AnchorPane>
