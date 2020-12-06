@@ -38,7 +38,7 @@ public class SettingsController {
     private SettingsModel model = new SettingsModel();
 
     /**
-     *Changes the password if and only if newPass and cfrmPass matches and none of the text fields are left blank.
+     * Changes the password if and only if newPass and confirmPass matches and none of the text fields are left blank.
      * @param event when user clicks the save button
      */
 
