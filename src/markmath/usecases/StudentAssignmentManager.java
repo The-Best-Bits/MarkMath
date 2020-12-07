@@ -91,14 +91,14 @@ public class StudentAssignmentManager {
         carbonCopy.setFinalMark();
     }
 
-    /**
-    Adds the StudentAssignment this StudentAssignmentManager manages to the corresponding AssignmentBundle
-     in the given classroom
-     */
-    public void matchBundle(Classroom room){
-        room.getAssignmentBundle(
-                carbonCopy.getAssignmentType()).addStudentAssignment(carbonCopy);
-    }
+//    /**
+//    Adds the StudentAssignment this StudentAssignmentManager manages to the corresponding AssignmentBundle
+//     in the given classroom
+//     */
+//    public void matchBundle(Classroom room){
+//        room.getAssignmentBundle(
+//                carbonCopy.getAssignmentType()).addStudentAssignment(carbonCopy);
+//    }
 
     /**
      * Returns the StudentAssignment of this StudentAssignmentManager

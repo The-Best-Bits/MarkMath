@@ -6,16 +6,11 @@ import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
 public class StudentAssignment {
-    /* It represents a single student assignment;
-     * it stores its owner's name, all the questions contained in it,
-     * the mapping of each question to corresponding marks (AssignmentOutline),
-     * and the total full mark of this assignment.
-     */
-
-    /* Attributes
+    /**
+     * Following Clean Architecture, this is an entity class that represents a students completed assignment
      * studentName: name of this student owner
      * studentID: ID of this student owner
-     * assignmentType: name of the AssignmentBundle it belongs to
+     * assignmentType: name of the AssignmentBundle this student assignment it belongs to
      * assignmentName: name of this assignment, concatenated by studentID and assignmentType
      * questions: the list of all questions contained
      * outline: the mapping of question to full mark
