@@ -6,15 +6,14 @@ import com.corundumstudio.socketio.listener.DataListener;
 
 
 public class SocketIOServer {
-    /** The SocketIOServer controller class
-     * This is the Socket IO Server that will connect to the Hypatia app and receive
-    the emitted events
-
-    SocketIO is a library that allows for bi-directional communication between clients and
-    servers. We are using the server-side library to implement this SocketIO server. SocketIO
-    uses Websocket protocol. We must communicate over this protocol because the Hypatia app does.
-    The SocketIO library will handle the Websocket Handshake for us upon connecting with Hypatia.
-
+    /** Following Clean Architecture, this is a controller class. This is the Socket IO Server that will connect to the
+     * Hypatia app and receive the emitted events.
+     * Attributes to note:
+     * client: the client that has connected to this server on port 3333
+     * parseResultsEvents: a boolean representing whether we will parse the 'result' events sent by Hypatia
+     * parser: the parser class that receives and parses the 'result' events received by this server. In this case,
+     * parsing refers to parsing for the information we need to use in our program.
+     *
     */
 
     private Configuration config;
@@ -43,27 +42,24 @@ public class SocketIOServer {
             }
         });
 
+        //starts the server
         server.start();
     }
 
     /**
-     * Server will start listening for "result" events emitted by Hypatia. These "result" events will only be parsed
- * if  is true
+     * Server will start listening for "result" events emitted by Hypatia when this method is called. These "result"
+     * events will only be parsed if parseResultsEvents is true
      */
     public void start(){
 
         // listen for the "results" event emitted by Hypatia
-        // we only need the information from this event, not the "expressions" event
         server.addEventListener("result", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
                 if (parseResultsEvents) {
                     System.out.println("Client Results" + s);
-
                     if (parser.getFinalParsedData().isEmpty()){
-                        System.out.println("Test");
                         parser.parseFirstResultEvent(s);
-                        System.out.println("test 2");
                     }
                     else{
                         parser.addParsedData(s);
@@ -81,13 +77,12 @@ public class SocketIOServer {
     public void setParseResultsEvents(boolean parse){this.parseResultsEvents = parse;}
 
     /**
-     * Emits check_all_math event. Server will receive all of the results events emitted by Hypatia from
+     * Emits check_all_math event. Server will receive all of the 'result' events emitted by Hypatia from
      * the currently opened Hypatia document
      */
     public void getAllResultsEvents(){
 
         if (client != null) {
-            //is check math not receiving the event right away?
             client.sendEvent("check_all_math");
             System.out.println("Event sent");
         }
@@ -95,7 +90,7 @@ public class SocketIOServer {
     }
 
     /**
-     * Returns this SocketIOServer's CheckMathParser
+     * Returns this SocketIOServer's parser CheckMathParser
      * @return parser
      */
     public CheckMathParser getparser() {

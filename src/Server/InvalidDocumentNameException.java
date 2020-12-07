@@ -1,6 +1,7 @@
 package Server;
 
-// exception is thrown when a studentdocument has an invalid name:
-// a valid name is of the form Student Name-Assignment Name
+/**
+ * This exception is thrown when a document has an invalid name
+ */
 public class InvalidDocumentNameException extends Exception{
 }

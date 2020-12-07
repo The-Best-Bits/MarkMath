@@ -3,12 +3,10 @@ package Server;
 import java.util.ArrayList;
 
 public class ParseByDash implements DocumentNameParsingAlgorithm {
-    //Contains the algorithm for parsing a document title of the form StudentName-AssignmentType
-
     /**
-     * Gets the student name, assignment type, and document title from the results event for a document
-     * with title of the form StudentName-AssignmentType
-     * @param docname name of the student document as taken from the results event
+     * Parses for the student number and assignment type from a document with title of the form
+     * StudentName-AssignmentType (spaces are allowed)
+     * @param docname name of the student document as taken from the 'result' event
      * @return an ArrayList of Strings containing the students name, the assignment name, and the full document title
      */
     public ArrayList<String> getDocNameInfo(String docname) throws InvalidDocumentNameException{
