@@ -470,7 +470,6 @@ public class ClassroomController<MyType> implements Initializable {
             createOutline();
         }
 
-
         //Checks if a valid name and id were inserted. If not, an error is displayed and this error
         //will stop the program from creating the assignment
         ArrayList<String> fieldData = checkFields();
@@ -544,25 +543,27 @@ public class ClassroomController<MyType> implements Initializable {
         String curr_class = this.classroomID;
         String sqlInsert = "INSERT INTO AssignmentBundles(assignmentbundle_id, assignment_name, classroom_id) VALUES (?,?,?)";
         try {
-            if (assignmentBundleInClassroom(received_id)) {
+            if (classroomModel.assignmentBundleIDInClassrooms(received_id, this.classroomID)) {
                 errorCreatingAssignment.setText("This Assignment's id already exists.");
             } else if (classroomModel.assignmentBundleNameInClassroom(assignment.getName(), this.classroomID)) {
                 errorCreatingAssignment.setText("This Assignment's name already exists.");
             } else {
-                Connection conn = dbConnection.getConnection();
-                int received_id_int = Integer.parseInt(received_id);
-                // ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM assignmentBundles");
-                PreparedStatement stmt = conn.prepareStatement(sqlInsert);
-                stmt.setInt(1, received_id_int);
-                stmt.setString(2, assignment.getName());
-                stmt.setString(3, curr_class);
-                stmt.execute();
-                conn.close();
+                classroomModel.addAssignmentBundleToClassroomDatabase(sqlInsert, received_id,
+                        assignment.getName(), curr_class);
             }
         }catch (SQLException e){
             errorCreatingAssignment.setText("Unexpected error. The assignment may \n exist in other classrooms");
         }
-        }
+    }
+
+    /**
+     *Checks the "ID" and "name" text fields to create an assignment.
+     * Returns An arraylist of two strings, the first one representing the inserted id in the text field to create
+     *an assignment, and the second one the name of the assignment.
+     * If either of them are empty, the default values are "99" and "Test".
+     * @return An arraylist of two strings, the first one being the id of the assignment we want to add, the second
+     * its name
+     */
 
     private ArrayList<String> checkFields(){
         String received_name;
@@ -594,26 +595,7 @@ public class ClassroomController<MyType> implements Initializable {
     }
 
 
-    //Luca's
-    private Boolean assignmentBundleInClassroom(String assignmentID){
-        try{
-            Connection conn = dbConnection.getConnection();
-            ResultSet rs = conn.createStatement().executeQuery("SELECT assignmentbundle_id FROM AssignmentBundles WHERE classroom_id =" + this.classroomID);
-            while (rs.next()){
-                if(rs.getString("assignmentbundle_id").equals(assignmentID)){
-                    conn.close();
-                    return true;
-                }
-            }
-            conn.close();
-            return false;
 
-        }catch(SQLException e){
-            System.out.println("Error" + e);
-        }
-
-        return false;
-    }
 
     /**
      *  When a user clicks the MarkAssignment button within a classroom this method goes through all of the parsed data

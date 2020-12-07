@@ -402,6 +402,58 @@ public class ClassroomModel {
         return false;
     }
 
+    /**
+     * Helper function to addAssignment. Checks if there exists an assignment with the same id in the database,
+     * since ids must be ideal for any classroom, so that it can be added in the classroom specified by classroomID.
+     * Return True if the assignment with assignmentID does not exist.
+     * @param assignmentID The id of the potential assignment that needs to be checked.
+     * @param classroomID The classroom id of the classroom where we went to put the assignment.
+     * @return
+     */
+    public Boolean assignmentBundleIDInClassrooms(String assignmentID, String classroomID){
+        try{
+            Connection conn = dbConnection.getConnection();
+            ResultSet rs = conn.createStatement().executeQuery("SELECT assignmentbundle_id FROM AssignmentBundles WHERE classroom_id =" + classroomID);
+            while (rs.next()){
+                if(rs.getString("assignmentbundle_id").equals(assignmentID)){
+                    conn.close();
+                    return true;
+                }
+            }
+            conn.close();
+            return false;
+
+        }catch(SQLException e){
+            System.out.println("Error" + e);
+        }
+
+        return false;
+    }
+
+    /**
+     * Helper method of addAssignmentBundleToClassroomDatabase in ClassroomController. It attempts to add the assignment
+     * to the data stored in the assignmentBundles table and assign it to the correct classroom indicated by currClass.
+     * Throws a SQL exception if the assignment cannot be added or there are other problems.
+     * Precondition:A valid sql statement must be created.
+     * @param sqlInsert The SQL statement needed to add an assignmentBundle to the table assignmentBundles with the
+     *                  currClass id.
+     * @param received_id The id of the assignment we want to add.
+     * @param assignmentName The name of the assignment we want to add.
+     * @param currClass The id of the class in which we want to add the assignment
+     * @throws SQLException Error in the database
+     */
+    public void addAssignmentBundleToClassroomDatabase(String sqlInsert, String received_id, String assignmentName,
+                                                       String currClass) throws SQLException{
+
+        int received_id_int = Integer.parseInt(received_id);
+        // ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM assignmentBundles");
+        PreparedStatement stmt = connection.prepareStatement(sqlInsert);
+        stmt.setInt(1, received_id_int);
+        stmt.setString(2, assignmentName );
+        stmt.setString(3, currClass);
+        stmt.execute();
+
+    }
 
     /**
      * @param assignmentType Name of the assignmentbundle
