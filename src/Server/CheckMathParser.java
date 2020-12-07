@@ -1,8 +1,6 @@
 package Server;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import markmath.controllers.ParsedDataPerAssignment;
-import markmath.controllers.ParsedDataPerAssignmentManager;
 
 import java.util.*;
 
