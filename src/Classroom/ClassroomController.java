@@ -108,7 +108,7 @@ public class ClassroomController<MyType> implements Initializable {
     private TextField textField[] = new TextField[20];
 
     @FXML
-    private int numOfQuestions = 1;
+    private int numOfQuestions = 0;
 
     @FXML
     private JFXTextField assignment_id;
@@ -463,7 +463,7 @@ public class ClassroomController<MyType> implements Initializable {
         errorCreatingAssignment.setText("");
         assignment_outline.clear();
         //Checks if the outline has at least one question
-        if (textField.length == 0) {
+        if (numOfQuestions == 0) {
             errorCreatingAssignment.setText("Please add a Question");
         }
         else {
@@ -506,18 +506,18 @@ public class ClassroomController<MyType> implements Initializable {
      * it to be used to create an assignment.
      * It checks if the input is a valid number (Positive float) and if no one of the fields is empty,
      * and if any of these two conditions fail, the user gets a prompt to input the outline correctly.
+     * Precondition: At least one question must exists and be valid.
      */
     private void createOutline(){
-        int i = 1;
+        int i = 0;
         // Gets the numbers for the outline from each field
         while (i != numOfQuestions) {
-            String poss_number = textField[i].getText().trim();
-            int j = 0;
+            String poss_number = textField[i+1].getText().trim();
             //checks if the number is valid for the outline
             try {
               float poss_number_float = Float.parseFloat(poss_number);
               if (poss_number_float > 0) {
-                  assignment_outline.put("question"+ (i), poss_number_float);
+                  assignment_outline.put("question"+ (i+1), poss_number_float);
               } else {
                   errorCreatingAssignment.setText("Please complete the Outline with valid full numbers.");
               }
@@ -560,7 +560,7 @@ public class ClassroomController<MyType> implements Initializable {
                 conn.close();
             }
         }catch (SQLException e){
-            System.out.println("Error" + e);
+            errorCreatingAssignment.setText("Unexpected error. The assignment may \n exist in other classrooms");
         }
         }
 
