@@ -2,9 +2,7 @@ package Dashboard;
 
 
 import Classroom.ClassroomController;
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import dbUtil.dbConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,17 +21,20 @@ import markmath.entities.Classroom;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
 
 
 
 public class DashboardController<MyType> implements Initializable {
+    /**
+     * Following Clean Architecture, this is a controller class that directly interacts with the UI for the Dashboard
+     * fxml page. It is responsible for initializing the Dashboard page and taking input from users on the Dashboard
+     * page and performing the necessary actions.
+     */
+
     @FXML
     private TableView<Classroom> classroomtable;
 
@@ -44,9 +45,6 @@ public class DashboardController<MyType> implements Initializable {
     private TableColumn<Classroom, String> namecolumn;
 
     @FXML
-    private JFXButton openHelp;
-
-    @FXML
     private JFXTextField classroomid;
 
     @FXML
@@ -55,17 +53,84 @@ public class DashboardController<MyType> implements Initializable {
     @FXML
     private Label preExistingID;
 
-    private dbConnection dbc;
-
     private ObservableList<Classroom> data;
     private MyType temp;
     private Date lastClickTime;
-    private Stage stage;
-    private JFXButton openClassroom;
+    private final DashboardModel model = new DashboardModel();
+
+
+    /**
+     * Opens the main "Dashboard page" that displays a table with all of the classrooms of this user
+     * @param event Classroom button is clicked
+     * @throws IOException
+     */
+    @FXML
+    void openClassroom(ActionEvent event) throws IOException {
+        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
+        Scene mainPage = new Scene(mainPageParent);
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(mainPage);
+        stage.show();
+    }
+
+    /**
+     * Opens the settings page
+     * @param event Settings button is clicked
+     * @throws IOException
+     */
+    @FXML
+    void openSetting(ActionEvent event) throws IOException {
+        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Settings/Settings.fxml"));
+        Scene mainPage = new Scene(mainPageParent);
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(mainPage);
+        stage.show();
+    }
+
+    /**
+     * Opens a how-to-use page for Dashboard
+     * @param event user clicks on help button
+     * @throws IOException
+     */
+
+    @FXML
+    void openHelp(ActionEvent event) throws IOException {
+        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/ClassroomGuide.fxml"));
+        Scene mainPage = new Scene(mainPageParent);
+
+        Stage stage = new Stage();
+        stage.setScene(mainPage);
+        stage.show();
+    }
+
+    /**
+     * Called when Dashboard.fxml is initially initialized after the user logs in
+     * @param location
+     * @param resources
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {                                                                                                 //establish connection
+            this.data = FXCollections.observableArrayList();
+            ResultSet rs = this.model.getClassroomData();
+            while (rs.next()) {
+                this.data.add(new Classroom(rs.getString("class_name"), rs.getString("class_id")));       //add data to resultset
+
+            }
+        } catch (SQLException e) {
+            System.err.println("Error" + e);
+        }
+
+        //add data we got to the table
+        this.idcolumn.setCellValueFactory(new PropertyValueFactory<Classroom, String>("id"));
+        this.namecolumn.setCellValueFactory(new PropertyValueFactory<Classroom, String>("classname"));
+        this.classroomtable.setItems(this.data);
+    }
 
     /**
      * Adds a classroom to this users account
-     *
      * @param event AddClassroom button is clicked
      */
     @FXML
@@ -74,50 +139,35 @@ public class DashboardController<MyType> implements Initializable {
         if (this.classroomid.getText().trim().equals("") || this.classroomname.getText().trim().equals("")) {
             this.preExistingID.setText("Error! Text field left blank");
         } else {
-            String sqlInsert = "INSERT INTO classrooms(class_id, class_name) VALUES (?,?)";
-            try {
-                Connection conn = dbConnection.getConnection();
-                ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM classrooms");
-                ArrayList<String> preExistingClassroomIDs = new ArrayList<>();
-                while (rs.next()) {
-                    preExistingClassroomIDs.add(rs.getString("class_id"));
-                }
-                //check if there already exists a classroom with the passed id
-                if (preExistingClassroomIDs.contains(this.classroomid.getText().trim())) {
-                    this.preExistingID.setText("Error! Pre-existing Classroom ID");
-                } else {
-                    this.preExistingID.setText("Classroom successfully added");
-                    PreparedStatement stmt = conn.prepareStatement(sqlInsert);
-                    stmt.setString(1, this.classroomid.getText().trim());
-                    stmt.setString(2, this.classroomname.getText().trim());
-                    stmt.execute();
+            String classID = this.classroomid.getText().trim();
+            String className = this.classroomname.getText().trim();
+            if (this.model.addClassroomToDatabase(classID, className)){
+                this.preExistingID.setText("Classroom successfully added");
+                try {
                     loadClassroom(event);
+                }catch (SQLException e){
+                    System.out.println("Error loading classrooms table" + e);
                 }
-                conn.close();
-
-            } catch (SQLException throwable) {
-                throwable.printStackTrace();
+            }
+            else{
+                this.preExistingID.setText("Error! Pre-existing Classroom ID");
             }
         }
-
     }
 
     /**
      * Updates the classrooms table to show all of the classrooms for this user
-     *
      * @param event AddClassroom button is clicked
      * @throws SQLException
      */
     @FXML
     private void loadClassroom(ActionEvent event) throws SQLException {
         this.preExistingID.setText("");
-        try {                                                                                                 //establish connection
-            Connection conn = dbConnection.getConnection();
+        try {
             this.data = FXCollections.observableArrayList();
-
-            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM classrooms");
+            ResultSet rs = this.model.getClassroomData();
             while (rs.next()) {
-                this.data.add(new Classroom(rs.getString("class_name"), rs.getString("class_id")));      //add data to resultset
+                this.data.add(new Classroom(rs.getString("class_name"), rs.getString("class_id")));
             }
         } catch (SQLException e) {
             System.err.println("Error" + e);
@@ -173,81 +223,6 @@ public class DashboardController<MyType> implements Initializable {
                 lastClickTime = new Date();
             }
         }
-    }
-
-    /**
-     * Opens the main "Dashboard page" that displays a table with all of the classrooms of this user
-     *
-     * @param event Classroom button is clicked
-     * @throws IOException
-     */
-    @FXML
-    void openClassroom(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
-        Scene mainPage = new Scene(mainPageParent);
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(mainPage);
-        stage.show();
-    }
-
-    /**
-     * Opens a settings page...
-     *
-     * @param event Settings button is clicked
-     * @throws IOException
-     */
-    @FXML
-    void openSetting(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Settings/Settings.fxml"));
-        Scene mainPage = new Scene(mainPageParent);
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(mainPage);
-        stage.show();
-    }
-
-    /**
-     * Called when Dashboard.fxml is initially initialized after the user logs in
-     *
-     * @param location
-     * @param resources
-     */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        try {                                                                                                 //establish connection
-            Connection conn = dbConnection.getConnection();
-            this.data = FXCollections.observableArrayList();
-
-            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM classrooms");
-            while (rs.next()) {
-                this.data.add(new Classroom(rs.getString("class_name"), rs.getString("class_id")));       //add data to resultset
-
-            }
-        } catch (SQLException e) {
-            System.err.println("Error" + e);
-        }
-
-        //add data we got to the table
-        this.idcolumn.setCellValueFactory(new PropertyValueFactory<Classroom, String>("id"));
-        this.namecolumn.setCellValueFactory(new PropertyValueFactory<Classroom, String>("classname"));
-        this.classroomtable.setItems(this.data);
-    }
-
-    /**
-     * Opens a how-to-use page for Dashboard
-     * @param event user clicks on help button
-     * @throws IOException
-     */
-
-    @FXML
-    void openHelp(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/ClassroomGuide.fxml"));
-        Scene mainPage = new Scene(mainPageParent);
-
-        Stage stage = new Stage();
-        stage.setScene(mainPage);
-        stage.show();
     }
 
 }
