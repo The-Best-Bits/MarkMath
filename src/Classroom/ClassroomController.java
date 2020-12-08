@@ -373,7 +373,7 @@ public class ClassroomController<MyType> implements Initializable {
                 StudentMarksController studentMarksController= Loader.getController();
                 studentMarksController.setStudentID(this.student_table.getSelectionModel().getSelectedItem().getID());
                 studentMarksController.setClassID(this.classroomID);
-                studentMarksController.loadData();
+                studentMarksController.loadPage();
                 Parent p = Loader.getRoot();
                 Scene scene = new Scene(p);
 

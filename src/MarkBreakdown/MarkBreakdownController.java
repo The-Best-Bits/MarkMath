@@ -142,7 +142,7 @@ public class MarkBreakdownController {
                         loadPage();
 
                         if (this.studentMarksController != null) {
-                            this.studentMarksController.loadData();
+                            this.studentMarksController.loadTableData();
                         } else if (this.assignmentPageController != null) {
                             this.assignmentPageController.loadData();
                         }
