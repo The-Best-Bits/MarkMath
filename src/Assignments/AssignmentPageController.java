@@ -79,6 +79,11 @@ public class AssignmentPageController<MyType> implements Initializable {
         this.bundleid = bundleid;
     }
 
+    /**
+     * Process event of clicking onto Classroom button and direct to classroom page
+     * @param event
+     * @throws IOException
+     */
     @FXML
     void openClassroom(ActionEvent event) throws IOException {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
@@ -89,7 +94,11 @@ public class AssignmentPageController<MyType> implements Initializable {
         stage.show();
     }
 
-
+    /**
+     * Process event of clicking onto Settings button and direct to Setting page
+     * @param event
+     * @throws IOException
+     */
     @FXML
     void openSetting(ActionEvent event) throws IOException {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Settings/Settings.fxml"));
@@ -100,26 +109,18 @@ public class AssignmentPageController<MyType> implements Initializable {
         stage.show();
     }
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.db = new dbConnection();}
 
 
     /**
-     *
+     * Helper for UpdateFromDB; create a linked HashMap using data of grade breakdown received from database
+     * @param rs
+     * @param count
+     * @return
+     * @throws SQLException
      */
-    public void loadData(){
-        UpdateFromDB();
-        this.idColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentID"));
-        this.nameColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentName"));
-        this.gradeColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("finalMark"));
-        this.AssignmentName.setText(this.bundlename);
-        this.AssignmentOutline.setText(this.outline+ ", Total: " + this.fullMark);
-        this.AssignmentTable.setItems(null);
-        this.AssignmentTable.setItems(this.data);
-    }
-
     public LinkedHashMap<String, Float> CreateMap(ResultSet rs, int count) throws SQLException{
         LinkedHashMap<String, Float> map = new LinkedHashMap<>();
         for(int i=4; i<count; i++){
@@ -128,6 +129,10 @@ public class AssignmentPageController<MyType> implements Initializable {
         return map;
     }
 
+
+    /**
+     * Helper for loadData; update attributes of this controller with data from database received by model
+     */
     public void UpdateFromDB(){
         try{
             ResultSet rs = PageModel.getGradeData(this.bundleid);
@@ -153,6 +158,26 @@ public class AssignmentPageController<MyType> implements Initializable {
     }
 
 
+    /**
+     * Display attributes data onto the Assignment page
+     */
+    public void loadData(){
+        UpdateFromDB();
+        this.idColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentID"));
+        this.nameColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("studentName"));
+        this.gradeColumn.setCellValueFactory(new PropertyValueFactory<StudentAssignment, String>("finalMark"));
+        this.AssignmentName.setText(this.bundlename);
+        this.AssignmentOutline.setText(this.outline+ ", Total: " + this.fullMark);
+        this.AssignmentTable.setItems(null);
+        this.AssignmentTable.setItems(this.data);
+    }
+
+
+    /**
+     * Process event of clicking onto Back button and direct to the corresponding bundle page
+     * @param event
+     * @throws IOException
+     */
     public void backToBundle(ActionEvent event) throws IOException{
         FXMLLoader Loader = new FXMLLoader();
         Loader.setLocation(getClass().getResource("/Classroom/Classroom.fxml"));
@@ -172,6 +197,10 @@ public class AssignmentPageController<MyType> implements Initializable {
         window.show();
     }
 
+    /**
+     * Process row selection in the table; load the detailed grade breakdown pop-up window
+     * @throws Exception
+     */
     @FXML
     public void handleRowSelect() throws Exception {
         MyType row = (MyType) this.AssignmentTable.getSelectionModel().getSelectedItem();
@@ -207,6 +236,9 @@ public class AssignmentPageController<MyType> implements Initializable {
                 Scene scene = new Scene(p);
 
                 Stage stage = new Stage();
+                stage.setOnCloseRequest(e -> {
+                    loadData();
+                    stage.close();});
                 stage.setScene(scene);
                 stage.show();
 
@@ -216,22 +248,4 @@ public class AssignmentPageController<MyType> implements Initializable {
         }
     }
 
-
-    public static boolean isPositiveInteger(String str) {
-        try {
-            int num = Integer.parseInt(str);
-            return num >= 0;
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-    }
-
-    public static boolean isPositiveFloat(String str) {
-        try {
-            float decimal = Float.parseFloat(str);
-            return decimal > 0;
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-    }
 }
