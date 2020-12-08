@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 
 public class MarkBreakdownModel {
+    /**
+     * Responsible for direct interaction with database for Mark Breakdown pop-up window
+     */
     Connection connection;
 
     public MarkBreakdownModel() {
@@ -157,6 +160,15 @@ public class MarkBreakdownModel {
         }
     }
 
+    /**
+     * With given data input, update corresponding total and grade breakdown in database
+     * @param qid
+     * @param mark
+     * @param NewTotal
+     * @param stuid
+     * @param bundleid
+     * @throws SQLException
+     */
     public void updateGradeData(int qid, float mark, float NewTotal, String stuid, String bundleid) throws SQLException{
         String query = "UPDATE '"+bundleid+"' SET question"+qid+" = '"+mark+"', total = '"+NewTotal+"' WHERE student_id = '"+stuid+"'";
         this.connection.prepareStatement(query).executeUpdate();
