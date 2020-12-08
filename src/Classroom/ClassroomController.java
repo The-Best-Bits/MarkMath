@@ -338,6 +338,8 @@ public class ClassroomController<MyType> implements Initializable {
             this.classroomModel.removeStudent(studentID, classID);
             this.student_id.setText("");
             this.loadData();
+        } else {
+            this.studentIDError.setText("This student is not in this class.");
         }
     }
 
