@@ -1,19 +1,13 @@
 package markmath.entities;
 
 public class Question {
-    /* Attributes
-     * questionNumber: the order number in this assignment
-     * fullMark: full mark of this question
-     * numberOfErrors
-     * finalMark: mark after deduction from errors
-     * */
-
-    /* Possible Methods to implement
-     * Constructor
-     * getFinalMark
-     * setFinalMark
-     * setErrors
-     * */
+    /**
+     * Following Clean Architecture this is an entity class that represents a single question in an assignment
+     * Atributes:
+     * questionNumber: number of this question
+     * numberOfErrors: the number of errors a student made in their solution for this question
+     * finalMark: final mark for this question
+     */
 
     private int questionNumber;
     private int numberOfErrors;

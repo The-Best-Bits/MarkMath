@@ -30,17 +30,6 @@ public class StudentAssignmentManager {
         this.addQuestions(finalParsedData);
     }
 
-//    /**
-//    Sets the assignment outline for the StudentAssignment this StudentAssignmentManager manages
-//     */
-//    //changed
-//    //we have the assignmentType of this document so why don't we just set the assignment outline ourself? No need for
-//    //this method. But how do we get the assignment outline corresponding?
-//    public void setCopy(AssignmentOutline outline){
-//        //removed line
-//        carbonCopy.setOutline(outline);
-//    }
-
     /**
     Uses the parsed data to add all of the Questions to the StudentAssignment this StudentAssignmentManager manages
     Pre condition: The outline for this carbon copy must be set before this method is called
@@ -63,19 +52,6 @@ public class StudentAssignmentManager {
         }
     }
 
-//    //previous implementation
-//    public void addQuestion(int No, int errors){
-//        ArrayList<Question> ques = carbonCopy.getQuestions();
-//        for(Question q: ques){
-//            if(No == q.getQuestionNumber()){
-//                carbonCopy.modifyQuestionErrors(No, errors);
-//                return;
-//            }
-//        }
-//        Question newQues = new Question(No, errors);
-//        carbonCopy.addQuestion(newQues);
-//    }
-
     /**
      * Marks all of the Questions in the StudentAssignment this StudentAssignmentManager manages, and sets the final
      * mark for this StudentAssignment
@@ -91,14 +67,6 @@ public class StudentAssignmentManager {
         carbonCopy.setFinalMark();
     }
 
-    /**
-    Adds the StudentAssignment this StudentAssignmentManager manages to the corresponding AssignmentBundle
-     in the given classroom
-     */
-    public void matchBundle(Classroom room){
-        room.getAssignmentBundle(
-                carbonCopy.getAssignmentType()).addStudentAssignment(carbonCopy);
-    }
 
     /**
      * Returns the StudentAssignment of this StudentAssignmentManager

@@ -1,7 +1,6 @@
 package Classroom;
 
 import dbUtil.dbConnection;
-import markmath.controllers.ParsedDataPerAssignment;
 import markmath.entities.AssignmentBundle;
 import markmath.entities.AssignmentOutline;
 import markmath.entities.StudentAssignment;
