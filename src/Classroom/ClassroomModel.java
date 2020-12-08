@@ -405,22 +405,21 @@ public class ClassroomModel {
     /**
      * Helper function to addAssignment. Checks if there exists an assignment with the same id in the database,
      * since ids must be ideal for any classroom, so that it can be added in the classroom specified by classroomID.
-     * Return True if the assignment with assignmentID does not exist.
+     * Return True if the assignment with assignmentID exists.
      * @param assignmentID The id of the potential assignment that needs to be checked.
      * @param classroomID The classroom id of the classroom where we went to put the assignment.
      * @return
      */
     public Boolean assignmentBundleIDInClassrooms(String assignmentID, String classroomID){
         try{
-            Connection conn = dbConnection.getConnection();
-            ResultSet rs = conn.createStatement().executeQuery("SELECT assignmentbundle_id FROM AssignmentBundles WHERE classroom_id =" + classroomID);
+            
+            ResultSet rs = connection.createStatement().executeQuery("SELECT assignmentbundle_id FROM AssignmentBundles WHERE classroom_id =" + classroomID);
             while (rs.next()){
                 if(rs.getString("assignmentbundle_id").equals(assignmentID)){
-                    conn.close();
+                    connection.close();
                     return true;
                 }
             }
-            conn.close();
             return false;
 
         }catch(SQLException e){
