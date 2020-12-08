@@ -66,11 +66,11 @@
             </JFXButton>
             </children>
         </Pane>
-        <TableView fx:id="AssignmentTable" layoutX="304.0" layoutY="130.0" onMouseClicked="#handleRowSelect" prefHeight="641.0" prefWidth="1065.0">
+        <TableView fx:id="AssignmentTable" layoutX="242.0" layoutY="130.0" onMouseClicked="#handleRowSelect" prefHeight="641.0" prefWidth="1200.0">
             <columns>
-                <TableColumn fx:id="idColumn" prefWidth="198.0" text="Student ID" />
-                <TableColumn fx:id="nameColumn" minWidth="0.0" prefWidth="266.0" text="Student Name" />
-            <TableColumn fx:id="gradeColumn" prefWidth="600.0" text="Grade" />
+                <TableColumn fx:id="idColumn" prefWidth="300.0" text="Student ID" />
+                <TableColumn fx:id="nameColumn" minWidth="0.0" prefWidth="350.0" text="Student Name" />
+            <TableColumn fx:id="gradeColumn" prefWidth="550.0" text="Grade" />
             </columns>
         </TableView>
       <Text fx:id="AssignmentOutline" fill="WHITE" layoutX="393.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="941.21630859375">
