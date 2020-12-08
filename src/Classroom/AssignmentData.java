@@ -5,16 +5,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class AssignmentData {
+    /** This class is an entity class that stores and gets an assignment's id, the class the assignment belongs to, and
+     * the name of the assignment for the purposes of populating the table in StudentMarks.
+     **/
     private final StringProperty ID;
     private final StringProperty name;
     private final StringProperty classes;
 
     public String getID() {
         return ID.get();
-    }
-
-    public StringProperty IDProperty() {
-        return ID;
     }
 
     public void setID(String ID) {
@@ -25,20 +24,12 @@ public class AssignmentData {
         return name.get();
     }
 
-    public StringProperty nameProperty() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name.set(name);
     }
 
     public String getClasses() {
         return classes.get();
-    }
-
-    public StringProperty classesProperty() {
-        return classes;
     }
 
     public void setClasses(String classes) {
