@@ -198,6 +198,7 @@ public class AssignmentPageController<MyType> implements Initializable {
                 String studentID = this.AssignmentTable.getSelectionModel().getSelectedItem().getStudentID();
 
                 MarkBreakdownController markBreakdownController = Loader.getController();
+                markBreakdownController.setAssignmentPageController(this);
                 markBreakdownController.setAssignmentID(this.bundleid);
                 markBreakdownController.setStudentID(studentID);
                 markBreakdownController.setClassID(this.classroomID);

@@ -2,7 +2,6 @@ package Classroom;
 
 import Assignments.AssignmentPageController;
 import Server.CheckMathParser;
-import Server.SocketIOServer;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import dbUtil.dbConnection;
@@ -17,19 +16,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import login.Login;
-import markmath.controllers.ParsedDataPerAssignment;
-import markmath.controllers.ParsedDataPerAssignmentManager;
 import markmath.entities.AssignmentBundle;
 import markmath.entities.AssignmentOutline;
 import markmath.entities.StudentAssignment;
 import markmath.usecases.StudentAssignmentManager;
-import Classroom.ClassroomModel;
 import StudentMarks.StudentMarksController;
 
 
@@ -256,8 +251,12 @@ public class ClassroomController<MyType> implements Initializable {
         String classID = this.classroomID.trim();
 
         if (studentID.isEmpty()) {
-            System.out.println("hi");
             this.studentIDError.setText("This field cannot be empty.");
+            return;
+        }
+
+        if (studentID.equals("0")) {
+            this.studentIDError.setText("0 is not a valid input.");
             return;
         }
 
@@ -374,7 +373,7 @@ public class ClassroomController<MyType> implements Initializable {
                 StudentMarksController studentMarksController= Loader.getController();
                 studentMarksController.setStudentID(this.student_table.getSelectionModel().getSelectedItem().getID());
                 studentMarksController.setClassID(this.classroomID);
-                studentMarksController.loadPage();
+                studentMarksController.loadData();
                 Parent p = Loader.getRoot();
                 Scene scene = new Scene(p);
 

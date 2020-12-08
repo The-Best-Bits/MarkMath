@@ -85,7 +85,7 @@ public class StudentMarksController<MyType> {
 
 
     @FXML
-    public void loadPage() throws Exception {
+    public void loadData() throws Exception {
         this.class_name_display.setText(this.studentMarksModel.getClassroomName(classroomID));
         this.student_name_display.setText(this.studentMarksModel.getStudentName(studentID));
 
@@ -144,6 +144,7 @@ public class StudentMarksController<MyType> {
 
                 String assignment_id = this.marks_table.getSelectionModel().getSelectedItem().getAssignmentID();
                 MarkBreakdownController markBreakdownController = Loader.getController();
+                markBreakdownController.setStudentMarksController(this);
                 markBreakdownController.setAssignmentID(assignment_id);
                 markBreakdownController.setStudentID(this.studentID);
                 markBreakdownController.setClassID(this.classroomID);
