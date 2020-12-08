@@ -1,10 +1,14 @@
 package Test;
+import Server.CheckMathParser;
 import Server.InvalidDocumentNameException;
 import Server.ParseByDash;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import markmath.controllers.ParsedDataPerAssignment;
 import markmath.controllers.ParsedDataPerAssignmentManager;
+import markmath.entities.AssignmentOutline;
 import org.junit.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -165,5 +169,67 @@ public class parserTests {
         Assert.assertEquals(manager.getParsedDataAssignments().size(), 1);
 
     }
+
+    //CheckMathParser tests
+    @Test
+    public void parseFirstResultEvent(){
+        /* Test that parseFirstResultEvent works correctly in CheckMathParser using a sample JSON String results event
+         */
+
+        String data = "{ \"docid\": \"864.6.12\", \"docname\": \"5-    Fractions1.ezt *\", \"userid\": 1288, \"username\": \"Jasmina Brar\", " +
+                "\"mathid\": \"tex65.mth1288-8\", \"version\": 23, \"problem\": 2, \"value\": {\"type\": \"correct\"}}";
+        CheckMathParser parser = new CheckMathParser();
+        try {
+            parser.parseFirstResultEvent(data);
+            Assert.assertEquals(parser.getAssignmentName(), "5-Fractions1");
+            Assert.assertEquals(parser.getAssignmentType(), "Fractions1");
+            Assert.assertEquals(parser.getStudentNum(), "5");
+            Assert.assertEquals((int)parser.getFinalParsedData().get("question2"), 0);
+        }catch(JsonProcessingException e){
+            System.out.println("Error" + e);
+        }
+
+    }
+
+    @Test
+    public void addParsedDataPreexistingQuestion(){
+         /* Tests that addParsedData in CheckMathParser adds new data correctly if there already exists a question in
+         finalParsedData (attribute of CheckMathParser) corresponding to the question new data corresponds to
+          */
+        String intialdata = "{ \"docid\": \"864.6.12\", \"docname\": \"5-    Fractions1.ezt *\", \"userid\": 1288, \"username\": \"Jasmina Brar\", " +
+                "\"mathid\": \"tex65.mth1288-8\", \"version\": 23, \"problem\": 2, \"value\": {\"type\": \"correct\"}}";
+        String newdata = "{ \"docid\": \"864.6.12\", \"docname\": \"5-    Fractions1.ezt *\", \"userid\": 1288, \"username\": \"Jasmina Brar\", " +
+                "\"mathid\": \"tex65.mth1288-8\", \"version\": 23, \"problem\": 2, \"value\": {\"type\": \"math-error\"}}";
+        CheckMathParser parser = new CheckMathParser();
+        try {
+            parser.parseFirstResultEvent(intialdata);
+            parser.addParsedData(newdata);
+            Assert.assertEquals((int)parser.getFinalParsedData().get("question2"), 1);
+        }catch(JsonProcessingException e){
+            System.out.println("Error" + e);
+        }
+
+    }
+
+    @Test
+    public void addParsedDataNewQuestion(){
+        /*Tests that addParsedData in CheckMathParser adds new data correctly if there does not already exist a question
+        in finalParsedData (attribute of CheckMathParser) corresponding to the question new data corresponds to
+         */
+        String intialdata = "{ \"docid\": \"864.6.12\", \"docname\": \"5-    Fractions1.ezt *\", \"userid\": 1288, \"username\": \"Jasmina Brar\", " +
+                "\"mathid\": \"tex65.mth1288-8\", \"version\": 23, \"problem\": 2, \"value\": {\"type\": \"correct\"}}";
+        String newdata = "{ \"docid\": \"864.6.12\", \"docname\": \"5-    Fractions1.ezt *\", \"userid\": 1288, \"username\": \"Jasmina Brar\", " +
+                "\"mathid\": \"tex65.mth1288-8\", \"version\": 23, \"problem\": 3, \"value\": {\"type\": \"math-error\"}}";
+        CheckMathParser parser = new CheckMathParser();
+        try {
+            parser.parseFirstResultEvent(intialdata);
+            parser.addParsedData(newdata);
+            Assert.assertEquals((int)parser.getFinalParsedData().get("question2"), 0);
+            Assert.assertEquals((int)parser.getFinalParsedData().get("question3"), 1);
+        }catch(JsonProcessingException e){
+            System.out.println("Error" + e);
+        }
+    }
+
 
 }

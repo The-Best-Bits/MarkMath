@@ -71,7 +71,7 @@ public class DashboardController<MyType> implements Initializable {
     @FXML
     private void addClassroom(ActionEvent event) {
         //first check if the user has left the classroomid or classroomname text fields empty
-        if (this.classroomid.getText().equals("") || this.classroomname.getText().equals("")) {
+        if (this.classroomid.getText().trim().equals("") || this.classroomname.getText().trim().equals("")) {
             this.preExistingID.setText("Error! Text field left blank");
         } else {
             String sqlInsert = "INSERT INTO classrooms(class_id, class_name) VALUES (?,?)";
@@ -83,13 +83,13 @@ public class DashboardController<MyType> implements Initializable {
                     preExistingClassroomIDs.add(rs.getString("class_id"));
                 }
                 //check if there already exists a classroom with the passed id
-                if (preExistingClassroomIDs.contains(this.classroomid.getText())) {
+                if (preExistingClassroomIDs.contains(this.classroomid.getText().trim())) {
                     this.preExistingID.setText("Error! Pre-existing Classroom ID");
                 } else {
                     this.preExistingID.setText("Classroom successfully added");
                     PreparedStatement stmt = conn.prepareStatement(sqlInsert);
-                    stmt.setString(1, this.classroomid.getText());
-                    stmt.setString(2, this.classroomname.getText());
+                    stmt.setString(1, this.classroomid.getText().trim());
+                    stmt.setString(2, this.classroomname.getText().trim());
                     stmt.execute();
                     loadClassroom(event);
                 }
@@ -118,9 +118,6 @@ public class DashboardController<MyType> implements Initializable {
             ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM classrooms");
             while (rs.next()) {
                 this.data.add(new Classroom(rs.getString("class_name"), rs.getString("class_id")));      //add data to resultset
-                System.out.println(rs.getString("class_id"));
-                System.out.println(rs.getString("class_name"));
-                //if an empty classroom is added we should check for this and omit it
             }
         } catch (SQLException e) {
             System.err.println("Error" + e);
@@ -129,7 +126,6 @@ public class DashboardController<MyType> implements Initializable {
         //add data we got to the table
         this.idcolumn.setCellValueFactory(new PropertyValueFactory<Classroom, String>("id"));
         this.namecolumn.setCellValueFactory(new PropertyValueFactory<Classroom, String>("classname"));
-//        this.classroomtable.setItems(null);
         this.classroomtable.setItems(this.data);
 
     }
@@ -195,17 +191,6 @@ public class DashboardController<MyType> implements Initializable {
         stage.show();
     }
 
-    //will be changed to an instructions page
-    @FXML
-    void openPeople(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/People/People.fxml"));
-        Scene mainPage = new Scene(mainPageParent);
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(mainPage);
-        stage.show();
-    }
-
     /**
      * Opens a settings page...
      *
@@ -246,7 +231,6 @@ public class DashboardController<MyType> implements Initializable {
         //add data we got to the table
         this.idcolumn.setCellValueFactory(new PropertyValueFactory<Classroom, String>("id"));
         this.namecolumn.setCellValueFactory(new PropertyValueFactory<Classroom, String>("classname"));
-//        this.classroomtable.setItems(null);
         this.classroomtable.setItems(this.data);
     }
 
