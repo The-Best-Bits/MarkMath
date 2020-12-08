@@ -1,14 +1,12 @@
 package Server;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import markmath.controllers.ParsedDataPerAssignment;
-import markmath.controllers.ParsedDataPerAssignmentManager;
 
 import java.util.*;
 
 
 public class CheckMathParser {
-    /**The CheckMathParser Controller Class
+    /** Following Clean Architecture this is an entity class.
      * Responsible for parsing and combining all of the "result" event data received by SocketIOServer from a single
      * Hypatia document.
      * Attributes:
@@ -39,8 +37,9 @@ public class CheckMathParser {
 
     /**
      * Sets the String attributes of this CheckMathParser object (Assignment Name, Assignment Type, Student Number)
-     * using data (the first received "result" event from an opened Hypatia document). The question number and amount of
-     * errors for this question as given data is also recorded in finalParsedData
+     * using 'data' (which in the context of our program is the first received "result" event from an opened Hypatia
+     * document). The question number and amount of errors for this question as given in 'data' is also recorded in
+     * finalParsedData
      * @param data JSON String data from SocketIOServer
      * @throws JsonProcessingException Library Jackson is used to covert the JSON String to a HashMap. When there is an
      * error in processing the JSON String in ObjectMapper().readValue() method this exception is thrown.
@@ -57,7 +56,6 @@ public class CheckMathParser {
             this.assignmentName = docInfo.get(2);
             String question = ("question" + (int)tempResultsMap.get("problem"));
             this.finalParsedData.put(question, checkForErrors((LinkedHashMap)tempResultsMap.get("value")));
-
             System.out.println( assignmentName + assignmentType + studentNum + finalParsedData);
 
         }catch(InvalidDocumentNameException e){
@@ -68,10 +66,11 @@ public class CheckMathParser {
 
 
     /**
-     * Adds new "result" event data received from the SocketIOServer to finalParsedData. If the new results data corresponds
-     * to a question already in finalParsedData we update the amount of errors for this question. If the opposite is true
-     * we add a new question with the corresponding amount of errors from the received results data to finalParsedData
-     * @param data new "result" event data received from SocketIOServer
+     * Adds new "result" event data received from the SocketIOServer to finalParsedData. If the new 'result' data
+     * corresponds to a question already in finalParsedData we update the amount of errors for this question. If the
+     * opposite is true we add a new question with the corresponding amount of errors from the received 'result' data to
+     * finalParsedData
+     * @param data new 'result' event data received from SocketIOServer
      */
     public void addParsedData(String data) throws JsonProcessingException{
         //instantiate new HashMap from JSON String using jackson library
@@ -79,7 +78,8 @@ public class CheckMathParser {
         String receivedQuestion = "question" + (int)tempResultsMap.get("problem");
         if (finalParsedData.containsKey(receivedQuestion)) {
             int old_errors = finalParsedData.get(receivedQuestion);
-            finalParsedData.replace(receivedQuestion, old_errors + checkForErrors((LinkedHashMap)tempResultsMap.get("value")));
+            finalParsedData.replace(receivedQuestion, old_errors +
+                    checkForErrors((LinkedHashMap)tempResultsMap.get("value")));
         }
         else{
             finalParsedData.put(receivedQuestion,checkForErrors((LinkedHashMap)tempResultsMap.get("value")));
@@ -88,8 +88,8 @@ public class CheckMathParser {
     }
 
     /**
-     * Checks whether a results event contains an error
-     * @param valueError holds whether this results event, and thus a part of the problem, contains an error
+     * Checks whether a 'result' event contains an error
+     * @param valueError LinkedHashMap containing a key "type" mapped to the type of error in the 'result' event
      * @return the number of errors given by this results event
      */
     private int checkForErrors(LinkedHashMap valueError) {

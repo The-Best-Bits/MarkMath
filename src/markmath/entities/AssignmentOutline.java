@@ -2,12 +2,13 @@ package markmath.entities;
 
 import java.util.HashMap;
 
-/** The AssignmentOutline class.
-* It represents the name of the AssignmentBundle with which it is associated,
-* and the total marks assigned from the teacher to each question of the
-* assignment.
-*/
+
 public class AssignmentOutline {
+    /** Following Clean Architecture this is an entity class that represents the outline of an assignment bundle.
+     * Attributes:
+     * name: name of the assignment bundle this assignment outline is associated with
+     * questionToMarks: a map of each question in the assignment bundle to the total marks for this question
+     */
 
     private String name;
     private HashMap<String, Float> questionToMarks;
