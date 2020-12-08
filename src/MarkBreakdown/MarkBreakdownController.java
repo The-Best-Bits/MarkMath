@@ -1,8 +1,7 @@
 package MarkBreakdown;
 
-import MarkBreakdown.BreakdownData;
-import StudentMarks.StudentMarksModel;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
+import Assignments.AssignmentPageController;
+import StudentMarks.StudentMarksController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,9 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import markmath.entities.StudentAssignment;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MarkBreakdownController {
@@ -29,7 +26,9 @@ public class MarkBreakdownController {
     private ArrayList<String> gradeBreakdown;
     private ArrayList<String> possibleGradeBreakdown;
 
-    private StudentMarksModel studentMarksModel = new StudentMarksModel();
+    private StudentMarksController studentMarksController;
+
+    private AssignmentPageController assignmentPageController;
 
 
     @FXML
@@ -56,6 +55,14 @@ public class MarkBreakdownController {
 
     @FXML
     private TableColumn<BreakdownData, String> possible_mark_column;
+
+    public void setStudentMarksController(StudentMarksController controller) {
+        this.studentMarksController = controller;
+    }
+
+    public void setAssignmentPageController(AssignmentPageController controller) {
+        this.assignmentPageController = controller;
+    }
 
 
     public void setStudentID(String studentID) {
@@ -133,6 +140,12 @@ public class MarkBreakdownController {
                     try{
                         markBreakdownModel.updateGradeData(questionNumber, newMark, NewTotal, this.studentID, this.assignmentID);
                         loadPage();
+
+                        if (this.studentMarksController != null) {
+                            this.studentMarksController.loadData();
+                        } else if (this.assignmentPageController != null) {
+                            this.assignmentPageController.loadData();
+                        }
                         popup.close();
                     } catch (Exception exc) {
                         exc.printStackTrace();

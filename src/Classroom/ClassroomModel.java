@@ -60,7 +60,7 @@ public class ClassroomModel {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT * FROM students WHERE student_id = " + studentID;
+        String sql = "SELECT * FROM students WHERE student_id = '" + studentID + "'";
 
         try {
             stmt = this.connection.createStatement();
@@ -84,7 +84,7 @@ public class ClassroomModel {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT * FROM students WHERE student_id = " + studentID + " AND CHARINDEX(':" + classID + ":', class_id) > 0";
+        String sql = "SELECT * FROM students WHERE student_id = '" + studentID + "' AND CHARINDEX(':" + classID + ":', class_id) > 0";
 
         try {
             if (studentIsInDatabase(studentID)) {
@@ -118,7 +118,7 @@ public class ClassroomModel {
                 String originalClasses = rs.getString(1);
                 String newClasses = originalClasses + classID + ":";
 
-                String sql2 = "UPDATE students SET class_id = '" + newClasses + "' WHERE student_id = " + studentID;
+                String sql2 = "UPDATE students SET class_id = '" + newClasses + "' WHERE student_id = '" + studentID + "'";
                 stmt = this.connection.createStatement();
                 stmt.executeUpdate(sql2);
                 return true;
