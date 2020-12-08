@@ -73,7 +73,7 @@
             <TableColumn fx:id="gradeColumn" prefWidth="600.0" text="Grade" />
             </columns>
         </TableView>
-      <Text fx:id="AssignmentOutline" fill="WHITE" layoutX="423.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="479.21630859375">
+      <Text fx:id="AssignmentOutline" fill="WHITE" layoutX="393.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="941.21630859375">
          <font>
             <Font size="16.0" />
          </font>
