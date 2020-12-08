@@ -3,10 +3,6 @@ package StudentMarks;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-
-/**
- *  this is an entity class that stores assignmentID, assignmentName, and grade for a specific student's assignment
- **/
 public class MarksData {
     private final StringProperty assignmentID;
     private final StringProperty assignmentName;
@@ -20,8 +16,13 @@ public class MarksData {
         return assignmentName.get();
     }
 
+
     public void setAssignmentName(String assignmentName) {
         this.assignmentName.set(assignmentName);
+    }
+
+    public String getGrade() {
+        return grade.get();
     }
 
     public void setGrade(String grade) {

@@ -15,7 +15,7 @@ public class StudentMarksModel {
     Connection connection;
 
     /**
-     *  Initializes model and connects it to database
+     * Initializes model and connects it to database
      **/
     public StudentMarksModel() {
         try {
@@ -31,6 +31,7 @@ public class StudentMarksModel {
 
     /**
      * returns the name of a classroom with a certain ID
+     *
      * @param classID
      * @return return class_name for row in clasrooms in database with column class_id = classID
      * @throws SQLException
@@ -49,13 +50,11 @@ public class StudentMarksModel {
         } catch (SQLException ex) {
             ex.printStackTrace();
             return ("");
-        }
-
-        finally {
+        } finally {
             if (stmt != null) {
                 stmt.close();
             }
-            if (rs != null){
+            if (rs != null) {
                 rs.close();
             }
         }
@@ -63,6 +62,7 @@ public class StudentMarksModel {
 
     /**
      * gets assignment name from ID
+     *
      * @param assignmentID
      * @return return assignment_name for row in clasrooms in database with column
      * assignmentbundle_id = assignmentID
@@ -82,13 +82,11 @@ public class StudentMarksModel {
         } catch (SQLException ex) {
             ex.printStackTrace();
             return ("");
-        }
-
-        finally {
+        } finally {
             if (stmt != null) {
                 stmt.close();
             }
-            if (rs != null){
+            if (rs != null) {
                 rs.close();
             }
         }
@@ -96,6 +94,7 @@ public class StudentMarksModel {
 
     /**
      * gets student name from ID
+     *
      * @param studentID
      * @return student_name for row in students table in database with column student_id = studentID
      * @throws SQLException
@@ -114,10 +113,8 @@ public class StudentMarksModel {
         } catch (SQLException ex) {
             ex.printStackTrace();
             return ("");
-        }
-
-        finally {
-            if (stmt != null && rs != null){
+        } finally {
+            if (stmt != null && rs != null) {
                 stmt.close();
                 rs.close();
             }
@@ -126,6 +123,7 @@ public class StudentMarksModel {
 
     /**
      * gets a list of assignments associated with the class
+     *
      * @param classID
      * @return an ArrayList containing all of the assignmentbundle_ids in table 'AssignmentBundles'
      * in rows with classroom_id = classroomID.
@@ -151,73 +149,56 @@ public class StudentMarksModel {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
-        }
-
-        finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (rs != null){
-                rs.close();
-            }
-        }
-    }
-
-    /**
-     * creates and returns a string representation of the students grade, in the form
-     * student's grade / possible grade
-     * @param studentID
-     * @param assignmentID
-     * @return A string containing the value for the 'total' column in the row with studentID in the
-     * 'student_id' column in the table with title assignmentID, "/", and the value for the 'total' column
-     * in the row with 0 in the 'student_id' column in the table.
-     * @throws Exception
-     */
-    public String getTotalMark(String studentID, String assignmentID) throws SQLException {
-        Statement stmt = null;
-        ResultSet rs = null;
-        ResultSet rs2 = null;
-
-        String sql = "SELECT (total) FROM '" + assignmentID + "' WHERE student_id = '" + studentID + "'";
-        String grade = "0.0";
-        String possibleGrade = "0.0";
-        try {
-            stmt = this.connection.createStatement();
-            rs = stmt.executeQuery(sql);
-
-            if (rs.next()) {
-                /*stores student's total mark in grade*/
-                grade = rs.getString(1);
-                String sql2 = "SELECT (total) FROM '" + assignmentID + "' WHERE student_id = '" + 0 + "'";
-
-                /* stores total possible grade in possibleGrade*/
-                rs2 = stmt.executeQuery(sql2);
-                possibleGrade = rs2.getString(1);
-            }
-
-            return grade + "/" + possibleGrade;
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return grade + "/" + possibleGrade;
-        }
-
-        finally {
+        } finally {
             if (stmt != null) {
                 stmt.close();
             }
             if (rs != null) {
                 rs.close();
             }
+        }
+    }
 
-            if (rs2 != null) {
-                rs2.close();
+    /**
+     * creates and returns the string of the students mark
+     *
+     * @param studentID
+     * @param assignmentID
+     * @return A string containing the value for the 'total' column in the row with studentID in the
+     * 'student_id' column in the table with title assignmentID. If there is no such row, "0.0" is
+     * returned.
+     * @throws Exception
+     */
+    public String getTotalMark(String studentID, String assignmentID) throws SQLException {
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT (total) FROM '" + assignmentID + "' WHERE student_id = '" + studentID + "'";
+        try {
+            stmt = this.connection.createStatement();
+            rs = stmt.executeQuery(sql);
+            String grade = "0.0";
+            if (rs.next()) {
+                grade = rs.getString(1);
+            }
+            return grade;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return "";
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (rs != null) {
+                rs.close();
             }
         }
     }
 
     /**
      * Finds out whether the table for a specific assignment exists in the database.
+     *
      * @param assignmentID
      * @return true if a table with the title assignmentID exists in database, false if not.
      * @throws Exception
@@ -232,9 +213,8 @@ public class StudentMarksModel {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-        }
-        finally {
-            if (rs != null){
+        } finally {
+            if (rs != null) {
                 rs.close();
             }
         }
@@ -242,12 +222,13 @@ public class StudentMarksModel {
 
     /**
      * finds out whether the grades for a specific student are in the page for an assignment.
+     *
      * @param studentID
      * @param assignmentID
      * @return true if there exists a row with colum student_id = studentID in the table with name
-     *  assignmentID, false if there doesn't exist one or if the assignmentID table doesn't exist.
+     * assignmentID, false if there doesn't exist one or if the assignmentID table doesn't exist.
      * @throws Exception
-     */
+     **/
     public boolean studentDidAssignment(String studentID, String assignmentID) throws SQLException {
         if (!tableExists(assignmentID)) {
             return false;
@@ -265,6 +246,7 @@ public class StudentMarksModel {
             e.printStackTrace();
             return false;
         }
+
         finally {
             if (stmt != null) {
                 stmt.close();

@@ -123,7 +123,8 @@ public class StudentMarksController<MyType> {
             for (String assignmentID: assignmentsInClass) {
                 String assignment_name = studentMarksModel.getAssignmentName(assignmentID);
                 if (studentMarksModel.tableExists(assignmentID) && studentMarksModel.studentDidAssignment(studentID, assignmentID)) {
-                    String totalMark = studentMarksModel.getTotalMark(studentID, assignmentID);
+                    String totalMark = studentMarksModel.getTotalMark(studentID, assignmentID) + "/" +
+                            studentMarksModel.getTotalMark("0", assignmentID);
                     this.marksData.add(new MarksData(assignmentID, assignment_name, totalMark));
                 }
             }
