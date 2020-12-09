@@ -25,9 +25,9 @@
                             </image>
                         </ImageView>
                     </children></Pane>
-                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openClassroom" prefHeight="100.0" prefWidth="250.0" ripplerFill="WHITE" text="  Classroom" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openClassroom" prefHeight="100.0" prefWidth="250.0" ripplerFill="WHITE" text="  Classrooms" textFill="WHITE">
                     <font>
-                        <Font size="20.0" />
+                        <Font name="Yu Gothic UI Regular" size="20.0" />
                     </font>
                     <VBox.margin>
                         <Insets />
@@ -41,7 +41,7 @@
                 </JFXButton>
                 <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openSetting" prefHeight="100.0" prefWidth="250.0" text="  Settings" textFill="WHITE">
                     <font>
-                        <Font size="20" />
+                        <Font name="Yu Gothic UI Regular" size="20" />
                     </font>
                     <padding>
                         <Insets left="50.0" />
@@ -69,7 +69,7 @@
       <JFXTextField fx:id="newPass" layoutX="460.0" layoutY="190.0" prefHeight="40.0" prefWidth="230.0" style="-fx-background-color: #FFFFFF;" />
       <Text fill="#616161" layoutX="280.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Password:" textAlignment="RIGHT" wrappingWidth="170.0">
          <font>
-            <Font size="20.0" />
+            <Font name="Yu Gothic UI Regular" size="20.0" />
          </font>
       </Text>
       <JFXButton fx:id="savePassword" layoutX="565.0" layoutY="340.0" onAction="#savePassword" prefHeight="45.0" prefWidth="125.0" styleClass="addButton" stylesheets="@../art/classroom.css" text="Save" textFill="WHITE">
@@ -80,12 +80,12 @@
       <JFXTextField fx:id="cfrmPass" layoutX="460.0" layoutY="260.0" prefHeight="40.0" prefWidth="230.0" style="-fx-background-color: #FFFFFF;" />
       <Text fill="#616161" layoutX="280.0" layoutY="290.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password:" textAlignment="RIGHT" wrappingWidth="170.0">
          <font>
-            <Font size="20.0" />
+            <Font name="Yu Gothic UI Regular" size="20.0" />
          </font>
       </Text>
       <Label fx:id="passRemind" layoutX="320.0" layoutY="305.0" prefHeight="30.0" prefWidth="370.0" textFill="#ff0000bf">
          <font>
-            <Font size="18.0" />
+            <Font name="Yu Gothic UI Regular" size="18.0" />
          </font>
       </Label>
     </children>

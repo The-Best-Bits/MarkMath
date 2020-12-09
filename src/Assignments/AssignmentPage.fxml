@@ -28,7 +28,7 @@
                     </children></Pane>
                 <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openClassroom" prefHeight="100.0" prefWidth="250.0" text="  Classrooms" textFill="WHITE">
                     <font>
-                        <Font size="20.0" />
+                        <Font name="Yu Gothic UI Regular" size="20.0" />
                     </font>
                     <VBox.margin>
                         <Insets />
@@ -42,7 +42,7 @@
                 </JFXButton>
                 <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openSetting" prefHeight="100.0" prefWidth="250.0" text="  Settings" textFill="WHITE">
                     <font>
-                        <Font size="20.0" />
+                        <Font name="Yu Gothic UI Regular" size="20.0" />
                     </font>
                     <padding>
                         <Insets left="50.0" />
@@ -62,7 +62,7 @@
                 </Text>
             <JFXButton fx:id="backButton" defaultButton="true" layoutX="910.0" layoutY="40.0" onAction="#backToBundle" prefHeight="45.0" prefWidth="100.0" styleClass="markAssignment" stylesheets="@../art/classroom.css" text="Back" textFill="WHITE" wrapText="true">
                <font>
-                  <Font name="System Bold" size="17.0" />
+                  <Font name="Yu Gothic UI Regular" size="18.0" />
                </font>
                <styleClass>
                   <String fx:value="markAssignment" />
@@ -85,12 +85,12 @@
         </TableView>
       <Text fx:id="AssignmentOutline" fill="WHITE" layoutX="415.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="712.666748046875">
          <font>
-            <Font size="15.0" />
+            <Font name="Yu Gothic UI Regular" size="15.0" />
          </font>
       </Text>
       <Text fill="#ffffff99" layoutX="260.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double-click on selected rows to view details and edit marks manually" wrappingWidth="506.3002944365144">
          <font>
-            <Font size="15.0" />
+            <Font name="Yu Gothic UI Regular" size="15.0" />
          </font>
       </Text>
     </children>
