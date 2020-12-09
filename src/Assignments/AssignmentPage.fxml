@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -25,7 +26,7 @@
                             </image>
                         </ImageView>
                     </children></Pane>
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="117.0" prefWidth="246.0" text="  Classrooms" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openClassroom" prefHeight="117.0" prefWidth="246.0" text="  Classrooms" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -39,7 +40,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="FOLDER" size="30" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openSetting" prefHeight="106.0" prefWidth="246.0" text="  Settings" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openSetting" prefHeight="106.0" prefWidth="246.0" text="  Settings" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -63,29 +64,33 @@
                <font>
                   <Font name="System Bold" size="17.0" />
                </font>
+               <styleClass>
+                  <String fx:value="markAssignment" />
+                  <String fx:value="markAssignment" />
+               </styleClass>
             </JFXButton>
             </children>
         </Pane>
-        <TableView fx:id="AssignmentTable" layoutX="240.0" layoutY="141.0" onMouseClicked="#handleRowSelect" prefHeight="630.0" prefWidth="1129.0">
+        <TableView fx:id="AssignmentTable" layoutX="242.0" layoutY="130.0" onMouseClicked="#handleRowSelect" prefHeight="641.0" prefWidth="1200.0">
             <columns>
-                <TableColumn fx:id="idColumn" prefWidth="198.0" text="Student ID" />
-                <TableColumn fx:id="nameColumn" minWidth="0.0" prefWidth="266.0" text="Student Name" />
-            <TableColumn fx:id="gradeColumn" prefWidth="663.0" text="Grade" />
+                <TableColumn fx:id="idColumn" prefWidth="300.0" text="Student ID" />
+                <TableColumn fx:id="nameColumn" minWidth="0.0" prefWidth="350.0" text="Student Name" />
+            <TableColumn fx:id="gradeColumn" prefWidth="550.0" text="Grade" />
             </columns>
         </TableView>
-      <Text fx:id="AssignmentOutline" fill="WHITE" layoutX="426.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="479.21630859375">
+      <Text fx:id="AssignmentOutline" fill="WHITE" layoutX="394.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="941.21630859375">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text fill="WHITE" layoutX="251.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Full Mark Outline:" wrappingWidth="174.9999829530716">
+      <Text fill="WHITE" layoutX="251.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Full Mark Outline:" wrappingWidth="174.9999829530716">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
       <Text fill="WHITE" layoutX="251.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double-click on selected rows to view details and edit marks manually." wrappingWidth="635.78515625">
          <font>
-            <Font size="16.0" />
+            <Font size="14.0" />
          </font>
       </Text>
     </children>

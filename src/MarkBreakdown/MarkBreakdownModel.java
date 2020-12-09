@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 
 public class MarkBreakdownModel {
+    /**
+     * Responsible for direct interaction with database for Mark Breakdown pop-up window
+     */
     Connection connection;
 
     public MarkBreakdownModel() {
@@ -23,7 +26,7 @@ public class MarkBreakdownModel {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT class_name FROM classrooms WHERE class_id = " + classID;
+        String sql = "SELECT class_name FROM classrooms WHERE class_id = '" + classID + "'";
 
         try {
             stmt = this.connection.createStatement();
@@ -48,7 +51,7 @@ public class MarkBreakdownModel {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT assignment_name FROM AssignmentBundles WHERE assignmentbundle_id = " + assignmentID;
+        String sql = "SELECT assignment_name FROM AssignmentBundles WHERE assignmentbundle_id = '" + assignmentID + "'";
 
         try {
             stmt = this.connection.createStatement();
@@ -73,7 +76,7 @@ public class MarkBreakdownModel {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT student_name FROM students WHERE student_id = " + studentID;
+        String sql = "SELECT student_name FROM students WHERE student_id = '" + studentID + "'";
 
         try {
             stmt = this.connection.createStatement();
@@ -157,6 +160,15 @@ public class MarkBreakdownModel {
         }
     }
 
+    /**
+     * With given data input, update corresponding total and grade breakdown in database
+     * @param qid
+     * @param mark
+     * @param NewTotal
+     * @param stuid
+     * @param bundleid
+     * @throws SQLException
+     */
     public void updateGradeData(int qid, float mark, float NewTotal, String stuid, String bundleid) throws SQLException{
         String query = "UPDATE '"+bundleid+"' SET question"+qid+" = '"+mark+"', total = '"+NewTotal+"' WHERE student_id = '"+stuid+"'";
         this.connection.prepareStatement(query).executeUpdate();

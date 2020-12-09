@@ -10,6 +10,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+/**
+ * This class interacts with the UI for the Set Password page and the Login page. Users are able to see the
+ * Set Password page if there is no password in the current database. After setting the password, the user
+ * will be able to access the login page and login to the application.
+ */
 public class SetPasswordController {
 
     SetPasswordModel setPasswordModel = new SetPasswordModel();
@@ -23,6 +28,12 @@ public class SetPasswordController {
     @FXML
     private Label invalidPassword;
 
+
+    /**
+     * Sets the password to the user input. Calls setPassword in the SetPasswordModel. The password field
+     * cannot be left as blank.
+     * @param event
+     */
     @FXML
     void setPassword(ActionEvent event) {
         try {

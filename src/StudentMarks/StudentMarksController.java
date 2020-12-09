@@ -20,9 +20,23 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class StudentMarksController<MyType> {
+    /**
+     * This is a controller class that directly interacts with the UI for the StudentMarks.fxml page. It is responsible
+     * for populating the table in the page as well as initializing a MarkBreakdownController and opening the
+     * MarkBreakdown.fxml page with that controller.
+     */
     StudentMarksModel studentMarksModel = new StudentMarksModel();
+
     private String studentID;
     private String classroomID;
+
+    public void setStudentID(String studentID) {
+        this.studentID = studentID;
+    }
+
+    public void setClassID(String classID) {
+        this.classroomID = classID;
+    }
 
     @FXML
     private Text student_name_display;
@@ -50,14 +64,26 @@ public class StudentMarksController<MyType> {
     private MyType temp;
     private Date lastClickTime;
 
+    /**
+     * Helper function for opening pages.
+     * @throws IOException
+     */
+    private void openPage(Parent p, Stage stage) throws IOException {
+        Scene mainPage = new Scene(p);
+        stage.setScene(mainPage);
+        stage.show();
+    }
+
+    /**
+     * Opens the main "Dashboard page" that displays a table with all of the classrooms of this user
+     * @param event Classroom button is clicked
+     * @throws IOException
+     */
     @FXML
     void openClassroom(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
-        Scene mainPage = new Scene(mainPageParent);
-
-        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(mainPage);
-        window.show();
+        Parent p = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        openPage(p, stage);
     }
 
     /**
@@ -67,28 +93,28 @@ public class StudentMarksController<MyType> {
      */
     @FXML
     void openSetting(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Settings/Settings.fxml"));
-        Scene mainPage = new Scene(mainPageParent);
-
-        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-        window.setScene(mainPage);
-        window.show();
+        Parent p = FXMLLoader.load(getClass().getResource("/Settings/Settings.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        openPage(p, stage);
     }
 
-    public void setStudentID(String studentID) {
-        this.studentID = studentID;
-    }
-
-    public void setClassID(String classID) {
-        this.classroomID = classID;
-    }
-
-
+    /**
+     * loads the classroom name and student name fields, as well as the data in the table.
+     * @throws Exception
+     */
     @FXML
     public void loadPage() throws Exception {
         this.class_name_display.setText(this.studentMarksModel.getClassroomName(classroomID));
         this.student_name_display.setText(this.studentMarksModel.getStudentName(studentID));
+        this.loadTableData();
+    }
 
+    /**
+     * loads the data in the table in this page.
+     * @throws Exception
+     */
+    @FXML
+    public void loadTableData() throws Exception {
         try {
             this.marksData = FXCollections.observableArrayList();
 
@@ -97,7 +123,8 @@ public class StudentMarksController<MyType> {
             for (String assignmentID: assignmentsInClass) {
                 String assignment_name = studentMarksModel.getAssignmentName(assignmentID);
                 if (studentMarksModel.tableExists(assignmentID) && studentMarksModel.studentDidAssignment(studentID, assignmentID)) {
-                    String totalMark = studentMarksModel.getTotalMark(studentID, assignmentID);
+                    String totalMark = studentMarksModel.getTotalMark(studentID, assignmentID) + "/" +
+                            studentMarksModel.getTotalMark("0", assignmentID);
                     this.marksData.add(new MarksData(assignmentID, assignment_name, totalMark));
                 }
             }
@@ -126,7 +153,7 @@ public class StudentMarksController<MyType> {
         if (row != temp) {
             temp = row;
             lastClickTime = new java.util.Date();
-        } else if (row == temp) {
+        } else {
             java.util.Date now = new java.util.Date();
             long diff = now.getTime() - lastClickTime.getTime();
             if (diff < 300) { //another click registered in 300 millis
@@ -142,30 +169,34 @@ public class StudentMarksController<MyType> {
                     e.printStackTrace();
                 }
 
-                String assignment_id = this.marks_table.getSelectionModel().getSelectedItem().getAssignmentID();
+                /*gets the controller from the loader of the mark breakdown page, and then sets attributes */
                 MarkBreakdownController markBreakdownController = Loader.getController();
-                markBreakdownController.setAssignmentID(assignment_id);
+                String assignmentID = this.marks_table.getSelectionModel().getSelectedItem().getAssignmentID();
+                markBreakdownController.setStudentMarksController(this);
+                markBreakdownController.setAssignmentID(assignmentID);
                 markBreakdownController.setStudentID(this.studentID);
                 markBreakdownController.setClassID(this.classroomID);
                 markBreakdownController.loadPage();
 
+                /*opens mark breakdown page for the assignment */
                 Parent p = Loader.getRoot();
-                Scene scene = new Scene(p);
-
                 Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.show();
-
+                openPage(p, stage);
             } else {
                 lastClickTime = new Date();
             }
         }
     }
 
+    /**
+     * goes to the classroom page that this assignment was in, open to the students tab of that page.=,
+     * and populates the tables in that page.
+     * @param event
+     * @throws Exception
+     */
     @FXML
     private void back(ActionEvent event) throws Exception {
         FXMLLoader Loader = new FXMLLoader();
-
         Loader.setLocation(getClass().getResource("/Classroom/Classroom.fxml"));
 
         try {
@@ -175,16 +206,18 @@ public class StudentMarksController<MyType> {
             e.printStackTrace();
         }
 
+        /*gets classroomController from loader, sets classroomID and populates table*/
         ClassroomController classroomController = Loader.getController();
         classroomController.setClassroomID(this.classroomID);
         classroomController.loadData();
+
+        /* Sets the top tab to the Student tab*/
         SingleSelectionModel<Tab> selectionModel = classroomController.tab_pane.getSelectionModel();
         selectionModel.select(1);
-        Parent p = Loader.getRoot();
-        Scene scene = new Scene(p);
 
+        /*loads page*/
+        Parent p = Loader.getRoot();
         Stage stage = (Stage) backButton.getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+        openPage(p, stage);
     }
 }

@@ -7,6 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class SettingsModel {
+    /**
+     * This class works with the SettingsController class and acts as a gateway class to read and update
+     * information in the data base. The user will be able to change and store their new password.
+     */
 
     Connection connection;
 

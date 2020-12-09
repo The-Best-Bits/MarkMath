@@ -1,8 +1,7 @@
 package MarkBreakdown;
 
-import MarkBreakdown.BreakdownData;
-import StudentMarks.StudentMarksModel;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
+import Assignments.AssignmentPageController;
+import StudentMarks.StudentMarksController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,9 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import markmath.entities.StudentAssignment;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MarkBreakdownController {
@@ -29,7 +26,9 @@ public class MarkBreakdownController {
     private ArrayList<String> gradeBreakdown;
     private ArrayList<String> possibleGradeBreakdown;
 
-    private StudentMarksModel studentMarksModel = new StudentMarksModel();
+    private StudentMarksController studentMarksController;
+
+    private AssignmentPageController assignmentPageController;
 
 
     @FXML
@@ -57,6 +56,14 @@ public class MarkBreakdownController {
     @FXML
     private TableColumn<BreakdownData, String> possible_mark_column;
 
+    public void setStudentMarksController(StudentMarksController controller) {
+        this.studentMarksController = controller;
+    }
+
+    public void setAssignmentPageController(AssignmentPageController controller) {
+        this.assignmentPageController = controller;
+    }
+
 
     public void setStudentID(String studentID) {
         this.studentID = studentID;
@@ -77,6 +84,10 @@ public class MarkBreakdownController {
         this.possibleGradeBreakdown = possibleGradeBreakdown;
     }
 
+    /**
+     * Display the data for a markbreakdown onto the pop-up window
+     * @throws Exception
+     */
     @FXML
     public void loadPage() throws Exception {
         this.assignment_name_display.setText(this.markBreakdownModel.getAssignmentName(this.assignmentID));
@@ -107,6 +118,10 @@ public class MarkBreakdownController {
         this.breakdown_table.setItems(this.breakdownData);
     }
 
+    /**
+     * Process event of clicking onto Edit Mark button; open the pop-up window with editing function
+     * @param event
+     */
     @FXML
     public void editMarks(ActionEvent event) {
         Stage popup = new Stage();
@@ -122,9 +137,9 @@ public class MarkBreakdownController {
         Button button1 = new Button("Submit change");
 
         button1.setOnAction(e -> {
-            if (isPositiveInteger(field1.getText()) & isPositiveFloat(field2.getText())) {
-                int questionNumber = Integer.parseInt(field1.getText());
-                float newMark = Float.parseFloat(field2.getText());
+            if (isValidInteger(field1.getText().trim()) & isValidFloat(field2.getText().trim())) {
+                int questionNumber = Integer.parseInt(field1.getText().trim());
+                float newMark = Float.parseFloat(field2.getText().trim());
                 if (questionNumber <= possibleGradeBreakdown.size() - 1 && newMark <= Float.parseFloat(possibleGradeBreakdown.get(questionNumber - 1))) {
                     float oldMark = Float.parseFloat(gradeBreakdown.get(questionNumber - 1));
                     float oldTotal = Float.parseFloat(gradeBreakdown.get(gradeBreakdown.size() -1));
@@ -133,6 +148,12 @@ public class MarkBreakdownController {
                     try{
                         markBreakdownModel.updateGradeData(questionNumber, newMark, NewTotal, this.studentID, this.assignmentID);
                         loadPage();
+
+                        if (this.studentMarksController != null) {
+                            this.studentMarksController.loadTableData();
+                        } else if (this.assignmentPageController != null) {
+                            this.assignmentPageController.loadData();
+                        }
                         popup.close();
                     } catch (Exception exc) {
                         exc.printStackTrace();
@@ -154,7 +175,12 @@ public class MarkBreakdownController {
 
     }
 
-    public static boolean isPositiveInteger(String str) {
+    /**
+     * Helper for setAction for Submit button; check if the ID input is a positive integer
+     * @param str
+     * @return
+     */
+    public static boolean isValidInteger(String str) {
         try {
             int num = Integer.parseInt(str);
             return num > 0;
@@ -163,10 +189,15 @@ public class MarkBreakdownController {
         }
     }
 
-    public static boolean isPositiveFloat(String str) {
+    /**
+     * Helper for setAction for Submit button; check if the mark input is a non-negative decimal number
+     * @param str
+     * @return
+     */
+    public static boolean isValidFloat(String str) {
         try {
             float decimal = Float.parseFloat(str);
-            return decimal > 0;
+            return decimal >= 0;
         } catch (NumberFormatException nfe) {
             return false;
         }
