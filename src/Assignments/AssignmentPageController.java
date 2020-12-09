@@ -17,9 +17,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import entities.AssignmentOutline;
-import entities.StudentAssignment;
-
+import markmath.entities.AssignmentOutline;
+import markmath.entities.StudentAssignment;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -28,6 +27,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class AssignmentPageController<MyType> implements Initializable {
+    /**
+     * Following Clean Architecture, this is a controller class that directly interacts with the UI for the
+     * AssignmentPage fxml page. It is responsible for initializing the Assignmentpage page and taking input from users
+     * on the AssignmentPage page and performing the necessary actions.
+     */
     AssignmentPageModel PageModel = new AssignmentPageModel();
 
     @FXML
@@ -47,9 +51,6 @@ public class AssignmentPageController<MyType> implements Initializable {
 
     @FXML
     private Text AssignmentOutline;
-
-    @FXML
-    private JFXButton backButton;
 
     private dbConnection db;
     private ObservableList<StudentAssignment> data;
