@@ -4,6 +4,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class BreakdownData {
+    /**
+     * Data class constructed for mark breakdown page
+     */
     private final StringProperty possibleMark;
     private final StringProperty mark;
     private final StringProperty questionNumber;

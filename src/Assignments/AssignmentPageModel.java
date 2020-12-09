@@ -9,6 +9,9 @@ import java.sql.Statement;
 
 
 public class AssignmentPageModel {
+    /**
+     * Responsible for direct interaction with database for Assignment page
+     */
     Connection connection;
 
     public AssignmentPageModel(){
@@ -22,13 +25,14 @@ public class AssignmentPageModel {
         }
     }
 
+    /**
+     * Get result set for grade data from the database
+     * @param bundleid
+     * @return
+     * @throws SQLException
+     */
     public ResultSet getGradeData(String bundleid) throws SQLException{
         return this.connection.createStatement().executeQuery("SELECT * FROM '" + bundleid + "'");
     }
 
-
-    public void updateGradeData(int qid, float mark, float NewTotal, int stuid, String bundleid) throws SQLException{
-        String query = "UPDATE '"+bundleid+"' SET question"+qid+" = '"+mark+"', total = '"+NewTotal+"' WHERE student_id = '"+stuid+"'";
-        this.connection.prepareStatement(query).executeUpdate();
-    }
 }
