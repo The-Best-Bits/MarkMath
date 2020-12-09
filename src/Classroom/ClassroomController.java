@@ -336,7 +336,7 @@ public class ClassroomController<MyType> implements Initializable {
         if (this.classroomModel.studentIsInClass(studentID, classID)) {
             this.classroomModel.removeStudent(studentID, classID);
             this.student_id.setText("");
-            this.loadData();
+            this.loadStudentData();
         } else {
             this.studentIDError.setText("This student is not in this class.");
         }
@@ -373,7 +373,7 @@ public class ClassroomController<MyType> implements Initializable {
                 StudentMarksController studentMarksController= Loader.getController();
                 studentMarksController.setStudentID(this.student_table.getSelectionModel().getSelectedItem().getID());
                 studentMarksController.setClassID(this.classroomID);
-                studentMarksController.loadData();
+                studentMarksController.loadPage();
                 Parent p = Loader.getRoot();
                 Scene scene = new Scene(p);
 
