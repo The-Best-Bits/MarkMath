@@ -3,7 +3,6 @@ package Assignments;
 import Classroom.ClassroomController;
 import MarkBreakdown.MarkBreakdownController;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
 import dbUtil.dbConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,28 +10,28 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import markmath.entities.AssignmentOutline;
 import markmath.entities.StudentAssignment;
-
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class AssignmentPageController<MyType> implements Initializable {
+    /**
+     * Following Clean Architecture, this is a controller class that directly interacts with the UI for the
+     * AssignmentPage fxml page. It is responsible for initializing the Assignmentpage page and taking input from users
+     * on the AssignmentPage page and performing the necessary actions.
+     */
     AssignmentPageModel PageModel = new AssignmentPageModel();
 
     @FXML
@@ -52,9 +51,6 @@ public class AssignmentPageController<MyType> implements Initializable {
 
     @FXML
     private Text AssignmentOutline;
-
-    @FXML
-    private JFXButton backButton;
 
     private dbConnection db;
     private ObservableList<StudentAssignment> data;
