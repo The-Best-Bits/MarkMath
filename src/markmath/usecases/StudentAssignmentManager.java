@@ -1,6 +1,6 @@
 package markmath.usecases;
 
-import markmath.entities.*;
+import entities.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

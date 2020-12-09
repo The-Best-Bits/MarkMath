@@ -1,4 +1,4 @@
-package markmath.entities;
+package entities;
 
 public class AssignmentBundle {
     /** Following Clean Architecture this is an entity class that represents an AssignmentBundle. This class

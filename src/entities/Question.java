@@ -1,4 +1,4 @@
-package markmath.entities;
+package entities;
 
 public class Question {
     /**

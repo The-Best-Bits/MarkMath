@@ -1,4 +1,4 @@
-package markmath.entities;
+package entities;
 
 /**
  * Exception that communicates no assignment was found that matched the research parameter (for example, a student name)

@@ -1,4 +1,4 @@
-package markmath.entities;
+package entities;
 
 import java.util.HashMap;
 

@@ -1,5 +1,5 @@
 package Test;
-import markmath.entities.*;
+import entities.*;
 import org.junit.*;
 
 import java.util.HashMap;
