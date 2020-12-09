@@ -20,9 +20,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import login.Login;
-import entities.AssignmentBundle;
-import entities.AssignmentOutline;
-import entities.StudentAssignment;
+import markmath.entities.AssignmentBundle;
+import markmath.entities.AssignmentOutline;
+import markmath.entities.StudentAssignment;
 import markmath.usecases.StudentAssignmentManager;
 import StudentMarks.StudentMarksController;
 import java.io.IOException;
@@ -160,7 +160,7 @@ public class ClassroomController<MyType> implements Initializable {
      */
     @FXML
     void openHelp(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Classroom/howto.fxml"));
+        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Classroom/classroomHowto.fxml"));
         Scene mainPage = new Scene(mainPageParent);
 
         Stage stage = new Stage();

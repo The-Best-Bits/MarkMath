@@ -1,6 +1,6 @@
 package markmath.usecases;
 
-import entities.Question;
+import markmath.entities.Question;
 
 public class MarkingCalculator {
     /**

@@ -1,6 +1,8 @@
 package markmath.usecases;
 
-import entities.*;
+import markmath.entities.AssignmentOutline;
+import markmath.entities.Question;
+import markmath.entities.StudentAssignment;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,8 +1,8 @@
 package Test;
 
-import entities.AssignmentOutline;
-import entities.Question;
-import entities.StudentAssignment;
+import markmath.entities.AssignmentOutline;
+import markmath.entities.Question;
+import markmath.entities.StudentAssignment;
 import markmath.usecases.MarkingCalculator;
 import markmath.usecases.StudentAssignmentManager;
 import org.junit.*;

@@ -1,4 +1,4 @@
-package entities;
+package markmath.entities;
 
 public class Classroom {
     /** Following Clean Architecture this is an entity class that represents a Classroom

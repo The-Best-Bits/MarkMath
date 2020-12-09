@@ -1,9 +1,9 @@
 package Classroom;
 
 import dbUtil.dbConnection;
-import entities.AssignmentBundle;
-import entities.AssignmentOutline;
-import entities.StudentAssignment;
+import markmath.entities.AssignmentBundle;
+import markmath.entities.AssignmentOutline;
+import markmath.entities.StudentAssignment;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package entities;
+package markmath.entities;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
