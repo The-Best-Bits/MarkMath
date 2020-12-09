@@ -438,8 +438,6 @@ public class ClassroomController<MyType> implements Initializable {
             }
         }
     }
-
-    //add assignment code
     /**
      * Allows the user to add one extra question to the outline of a new assignment they wish to create.
      * It creates a label indicating the appropriate question number and a text field that allows the user to insert

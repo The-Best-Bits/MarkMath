@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -25,7 +26,7 @@
                             </image>
                         </ImageView>
                     </children></Pane>
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openClassroom" prefHeight="117.0" prefWidth="246.0" text="  Classrooms" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openClassroom" prefHeight="117.0" prefWidth="246.0" text="  Classrooms" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -39,7 +40,7 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="FOLDER" size="30" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" onAction="#openSetting" prefHeight="106.0" prefWidth="246.0" text="  Settings" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openSetting" prefHeight="106.0" prefWidth="246.0" text="  Settings" textFill="WHITE">
                     <font>
                         <Font size="20.0" />
                     </font>
@@ -63,6 +64,10 @@
                <font>
                   <Font name="System Bold" size="17.0" />
                </font>
+               <styleClass>
+                  <String fx:value="markAssignment" />
+                  <String fx:value="markAssignment" />
+               </styleClass>
             </JFXButton>
             </children>
         </Pane>
@@ -83,6 +88,10 @@
             <Font size="18.0" />
          </font>
       </Text>
-      <Text fill="WHITE" layoutX="251.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double-click on selected rows to view details and edit marks manually." wrappingWidth="635.78515625" />
+      <Text fill="WHITE" layoutX="251.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double-click on selected rows to view details and edit marks manually." wrappingWidth="635.78515625">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
     </children>
 </AnchorPane>

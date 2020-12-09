@@ -12,20 +12,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
-import markmath.entities.Classroom;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class SettingsController {
 
     @FXML
     private JFXTextField newPass;
-
-    @FXML
-    private JFXButton savePassword;
 
     @FXML
     private JFXTextField cfrmPass;
@@ -69,6 +63,12 @@ public class SettingsController {
 
     }
 
+    /**
+     * Opens the classroom page
+     * @param event user clicks classroom button
+     * @throws IOException database exception
+     */
+
     @FXML
     void openClassroom(ActionEvent event) throws IOException {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
@@ -79,6 +79,11 @@ public class SettingsController {
         stage.show();
     }
 
+    /**
+     * Opens the Settings page
+     * @param event user clicks settings button
+     * @throws IOException database exception
+     */
     @FXML
     void openSetting(ActionEvent event) throws IOException {
         Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Settings/Settings.fxml"));
