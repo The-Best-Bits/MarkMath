@@ -251,14 +251,18 @@ public class ClassroomController<MyType> implements Initializable {
         String classID = this.classroomID.trim();
 
         if (studentID.isEmpty()) {
-            System.out.println("hi");
             this.studentIDError.setText("This field cannot be empty.");
+            return;
+        }
+
+        if (studentID.equals("0")) {
+            this.studentIDError.setText("0 is not a valid input.");
             return;
         }
 
         if (classroomModel.studentIsInDatabase(studentID)) {
             if (classroomModel.studentIsInClass(studentID, classID)) {
-                this.studentNameError.setText("This student is already in the class.");
+                this.studentIDError.setText("This student is already in the class.");
             } else {
                 this.classroomModel.addStudentToClass(studentID, classID);
                 this.student_id.setText("");
@@ -332,7 +336,9 @@ public class ClassroomController<MyType> implements Initializable {
         if (this.classroomModel.studentIsInClass(studentID, classID)) {
             this.classroomModel.removeStudent(studentID, classID);
             this.student_id.setText("");
-            this.loadData();
+            this.loadStudentData();
+        } else {
+            this.studentIDError.setText("This student is not in this class.");
         }
     }
 
@@ -409,7 +415,7 @@ public class ClassroomController<MyType> implements Initializable {
 
     @FXML
     void openHelp(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Classroom/howto.fxml"));
+        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Classroom/classroomHowto.fxml"));
         Scene mainPage = new Scene(mainPageParent);
 
         Stage stage = new Stage();

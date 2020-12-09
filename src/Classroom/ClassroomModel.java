@@ -11,8 +11,16 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class ClassroomModel {
+    /**
+     * Following Clean Architecture, this is a gateway class that interacts with the database. It is specifically
+     * responsible for sending and retrieving data to and from the database in accordance with the actions users can
+     * perform on the Classroom.fxml page.
+     */
     Connection connection;
 
+    /**
+     * Initializes model and connects it to database
+     **/
     public ClassroomModel(){
         try {
             this.connection = dbConnection.getConnection();
@@ -32,7 +40,12 @@ public class ClassroomModel {
         }
     }
 
-
+    /**
+     * gets the classroom name for the classroom with ID with classID from the database
+     * @param classID
+     * @return class_name from the table classrooms where column class_id is classID.
+     * @throws Exception
+     */
     public String getClassroomName(String classID) throws Exception {
         Statement stmt = null;
         ResultSet rs = null;
@@ -56,11 +69,17 @@ public class ClassroomModel {
         }
     }
 
+    /**
+     * finds whether the student is stored in the database or not.
+     * @param studentID
+     * @return true if there is a row with student_id equal to studentID in the students table, false otherwise.
+     * @throws Exception
+     */
     public boolean studentIsInDatabase(String studentID) throws Exception {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT * FROM students WHERE student_id = " + studentID;
+        String sql = "SELECT * FROM students WHERE student_id = '" + studentID + "'";
 
         try {
             stmt = this.connection.createStatement();
@@ -80,11 +99,19 @@ public class ClassroomModel {
         }
     }
 
+    /**
+     * Finds whether the student is in the class with the ID classID or not
+     * @param studentID
+     * @param classID
+     * @return true if the student with id studentID is in the students table and classID is stored in the class_id
+     * column for that student. Returns false otherwise.
+     * @throws Exception
+     */
     public boolean studentIsInClass(String studentID, String classID) throws Exception {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT * FROM students WHERE student_id = " + studentID + " AND CHARINDEX(':" + classID + ":', class_id) > 0";
+        String sql = "SELECT * FROM students WHERE student_id = '" + studentID + "' AND CHARINDEX(':" + classID + ":', class_id) > 0";
 
         try {
             if (studentIsInDatabase(studentID)) {
@@ -107,7 +134,16 @@ public class ClassroomModel {
         }
     }
 
-    public boolean addStudentToClass(String studentID, String classID) throws Exception {
+    /**
+     * If the student is in the database, this method modifies the value of class_id for the student in the database
+     * by appending classID + ":"
+     * @param studentID
+     * @param classID
+     * @throws Exception
+     * Note: When this method is called, the student should already be in the database.
+     * Note: The class_id data is stored in the form ":id1:id2:id3:" where each of id1, id2, and id3 are classroom IDs.
+     */
+    public void addStudentToClass(String studentID, String classID) throws Exception {
         Statement stmt = null;
         ResultSet rs = null;
         try {
@@ -118,16 +154,12 @@ public class ClassroomModel {
                 String originalClasses = rs.getString(1);
                 String newClasses = originalClasses + classID + ":";
 
-                String sql2 = "UPDATE students SET class_id = '" + newClasses + "' WHERE student_id = " + studentID;
+                String sql2 = "UPDATE students SET class_id = '" + newClasses + "' WHERE student_id = '" + studentID + "'";
                 stmt = this.connection.createStatement();
                 stmt.executeUpdate(sql2);
-                return true;
-            } else {
-                return false;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            return false;
         }
 
         finally {
@@ -140,21 +172,27 @@ public class ClassroomModel {
         }
     }
 
-    public boolean addStudentToDatabase(String studentID, String studentName) throws Exception {
+    /**
+     * if the student with ID studentID is not stored in the students table of the database, the student is
+     * added, with parameters student_name = studentName, student_id = studentID, and a classroom string ":" that
+     * means that the student is currently not in any classes.
+     * @param studentID
+     * @param studentName
+     * @throws Exception
+     */
+    public void addStudentToDatabase(String studentID, String studentName) throws Exception {
         Statement stmt = null;
 
         try {
-            if (this.studentIsInDatabase(studentID)) {
-                return false;
-            } else {
-                String sql = "INSERT INTO students (student_id, student_name, class_id) VALUES ('" + studentID + "', '" + studentName + "', ':')";
+            if (!this.studentIsInDatabase(studentID)) {
+                String sql = "INSERT INTO students (student_id, student_name, class_id) VALUES ('" + studentID + "', '"
+                        + studentName + "', ':')";
                 stmt = this.connection.createStatement();
                 stmt.executeUpdate(sql);
-                return true;
             }
+
         } catch (SQLException ex) {
             ex.printStackTrace();
-            return false;
         }
 
         finally {
@@ -164,9 +202,14 @@ public class ClassroomModel {
         }
     }
 
+    /**
+     * removes the class ID associated with the class under the student in the student table in the database.
+     * If the student is enrolled in no classes after this, the student is removed from the Database.
+     * @param studentID
+     * @param classID
+     * @throws Exception
+     */
     private void removeStudentFromClass(String studentID, String classID) throws Exception {
-        /*removes the class ID associated with the class under the student in the student table in the database.
-        If the student is enrolled in no classes after this, the student is removed from the Database.*/
         if (!studentIsInClass(studentID, classID)) {
             return;
         }
@@ -206,6 +249,12 @@ public class ClassroomModel {
         }
     }
 
+    /**
+     * removes the entry for the student with ID studentID in the table with title assignmentID.
+     * @param studentID
+     * @param assignmentID
+     * @throws Exception
+     */
     private void removeStudentFromAssignment(String studentID, String assignmentID) throws Exception {
         Statement stmt = null;
         ResultSet rs = null;
@@ -232,6 +281,13 @@ public class ClassroomModel {
         }
     }
 
+    /**
+     * Returns a list of Assignments associated with a class.
+     * @param classID
+     * @return an ArrayList containing Strings representing assignment IDs from database table AssignmentBundles where
+     * classroom_id = classID
+     * @throws Exception
+     */
     private ArrayList<String> getAssignmentsInClass(String classID) throws Exception{
         Statement stmt = null;
         ResultSet rs = null;
@@ -261,10 +317,15 @@ public class ClassroomModel {
         }
     }
 
+    /** removes the student from the classroom. The method removes the student from the class and from all
+     * assignment bundle tables.
+     * If the student is enrolled in no classes after this, the student is removed from the Database.
+     * @param studentID
+     * @param classID
+     * @throws Exception
+     */
     public void removeStudent(String studentID, String classID) throws Exception {
-        /* removes the class ID associated with the class under the student in the student table in the database.
-        If the student is enrolled in no classes after this, the student is removed from the Database.
-        Also removes students from all assignment bundle tables.
+        /*
          */
         if (!studentIsInClass(studentID, classID)) {
             return;
@@ -284,7 +345,14 @@ public class ClassroomModel {
         }
     }
 
-
+    /**
+     * Creates a table in the database with the name received_id, that contains columns student_id, student_name,
+     * document_name, as well as a column for each question that the teacher created in the outline, and a column for
+     * the total grade.
+     * @param received_id
+     * @param assignment
+     * @throws Exception
+     */
     public void createAssignmentTable(String received_id, AssignmentBundle assignment) throws Exception {
         Statement stmt = null;
 
@@ -300,13 +368,6 @@ public class ClassroomModel {
         String sql = "CREATE TABLE IF NOT EXISTS " + "[" + received_id + "]" + " (student_id STRING, student_name STRING, " +
                 "document_name STRING, "+ outlineInDatabase + "total STRING);";
 
-        /*String sql = "CREATE TABLE IF NOT EXISTS" + assignment.getName() +" (\n"
-                + "     bundle_id string PRIMARY KEY,\n"
-                + " 	student_id string,\n"
-                + " 	student_name string,\n"
-                + " 	document_name string,\n"
-                + " 	capacity real\n"
-                + ");"; */
         try {
             stmt = this.connection.createStatement();
             stmt.execute(sql);
@@ -324,6 +385,12 @@ public class ClassroomModel {
 
     }
 
+    /**
+     * Creates a row in the table assignment ID that is an outline for the assignment with student_id 0 and which
+     * contains the maximum possible marks for each question and the total.
+     * @param outline
+     * @param assignmentID
+     */
     public void addOutlineToAssignmentTable(AssignmentOutline outline, String assignmentID){
 
         StringBuilder outlineInDatabase = new StringBuilder();
@@ -335,13 +402,10 @@ public class ClassroomModel {
             i = i+1;
         }
         outlineInDatabase.append("question").append(i+1);
-        //System.out.println("you tried adding the outline");
-        //System.out.println(outlineInDatabase);
-        //System.out.println(String.join("", Collections.nCopies(numOfQuestions, "?")));
 
         String sqlInsert = "INSERT INTO " + "[" + assignmentID + "]"+" (student_id, student_name, document_name, " + outlineInDatabase.toString() +
                 ", total) VALUES (?, ?, ?, " + String.join("", Collections.nCopies(numOfQuestions, "?, ")) + "?)";
-        //System.out.println(sql);
+
         try {
             System.out.println("you are in the try loop");
             PreparedStatement stmt = connection.prepareStatement(sqlInsert);

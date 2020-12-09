@@ -12,21 +12,10 @@ public class MarksData {
         return assignmentID.get();
     }
 
-    public StringProperty assignmentIDProperty() {
-        return assignmentID;
-    }
-
-    public void setAssignmentID(String assignmentID) {
-        this.assignmentID.set(assignmentID);
-    }
-
     public String getAssignmentName() {
         return assignmentName.get();
     }
 
-    public StringProperty assignmentNameProperty() {
-        return assignmentName;
-    }
 
     public void setAssignmentName(String assignmentName) {
         this.assignmentName.set(assignmentName);
@@ -34,10 +23,6 @@ public class MarksData {
 
     public String getGrade() {
         return grade.get();
-    }
-
-    public StringProperty gradeProperty() {
-        return grade;
     }
 
     public void setGrade(String grade) {

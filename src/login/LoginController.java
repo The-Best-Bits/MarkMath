@@ -17,6 +17,10 @@ import javafx.stage.Stage;
 import java.awt.*;
 
 public class LoginController {
+    /**
+     * This class interacts directly with the UI of the login page. The user will be able to login by entering
+     * the correct password and access the dashboard page iff the password is correct.
+     */
 
     LoginModel loginModel = new LoginModel();
 
@@ -29,6 +33,11 @@ public class LoginController {
     @FXML
     private Label wrongPassword;
 
+    /**
+     * The onAction method for the login button. When pressed, takes the user input and calls isPassword in the
+     * loginModel. If the password is correct, open the dashboard page.
+     * @param event user clicks login button.
+     */
     @FXML
     private void userLogin(ActionEvent event) {
         try {

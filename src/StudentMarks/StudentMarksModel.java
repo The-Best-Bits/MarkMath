@@ -5,25 +5,42 @@ import dbUtil.dbConnection;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * Following Clean Architecture, this is a gateway class that interacts with the database. It is specifically
+ * responsible for sending and retrieving data to and from the database in accordance with the actions users can
+ * perform on the Dashboard fxml page.
+ */
 public class StudentMarksModel {
+
     Connection connection;
 
+    /**
+     * Initializes model and connects it to database
+     **/
     public StudentMarksModel() {
         try {
             this.connection = dbConnection.getConnection();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+
         if (this.connection == null) {
             System.exit(1);
         }
     }
 
-    public String getClassroomName(String classID) throws Exception {
+    /**
+     * returns the name of a classroom with a certain ID
+     *
+     * @param classID
+     * @return return class_name for row in clasrooms in database with column class_id = classID
+     * @throws SQLException
+     */
+    public String getClassroomName(String classID) throws SQLException {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT class_name FROM classrooms WHERE class_id = " + classID;
+        String sql = "SELECT class_name FROM classrooms WHERE class_id = '" + classID + "'";
 
         try {
             stmt = this.connection.createStatement();
@@ -33,22 +50,29 @@ public class StudentMarksModel {
         } catch (SQLException ex) {
             ex.printStackTrace();
             return ("");
-        }
-        finally {
+        } finally {
             if (stmt != null) {
                 stmt.close();
             }
-            if (rs != null){
+            if (rs != null) {
                 rs.close();
             }
         }
     }
 
-    public String getAssignmentName(String assignmentID) throws Exception {
+    /**
+     * gets assignment name from ID
+     *
+     * @param assignmentID
+     * @return return assignment_name for row in clasrooms in database with column
+     * assignmentbundle_id = assignmentID
+     * @throws SQLException
+     */
+    public String getAssignmentName(String assignmentID) throws SQLException {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT assignment_name FROM AssignmentBundles WHERE assignmentbundle_id = " + assignmentID;
+        String sql = "SELECT assignment_name FROM AssignmentBundles WHERE assignmentbundle_id = '" + assignmentID + "'";
 
         try {
             stmt = this.connection.createStatement();
@@ -58,40 +82,54 @@ public class StudentMarksModel {
         } catch (SQLException ex) {
             ex.printStackTrace();
             return ("");
-        }
-        finally {
+        } finally {
             if (stmt != null) {
                 stmt.close();
             }
-            if (rs != null){
+            if (rs != null) {
                 rs.close();
             }
         }
     }
 
-    public String getStudentName(String studentID) throws Exception {
+    /**
+     * gets student name from ID
+     *
+     * @param studentID
+     * @return student_name for row in students table in database with column student_id = studentID
+     * @throws SQLException
+     */
+    public String getStudentName(String studentID) throws SQLException {
         Statement stmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT student_name FROM students WHERE student_id = " + studentID;
+        String sql = "SELECT student_name FROM students WHERE student_id = '" + studentID + "'";
 
         try {
             stmt = this.connection.createStatement();
             rs = stmt.executeQuery(sql);
             return rs.getString(1);
+
         } catch (SQLException ex) {
             ex.printStackTrace();
             return ("");
-        }
-        finally {
-            if (stmt != null && rs != null){
+        } finally {
+            if (stmt != null && rs != null) {
                 stmt.close();
                 rs.close();
             }
         }
     }
 
-    public ArrayList<String> getAssignmentsInClass(String classID) throws Exception {
+    /**
+     * gets a list of assignments associated with the class
+     *
+     * @param classID
+     * @return an ArrayList containing all of the assignmentbundle_ids in table 'AssignmentBundles'
+     * in rows with classroom_id = classroomID.
+     * @throws Exception
+     */
+    public ArrayList<String> getAssignmentsInClass(String classID) throws SQLException {
         Statement stmt = null;
         ResultSet rs = null;
 
@@ -107,54 +145,11 @@ public class StudentMarksModel {
             }
 
             return assignments;
-        } catch (Exception e) {
+
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
-        }
-
-        finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-            if (rs != null){
-                rs.close();
-            }
-        }
-    }
-
-    public boolean tableExists(String assignment_id) throws Exception {
-        ResultSet rs = null;
-
-        try {
-            DatabaseMetaData dbm = this.connection.getMetaData();
-            rs = dbm.getTables(null, null, assignment_id, null);
-            return rs.next();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        finally {
-            if (rs != null){
-                rs.close();
-            }
-        }
-    }
-
-    public boolean studentDidAssignment(String studentID, String assignmentID) throws Exception {
-        Statement stmt = null;
-        ResultSet rs = null;
-
-        String sql = "SELECT * FROM '" + assignmentID + "' WHERE student_id = '" + studentID + "'";
-
-        try {
-            stmt = this.connection.createStatement();
-            rs = stmt.executeQuery(sql);
-            return (rs.next());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        finally {
+        } finally {
             if (stmt != null) {
                 stmt.close();
             }
@@ -164,29 +159,99 @@ public class StudentMarksModel {
         }
     }
 
-    public String getTotalMark(String studentID, String assignmentID) throws Exception {
+    /**
+     * creates and returns the string of the students mark
+     *
+     * @param studentID
+     * @param assignmentID
+     * @return A string containing the value for the 'total' column in the row with studentID in the
+     * 'student_id' column in the table with title assignmentID. If there is no such row, "0.0" is
+     * returned.
+     * @throws Exception
+     */
+    public String getTotalMark(String studentID, String assignmentID) throws SQLException {
         Statement stmt = null;
         ResultSet rs = null;
 
         String sql = "SELECT (total) FROM '" + assignmentID + "' WHERE student_id = '" + studentID + "'";
+        try {
+            stmt = this.connection.createStatement();
+            rs = stmt.executeQuery(sql);
+            String grade = "0.0";
+            if (rs.next()) {
+                grade = rs.getString(1);
+            }
+            return grade;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return "";
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (rs != null) {
+                rs.close();
+            }
+        }
+    }
+
+    /**
+     * Finds out whether the table for a specific assignment exists in the database.
+     *
+     * @param assignmentID
+     * @return true if a table with the title assignmentID exists in database, false if not.
+     * @throws Exception
+     */
+    public boolean tableExists(String assignmentID) throws SQLException {
+        ResultSet rs = null;
+
+        try {
+            DatabaseMetaData dbm = this.connection.getMetaData();
+            rs = dbm.getTables(null, null, assignmentID, null);
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+        }
+    }
+
+    /**
+     * finds out whether the grades for a specific student are in the page for an assignment.
+     *
+     * @param studentID
+     * @param assignmentID
+     * @return true if there exists a row with colum student_id = studentID in the table with name
+     * assignmentID, false if there doesn't exist one or if the assignmentID table doesn't exist.
+     * @throws Exception
+     **/
+    public boolean studentDidAssignment(String studentID, String assignmentID) throws SQLException {
+        if (!tableExists(assignmentID)) {
+            return false;
+        }
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT * FROM '" + assignmentID + "' WHERE student_id = '" + studentID + "'";
 
         try {
             stmt = this.connection.createStatement();
             rs = stmt.executeQuery(sql);
-            String a = "";
-            if (rs.next()) {
-                a = rs.getString(1);
-            }
-            return a;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return "";
+            return (rs.next());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
+
         finally {
             if (stmt != null) {
                 stmt.close();
             }
-            if (rs != null){
+            if (rs != null) {
                 rs.close();
             }
         }
