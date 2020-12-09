@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="760.0" prefWidth="670.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TabPane layoutX="-1.0" layoutY="1.0" prefHeight="760.0" prefWidth="670.0" stylesheets="@../art/helpPage.css" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="About Classroom">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Text fill="#4c6ab7" layoutX="29.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View Assignments and Students" wrappingWidth="406.30029296875">
+                           <font>
+                              <Font name="Yu Gothic UI Regular" size="28.0" />
+                           </font>
+                        </Text>
+                        <ImageView fitHeight="66.0" fitWidth="209.0" layoutX="440.0" layoutY="153.0">
+                           <image>
+                              <Image url="@../art/tab.png" />
+                           </image>
+                        </ImageView>
+                        <Text fill="#2c2c2c" layoutX="42.0" layoutY="132.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Switch to the &quot;Assignments&quot; tab to view all the assignmnets in this classroom and add assignments. Switch to the &quot;Students&quot; tab to see all the students in this classroom and add new students. Double click on any selected rows to view details about the assignment or student." wrappingWidth="358.30029296875">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#4c6ab7" layoutX="35.0" layoutY="342.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Adding Students" wrappingWidth="372.30029296875">
+                           <font>
+                              <Font name="Yu Gothic UI Regular" size="28.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#2c2c2c" layoutX="53.0" layoutY="377.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter a student's ID to add the student to this classroom. A student will be added if this student already exists in other classrooms but not the current classroom. Input the student's name to add a student that is not in any of the classes." wrappingWidth="358.30029296875">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ImageView fitHeight="133.0" fitWidth="200.0" layoutX="445.0" layoutY="361.0">
+                           <image>
+                              <Image url="@../art/addstudent.png" />
+                           </image>
+                        </ImageView>
+                        <Text fill="#4c6ab7" layoutX="35.0" layoutY="545.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Deleting Students" wrappingWidth="372.30029296875">
+                           <font>
+                              <Font name="Yu Gothic UI Regular" size="28.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#2c2c2c" layoutX="53.0" layoutY="579.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Delete a student by selecting the student in the tableview and press &quot;Remove Students&quot; to remove the student from this classroom." wrappingWidth="358.30029296875">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="About Assignments">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Text fill="#4c6ab7" layoutX="29.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Assignments" wrappingWidth="406.30029296875">
+                           <font>
+                              <Font name="Yu Gothic UI Regular" size="28.0" />
+                           </font>
+                        </Text>
+                        <ImageView fitHeight="137.0" fitWidth="200.0" layoutX="456.0" layoutY="132.0">
+                           <image>
+                              <Image url="@../art/addassignment_1.png" />
+                           </image>
+                        </ImageView>
+                        <Text fill="#2c2c2c" layoutX="58.0" layoutY="185.0" lineSpacing="1.5" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the id and the name of the assignment you wish to add. Ensure that the id is unique. " wrappingWidth="348.470703125">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#4c6ab7" layoutX="58.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name and ID" wrappingWidth="406.30029296875">
+                           <font>
+                              <Font name="Yu Gothic UI Regular" size="24.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#4c6ab7" layoutX="58.0" layoutY="295.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment Outline" wrappingWidth="406.30029296875">
+                           <font>
+                              <Font name="Yu Gothic UI Regular" size="24.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#2c2c2c" layoutX="58.0" layoutY="347.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Click &quot;Add Question&quot; to create a text field for a question in this assignment. Input the marks this question is worth. Add the outlines for each question in order and make sure that each question in this assignment has a mark created. Press &quot;Add Assignment&quot; at the bottom right to add this assignment to the classroom" wrappingWidth="367.30029296875">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <ImageView fitHeight="189.0" fitWidth="200.0" layoutX="456.0" layoutY="353.0">
+                           <image>
+                              <Image url="@../art/outline.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab text="Mark Assignments">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Text fill="#2c2c2c" layoutX="65.0" layoutY="112.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="When marking a new assignment, open the student's assignment in Hypatia and open the corresponding classroom in MarkMath. Make sure the name of the assignment is in the format studentID_assignmentName (e.g. 5-Fractions). Ensure that math expressions are only inside the math problems. " wrappingWidth="500.30029296875">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#4c6ab7" layoutX="27.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assignment Format" wrappingWidth="406.30029296875">
+                           <font>
+                              <Font name="Yu Gothic UI Regular" size="28.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#4c6ab7" layoutX="27.0" layoutY="281.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mark Assignments" wrappingWidth="406.30029296875">
+                           <font>
+                              <Font name="Yu Gothic UI Regular" size="28.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#2c2c2c" layoutX="61.0" layoutY="322.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Before marking the assignment, create an assignment outline for this assignment. You can find more information about the outline in the About Assignments tab. If the student exists in the classroom, the assignment has an outline and the name of the assignment is in the correct format, click &quot;Mark Assignment&quot; to comput the total marks of this assignment." wrappingWidth="507.30029296875">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#2c2c2c" layoutX="61.0" layoutY="488.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="If the marking was successful, you will be able to double click on the assignment and see the mark summary of that student. Double click again on specific students to view the details of their marks, and change marks to each question manually if you'd like." wrappingWidth="507.30029296875">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#2c2c2c" layoutX="61.0" layoutY="600.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MarkMath marks the computational questions automatically, while leaves any word problems as full credit. Double-click into a student's assignment detail to change marks on word problems manually." wrappingWidth="507.30029296875">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

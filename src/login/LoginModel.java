@@ -4,6 +4,11 @@ import java.sql.*;
 
 import dbUtil.dbConnection;
 
+/**
+ * This class interact with the database for the LoginController. It checks if a password already exists
+ * and check if the user inputs the correct password when login.
+ */
+
 public class LoginModel {
     Connection connection;
 
@@ -18,6 +23,11 @@ public class LoginModel {
         }
     }
 
+    /**
+     * Checks if there is a password in the database.
+     * @return
+     * @throws Exception database exception
+     */
     public boolean isPasswordAlreadySet() throws Exception {
         Statement stmt = null;
         ResultSet rs = null;
@@ -40,6 +50,13 @@ public class LoginModel {
         }
     }
 
+    /**
+     * Check if the password that user inputs is the matching password with the password stored in the
+     * database. Return true iff the passwords match.
+     * @param pass the password user inputs when login.
+     * @return true iff the password matches.
+     * @throws Exception database exception
+     */
     public boolean isPassword(String pass) throws Exception{
         Statement stmt = null;
         ResultSet rs = null;
