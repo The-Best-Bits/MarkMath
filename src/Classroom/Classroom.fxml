@@ -246,7 +246,7 @@
                 </Tab>
             </tabs>
         </TabPane>
-      <Text fill="#ffffff99" layoutX="480.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double-click on selected rows to view details." wrappingWidth="328.0000027921051">
+      <Text fill="#ffffff99" layoutX="470.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double-click on selected rows to view details." wrappingWidth="328.0000027921051">
          <font>
             <Font name="Yu Gothic UI Regular" size="15.0" />
          </font>
