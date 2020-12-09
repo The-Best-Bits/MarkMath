@@ -2,7 +2,6 @@ package Classroom;
 
 import Assignments.AssignmentPageController;
 import Server.CheckMathParser;
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import dbUtil.dbConnection;
 import javafx.collections.FXCollections;
@@ -26,8 +25,6 @@ import markmath.entities.AssignmentOutline;
 import markmath.entities.StudentAssignment;
 import markmath.usecases.StudentAssignmentManager;
 import StudentMarks.StudentMarksController;
-
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
@@ -37,7 +34,11 @@ import java.util.ResourceBundle;
 import java.util.Date;
 
 public class ClassroomController<MyType> implements Initializable {
-    ClassroomModel classroomModel = new ClassroomModel();
+    /**
+     * Following Clean Architecture this is a controller class that directly interacts with the UI for the Classroom
+     * fxml page. It is responsible for initializing the Classroom page and taking input from users on the Classroom
+     * page and performing the necessary actions.
+     */
 
     @FXML
     private Text classroom_name;
@@ -81,20 +82,9 @@ public class ClassroomController<MyType> implements Initializable {
     @FXML
     private TableColumn<AssignmentData, String> assignment_name_column;
 
-    private dbConnection db;
-
     private ObservableList<StudentData> student_data;
 
     private ObservableList<AssignmentData> assignment_data;
-
-    @FXML
-    private JFXButton markButton;
-
-    @FXML
-    private JFXButton btnQuestion;
-
-    @FXML
-    private JFXButton addAssignment;
 
     @FXML
     private GridPane pane;
@@ -112,9 +102,6 @@ public class ClassroomController<MyType> implements Initializable {
     private JFXTextField assignment_name;
 
     @FXML
-    private JFXButton openHelp;
-
-    @FXML
     private Label errorCreatingAssignment;
 
     @FXML
@@ -122,27 +109,74 @@ public class ClassroomController<MyType> implements Initializable {
 
     public int counterAddQuestions = 1;
     public HashMap<String, Float> assignment_outline = new HashMap<String, Float>();
-
     private String classroomID;
-
     private MyType temp;
     private Date lastClickTime;
+    ClassroomModel classroomModel = new ClassroomModel();
 
 
-    public String getClassroomID() {
-        return classroomID;
-    }
-
+    /**
+     * Set attribute classroomID to the given classroomID
+     * @param classroomID the given classroomID
+     */
     public void setClassroomID(String classroomID) {
         this.classroomID = classroomID;
     }
 
+    /**
+     * Opens the main "Dashboard page" that displays a table with all of the classrooms of this user
+     * @param event Classrooms button is clicked
+     * @throws IOException
+     */
+    @FXML
+    void openDashboard(ActionEvent event) throws IOException {
+        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
+        Scene mainPage = new Scene(mainPageParent);
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(mainPage);
+        stage.show();
+    }
+
+    /**
+     * Opens the settings page
+     * @param event Seetings button is clicked
+     * @throws IOException
+     */
+    @FXML
+    void openSetting(ActionEvent event) throws IOException {
+        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Settings/Settings.fxml"));
+        Scene mainPage = new Scene(mainPageParent);
+
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(mainPage);
+        stage.show();
+    }
+
+    /**
+     * Opens a how-to-use page for assignments
+     * @param event user clicks on help button
+     * @throws IOException
+     */
+    @FXML
+    void openHelp(ActionEvent event) throws IOException {
+        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Classroom/howto.fxml"));
+        Scene mainPage = new Scene(mainPageParent);
+
+        Stage stage = new Stage();
+        stage.setScene(mainPage);
+        stage.show();
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.db = new dbConnection();
 
     }
 
+    /**
+     * Loads the data on the Classroom page. This includes loading the assignment bundles in this classroom and the
+     * students in this classroom in the corresponding tables.
+     */
     @FXML
     public void loadData() {
         try {
@@ -153,15 +187,20 @@ public class ClassroomController<MyType> implements Initializable {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Loads the assignments of this classroom into the Assignments table
+     */
     @FXML
     private void loadBundleData() {
         try {
             Connection conn = dbConnection.getConnection();
             this.assignment_data = FXCollections.observableArrayList();
-
-            ResultSet rs = conn.createStatement().executeQuery("SELECT assignmentbundle_id, assignment_name, classroom_id FROM AssignmentBundles WHERE classroom_id =" + this.classroomID);
+            ResultSet rs = conn.createStatement().executeQuery("SELECT assignmentbundle_id, assignment_name, " +
+                    "classroom_id FROM AssignmentBundles WHERE classroom_id =" + this.classroomID);
             while (rs.next()) {
-                this.assignment_data.add(new AssignmentData(rs.getString(1), rs.getString(2), rs.getString(3)));
+                this.assignment_data.add(new AssignmentData(rs.getString(1), rs.getString(2),
+                        rs.getString(3)));
             }
 
         } catch (SQLException e) {
@@ -170,11 +209,41 @@ public class ClassroomController<MyType> implements Initializable {
 
         this.assignment_id_column.setCellValueFactory(new PropertyValueFactory<AssignmentData, String>("ID"));
         this.assignment_name_column.setCellValueFactory(new PropertyValueFactory<AssignmentData, String>("name"));
-
         this.assignment_table.setItems(null);
         this.assignment_table.setItems(this.assignment_data);
     }
 
+    /**
+     * Loods the students of this classroom into the Students table
+     * @throws Exception
+     */
+    @FXML
+    private void loadStudentData() throws Exception {
+        try {
+            Connection conn = dbConnection.getConnection();
+            this.student_data = FXCollections.observableArrayList();
+
+            ResultSet rs = conn.createStatement().executeQuery("SELECT student_id, student_name, class_id FROM students WHERE CHARINDEX(':" + this.classroomID + ":', class_id) > 0");
+            while (rs.next()) {
+                this.student_data.add(new StudentData(rs.getString(1), rs.getString(2), rs.getString(3)));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        this.student_id_column.setCellValueFactory(new PropertyValueFactory<StudentData, String>("ID"));
+        this.student_name_column.setCellValueFactory(new PropertyValueFactory<StudentData, String>("name"));
+
+        this.student_table.setItems(null);
+        this.student_table.setItems(this.student_data);
+        this.student_id_pane.toFront();
+    }
+
+    /**
+     * If the user double clicks on the row of a specific Assignment this method will open up the AssignmentPage, which
+     * will be initialized to display the data for this specific assignment
+     */
     @FXML
     private void RowSelect() {
         MyType row = (MyType) this.assignment_table.getSelectionModel().getSelectedItem();
@@ -213,33 +282,12 @@ public class ClassroomController<MyType> implements Initializable {
 
     }
 
-
-
-    @FXML
-    private void loadStudentData() throws Exception {
-        try {
-            Connection conn = dbConnection.getConnection();
-            this.student_data = FXCollections.observableArrayList();
-
-            ResultSet rs = conn.createStatement().executeQuery("SELECT student_id, student_name, class_id FROM students WHERE CHARINDEX(':" + this.classroomID + ":', class_id) > 0");
-            while (rs.next()) {
-                this.student_data.add(new StudentData(rs.getString(1), rs.getString(2), rs.getString(3)));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        this.student_id_column.setCellValueFactory(new PropertyValueFactory<StudentData, String>("ID"));
-        this.student_name_column.setCellValueFactory(new PropertyValueFactory<StudentData, String>("name"));
-
-        this.student_table.setItems(null);
-        this.student_table.setItems(this.student_data);
-        this.student_id_pane.toFront();
-    }
+    //add and remove students methods
 
     /**
-     * Adds student to classroom, and clears fields.
+     * After the user enters a students ID in addStudentIDPane and clicks add student, if there already exists a
+     * student in another classroom with the given ID then this student is automatically added to the classroom. If not,
+     * this method switches to the pane to addStudentNamePane
      * @param event user clicks add student button on the addStudentIDPane.
      * @throws Exception
      */
@@ -274,7 +322,10 @@ public class ClassroomController<MyType> implements Initializable {
     }
 
     /**
-     * Adds student to classroom and to database, and clears fields and goes to the addStudentIDPane.
+     * Following from addStudentWithID, this method is called if there does not exist a student in another classroom
+     * with the given ID. The user must then enter the students name in the addStudentNamePane. When they click
+     * addStudent this student will be added to this classroom. This method also clears all label text fields and
+     * changes the pane back to addStudentIDPane
      * @param event user clicks add student button on the addStudentNamePane.
      * @throws Exception
      */
@@ -344,7 +395,8 @@ public class ClassroomController<MyType> implements Initializable {
 
     /**
      * When a user clicks on a specific row (corresponding to a student), this method will open up a page for that
-     * specific student in that classroom that displays the grade breakdown for each assignment that the student completed.
+     * specific student in that classroom that displays the grade breakdown for each assignment that the student
+     * completed.
      */
     @FXML
     private void studentRowSelect() throws Exception {
@@ -386,44 +438,6 @@ public class ClassroomController<MyType> implements Initializable {
             }
         }
     }
-
-    @FXML
-    void openDashboard(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Dashboard/Dashboard.fxml"));
-        Scene mainPage = new Scene(mainPageParent);
-
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(mainPage);
-        stage.show();
-    }
-
-    @FXML
-    void openSetting(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Settings/Settings.fxml"));
-        Scene mainPage = new Scene(mainPageParent);
-
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(mainPage);
-        stage.show();
-    }
-
-    /**
-     * Opens a how-to-use page for assignments
-     * @param event user clicks on help button
-     * @throws IOException
-     */
-
-    @FXML
-    void openHelp(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Classroom/classroomHowto.fxml"));
-        Scene mainPage = new Scene(mainPageParent);
-
-        Stage stage = new Stage();
-        stage.setScene(mainPage);
-        stage.show();
-    }
-
-
     /**
      * Allows the user to add one extra question to the outline of a new assignment they wish to create.
      * It creates a label indicating the appropriate question number and a text field that allows the user to insert
@@ -595,9 +609,7 @@ public class ClassroomController<MyType> implements Initializable {
 
     }
 
-
-
-
+    //mark assignment methods
     /**
      *  When a user clicks the MarkAssignment button within a classroom this method goes through all of the parsed data
      *  received by the server, creates a mock student assignment corresponding to the parsed data of each specific
@@ -616,29 +628,22 @@ public class ClassroomController<MyType> implements Initializable {
             Login.getServer().setParseResultsEvents(false);
             CheckMathParser parser = Login.getServer().getparser();
             System.out.println(parser.getFinalParsedData());
-            //check that the student exists in this classroom
-            //check that there is a corresponding assignment bundle in this classroom
             if (!classroomModel.studentIsInClass(parser.getStudentNum(), this.classroomID)
                     || !classroomModel.assignmentBundleNameInClassroom(parser.getAssignmentType(), this.classroomID)) {
                 this.errorMarkingStudentAssignment.setText("Error. Student or assignment bundle associated with\nthis student document is not in this classroom");
             } else {
                 this.errorMarkingStudentAssignment.setText("");
-                //get assignment outline
                 AssignmentOutline outline = classroomModel.getAssignmentOutline(parser.getAssignmentType(),
                         this.classroomID);
-                //get student name
                 String studentName = classroomModel.getStudentNameFromDatabase(parser.getStudentNum());
                 StudentAssignmentManager saManager = new StudentAssignmentManager(parser.getStudentNum(), studentName,
                         parser.getAssignmentName(), parser.getAssignmentType(), parser.getFinalParsedData(), outline);
                 saManager.markAllQuestions();
                 StudentAssignment studentAssignment = saManager.getCarbonCopy();
-                //add StudentAssignment to Database
                 addStudentAssignmentToDatabase(studentAssignment);
             }
 
-            System.out.println("test" + parser.getFinalParsedData().isEmpty());
             parser.clearCheckMathParser();
-            System.out.println("test" + parser.getFinalParsedData().isEmpty());
 
         }catch(Exception e){
             System.out.println("Error" + e);
