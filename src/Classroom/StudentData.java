@@ -5,16 +5,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class StudentData {
+    /** This class is an entity class that stores and gets a student's ID, the student's name, and the classrooms
+     * the student is in for the purposes of populating the table in the students tab in the classroom page.
+     **/
     private final StringProperty ID;
     private final StringProperty name;
     private final StringProperty classes;
 
     public String getID() {
         return ID.get();
-    }
-
-    public StringProperty IDProperty() {
-        return ID;
     }
 
     public void setID(String ID) {
@@ -25,20 +24,12 @@ public class StudentData {
         return name.get();
     }
 
-    public StringProperty nameProperty() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name.set(name);
     }
 
     public String getClasses() {
         return classes.get();
-    }
-
-    public StringProperty classesProperty() {
-        return classes;
     }
 
     public void setClasses(String classes) {

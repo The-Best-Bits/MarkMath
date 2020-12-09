@@ -7,8 +7,8 @@ import java.util.HashMap;
 
 public class StudentAssignmentManager {
     /**
-     *  Manages a single student assignment by creating the copy, adding questions,
-     *  marking them, and putting them in the correct bundle.
+     *  Following Clean Architecture this is a use case class that manages a single student assignment by creating
+     *  the student assignment, adding questions to this student assignment, and marking the questions
      *
      *  Attributes:
      *  carbonCopy: the copy of a StudentAssignment
