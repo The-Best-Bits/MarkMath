@@ -1,5 +1,8 @@
 package Test;
-import markmath.entities.*;
+import markmath.entities.AssignmentOutline;
+import markmath.entities.Classroom;
+import markmath.entities.Question;
+import markmath.entities.StudentAssignment;
 import org.junit.*;
 
 import java.util.HashMap;

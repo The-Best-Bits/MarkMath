@@ -160,7 +160,7 @@ public class ClassroomController<MyType> implements Initializable {
      */
     @FXML
     void openHelp(ActionEvent event) throws IOException {
-        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Classroom/howto.fxml"));
+        Parent mainPageParent = FXMLLoader.load(getClass().getResource("/Classroom/classroomHowto.fxml"));
         Scene mainPage = new Scene(mainPageParent);
 
         Stage stage = new Stage();

@@ -13,21 +13,21 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="771.0" prefWidth="1369.0" styleClass="Pane" stylesheets="@../art/classroom.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudentMarks.StudentMarksController">
+<AnchorPane prefHeight="750.0" prefWidth="1300.0" styleClass="Pane" stylesheets="@../art/classroom.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StudentMarks.StudentMarksController">
     <children>
-        <VBox layoutX="-4.0" layoutY="-4.0" prefHeight="775.0" prefWidth="246.0" styleClass="VBox" stylesheets="@../art/dashboard.css">
+        <VBox prefHeight="750.0" prefWidth="250.0" styleClass="VBox" stylesheets="@../art/dashboard.css">
             <children>
-                <Pane prefHeight="220.0" prefWidth="410.0">
+                <Pane prefHeight="200.0" prefWidth="250.0">
                     <children>
-                        <ImageView fitHeight="93.0" fitWidth="227.0" layoutX="9.0" layoutY="40.0">
+                        <ImageView fitHeight="94.0" fitWidth="228.0" layoutX="11.0" layoutY="58.0">
                             <image>
                                 <Image url="@../art/MMlogo.png" />
                             </image>
                         </ImageView>
                     </children></Pane>
-                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openClassroom" prefHeight="113.0" prefWidth="246.0" text="  Classrooms" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openClassroom" prefHeight="100.0" prefWidth="250.0" text="  Classrooms" textFill="WHITE">
                     <font>
-                        <Font size="20.0" />
+                        <Font name="Yu Gothic UI Regular" size="20.0" />
                     </font>
                     <VBox.margin>
                         <Insets />
@@ -39,9 +39,9 @@
                         <FontAwesomeIconView fill="WHITE" glyphName="FOLDER" size="30" />
                     </graphic>
                 </JFXButton>
-                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openSetting" prefHeight="114.0" prefWidth="246.0" text="  Settings" textFill="WHITE">
+                <JFXButton alignment="BASELINE_LEFT" buttonType="RAISED" onAction="#openSetting" prefHeight="100.0" prefWidth="250.0" text="  Settings" textFill="WHITE">
                     <font>
-                        <Font size="20.0" />
+                        <Font name="Yu Gothic UI Regular" size="20.0" />
                     </font>
                     <padding>
                         <Insets left="50.0" />
@@ -52,36 +52,36 @@
                 </JFXButton>
             </children>
         </VBox>
-        <Pane layoutX="242.0" prefHeight="93.0" prefWidth="1128.0">
+        <Pane layoutX="250.0" prefHeight="100.0" prefWidth="1050.0">
             <children>
-                <Text fx:id="student_name_display" fill="WHITE" layoutX="26.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="506.30029296875">
+                <Text fx:id="student_name_display" fill="WHITE" layoutX="30.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="700.0">
                     <font>
-                        <Font name="Yu Gothic UI Regular" size="36.0" />
+                        <Font name="Yu Gothic UI Regular" size="40.0" />
                     </font>
                 </Text>
-                <Text fx:id="class_name_display" fill="WHITE" layoutX="26.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="347.6336669921875">
+                <Text fx:id="class_name_display" fill="WHITE" layoutX="30.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="700.0">
+                    <font>
+                        <Font name="Yu Gothic UI Regular" size="20.0" />
+                    </font>
+                </Text>
+                <JFXButton fx:id="backButton" layoutX="910.0" layoutY="40.0" onAction="#back" prefHeight="45.0" prefWidth="100.0" styleClass="markAssignment" stylesheets="@../art/classroom.css" text="Back" textFill="WHITE">
                     <font>
                         <Font name="Yu Gothic UI Regular" size="18.0" />
-                    </font>
-                </Text>
-                <JFXButton fx:id="backButton" layoutX="967.0" layoutY="27.0" onAction="#back" prefHeight="39.0" prefWidth="113.0" styleClass="markAssignment" stylesheets="@../art/classroom.css" text="Back" textFill="WHITE">
-                    <font>
-                        <Font size="17.0" />
                     </font>
                 </JFXButton>
             </children>
         </Pane>
-        <TableView fx:id="marks_table" layoutX="242.0" layoutY="126.0" onMouseClicked="#handleRowSelect" prefHeight="645.0" prefWidth="1128.0" stylesheets="@../art/classroom.css">
+        <TableView fx:id="marks_table" layoutX="250.0" layoutY="125.0" onMouseClicked="#handleRowSelect" prefHeight="625.0" prefWidth="1050.0" stylesheets="@../art/classroom.css">
             <columns>
-                <TableColumn fx:id="id_column" prefWidth="176.33331298828125" text="Assignment ID" />
-                <TableColumn fx:id="name_column" minWidth="0.0" prefWidth="261.00006103515625" text="Assignment Name" />
-                <TableColumn fx:id="total_column" prefWidth="687.0" text="Grade" />
+                <TableColumn fx:id="id_column" prefWidth="200.0" text="Assignment ID" />
+                <TableColumn fx:id="name_column" minWidth="400.0" prefWidth="300.0" text="Assignment Name" />
+                <TableColumn fx:id="total_column" prefWidth="448.0" text="Grade" />
             </columns>
         </TableView>
         <Text layoutX="397.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1.0" />
-      <Text fill="WHITE" layoutX="250.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double-click on selected rows to view details." wrappingWidth="635.78515625">
+      <Text fill="#ffffff99" layoutX="260.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Double-click on selected rows to view details and edit marks manually." wrappingWidth="504.0">
          <font>
-            <Font size="16.0" />
+            <Font name="Yu Gothic UI Regular" size="15.0" />
          </font>
       </Text>
     </children>

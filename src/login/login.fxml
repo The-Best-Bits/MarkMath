@@ -8,31 +8,31 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="482.0" prefWidth="483.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.LoginController">
+<AnchorPane prefHeight="450.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.LoginController">
    <children>
-      <Pane id="Pane" layoutX="-9.0" layoutY="-1.0" prefHeight="484.0" prefWidth="492.0" styleClass="Pane" stylesheets="@../art/login.css">
+      <Pane id="Pane" prefHeight="450.0" prefWidth="450.0" styleClass="Pane" stylesheets="@../art/login.css">
          <children>
-            <Text fx:id="signin" fill="WHITE" layoutX="163.0" layoutY="224.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sign in" textAlignment="CENTER" wrappingWidth="165.39682006835938">
+            <Text fx:id="signin" fill="WHITE" layoutX="125.0" layoutY="225.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sign in" textAlignment="CENTER" wrappingWidth="200.0">
                <font>
                   <Font name="Yu Gothic UI Light" size="48.0" />
                </font>
             </Text>
-            <JFXButton fx:id="loginButton" layoutX="126.0" layoutY="367.0" onAction="#userLogin" prefHeight="40.0" prefWidth="240.0" ripplerFill="WHITE" text="Log In" textFill="WHITE">
+            <JFXButton fx:id="loginButton" layoutX="100.0" layoutY="330.0" onAction="#userLogin" prefHeight="40.0" prefWidth="250.0" ripplerFill="WHITE" text="Log In" textFill="WHITE">
                <font>
                   <Font name="Yu Gothic Bold" size="18.0" />
                </font>
             </JFXButton>
-            <Label fx:id="wrongPassword" layoutX="126.0" layoutY="335.0" prefHeight="20.0" prefWidth="240.0" textFill="#ff6666">
+            <Label fx:id="wrongPassword" layoutX="100.0" layoutY="305.0" prefHeight="20.0" prefWidth="250.0" textFill="#ff6666">
                <font>
                   <Font name="Yu Gothic UI Regular" size="12.0" />
                </font>
             </Label>
-            <JFXPasswordField fx:id="password" focusColor="WHITE" layoutX="126.0" layoutY="273.0" prefHeight="47.0" prefWidth="250.0" promptText="Password" styleClass="JFXPasswordField" stylesheets="@../art/login.css" unFocusColor="WHITE">
+            <JFXPasswordField fx:id="password" focusColor="WHITE" layoutX="100.0" layoutY="250.0" prefHeight="47.0" prefWidth="250.0" promptText="Password" styleClass="JFXPasswordField" stylesheets="@../art/login.css" unFocusColor="WHITE">
                <font>
                   <Font name="Yu Gothic UI Regular" size="17.0" />
                </font>
             </JFXPasswordField>
-            <Text fill="WHITE" layoutX="115.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to MarkMath!" textAlignment="CENTER" wrappingWidth="272.9999910593033">
+            <Text fill="WHITE" layoutX="75.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to MarkMath!" textAlignment="CENTER" wrappingWidth="300.0">
                <font>
                   <Font name="Yu Gothic UI Semibold" size="40.0" />
                </font>

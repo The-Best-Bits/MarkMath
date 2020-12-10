@@ -1,8 +1,4 @@
 package markmath.entities;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
-import java.util.ArrayList;
 
 public class Classroom {
     /** Following Clean Architecture this is an entity class that represents a Classroom
