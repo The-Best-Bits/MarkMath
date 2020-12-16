@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+/**The main class of the app; starts the app by showing the login page. To run the app, this class needs to be run. 
+**/
 public class Login extends Application {
 
     LoginModel loginModel = new LoginModel();
@@ -18,6 +20,7 @@ public class Login extends Application {
 
     }
 
+    
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = openLogin();
@@ -32,7 +35,9 @@ public class Login extends Application {
         
 
     }
-
+    /**Method that runs the first page of the application, the login page. If the user is opening the page for the first time, 
+    it lets them choose a password.
+    **/
     public Parent openLogin() throws Exception{
         if (this.loginModel.isPasswordAlreadySet()) {
             return FXMLLoader.load(getClass().getResource("login.fxml"));
