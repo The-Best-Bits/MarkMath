@@ -2,7 +2,7 @@
 Repository of MarkMath for Hypatia
 
 How to run the app?
-Run the Login class to run the app. The password is set to "jordanpass" since you will be downloading our database, with already some sample classes, students and assignments. We thought this would be easier to test. If you had started with opening the app for the first time and an empty database, you would be asked to create an account with a new password.
+Run the Login class to run the app. The password is set to "2020fall" since you will be downloading our database, with already some sample classes, students and assignments. We thought this would be easier to test. If you had started with opening the app for the first time and an empty database, you would be asked to create an account with a new password.
 
 What libraries are needed?
 All the libraries that are needed can be found in the libraries folder inside the idea folder.
